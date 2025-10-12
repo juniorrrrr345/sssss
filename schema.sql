@@ -239,6 +239,7 @@ INSERT OR IGNORE INTO social_links (id, name, url, icon, display_order, is_activ
 -- Insérer les paramètres par défaut
 INSERT OR IGNORE INTO settings (key, value, description) VALUES
 ('shop_name', 'Al Gran', 'Nom de la boutique'),
+('order_link', '', 'Lien externe pour commander'),
 ('shop_email', '', 'Email de contact'),
 ('shop_phone', '', 'Numéro de téléphone'),
 ('shop_whatsapp', '', 'Numéro WhatsApp'),

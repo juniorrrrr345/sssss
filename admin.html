@@ -733,6 +733,28 @@
                 </div>
             </section>
 
+            <!-- Order Link Section -->
+            <section class="content-section" id="orderlink">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-shopping-cart"></i> Lien de Commande Externe</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>URL du lien de commande</label>
+                            <input type="url" id="setting_order_link" class="form-control" placeholder="https://wa.me/... ou https://t.me/... ou autre">
+                            <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">
+                                Lien externe pour commander (WhatsApp, Telegram, formulaire, etc.)
+                                <br>Le bouton "Commander" sur les pages produits utilisera ce lien.
+                            </small>
+                        </div>
+                        <button type="button" onclick="saveSettings('orderlink')" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <!-- Services Section -->
             <section class="content-section" id="services">
                 <div class="card">

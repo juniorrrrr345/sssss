@@ -566,6 +566,8 @@ async function saveSettings(section) {
     let fields = [];
     if (section === 'general') {
         fields = ['shop_name'];
+    } else if (section === 'orderlink') {
+        fields = ['order_link'];
     } else if (section === 'theme') {
         fields = ['theme_background_url'];
     } else if (section === 'advanced') {
