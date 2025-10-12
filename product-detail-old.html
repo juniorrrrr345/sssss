@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100K ROSIN - Al Gran</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles spécifiques pour la page de détails du produit */
+        .product-detail-container {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 0 100px;
+            min-height: 100vh;
+        }
+
+        /* Carousel d'images */
+        .product-carousel {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-images {
+            display: flex;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-image, .carousel-video {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-video {
+            background: #000;
+        }
+
+        .media-type-indicator {
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .carousel-button:hover {
+            background: rgba(255, 62, 165, 0.6);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-button.prev {
+            left: 20px;
+        }
+
+        .carousel-button.next {
+            right: 20px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: var(--primary-pink);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Badge LIVE ROSIN */
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-pink), #ff1493);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(255, 62, 165, 0.5);
+            z-index: 10;
+        }
+
+        /* Informations du produit */
+        .product-info {
+            padding: 1.5rem;
+            background: linear-gradient(180deg, transparent, rgba(10, 14, 39, 0.95));
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-farm {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 62, 165, 0.15);
+            border: 1px solid var(--primary-pink);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+        }
+
+        .product-vendor {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .vendor-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .vendor-name {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Sélection de quantité */
+        .quantity-section {
+            margin-bottom: 2rem;
+        }
+
+        .quantity-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quantity-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .quantity-option {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quantity-option:hover {
+            border-color: var(--primary-pink);
+            background: rgba(255, 62, 165, 0.1);
+        }
+
+        .quantity-option.selected {
+            border-color: var(--primary-pink);
+            background: rgba(255, 62, 165, 0.15);
+            box-shadow: 0 5px 20px rgba(255, 62, 165, 0.3);
+        }
+
+        .quantity-weight {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .quantity-price {
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Bouton principal */
+        .order-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-pink), #ff1493);
+            color: white;
+            border: 2px solid #25D366;
+            padding: 1.2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 62, 165, 0.4);
+            text-transform: capitalize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .order-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 62, 165, 0.6);
+        }
+
+        .order-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .product-carousel {
+                height: 60vh;
+            }
+
+            .product-title {
+                font-size: 1.5rem;
+            }
+
+            .quantity-options {
+                flex-direction: column;
+            }
+
+            .carousel-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-button.prev {
+                left: 10px;
+            }
+
+            .carousel-button.next {
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="product-detail-container">
+        <!-- Carousel d'images/vidéos du produit -->
+        <div class="product-carousel">
+            <div class="product-badge" id="productBadge">
+                <i class="fas fa-star"></i> LIVE ROSIN
+            </div>
+
+            <div class="carousel-images" id="carouselImages">
+                <!-- Les médias seront générés dynamiquement -->
+            </div>
+
+            <button class="carousel-button prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-button next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="carousel-indicators" id="carouselIndicators">
+                <!-- Les indicateurs seront générés dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Informations du produit -->
+        <div class="product-info">
+            <h1 class="product-title" id="productTitle">Chargement...</h1>
+
+            <div class="product-farm" id="productFarm">
+                <i class="fas fa-leaf"></i>
+                Farm: ...
+            </div>
+
+            <div class="product-vendor" id="productVendor">
+                <div class="vendor-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span class="vendor-name">...</span>
+            </div>
+
+            <!-- Sélection de la quantité -->
+            <div class="quantity-section">
+                <div class="quantity-title">
+                    <i class="fas fa-balance-scale"></i>
+                    Sélectionner la Quantité
+                </div>
+
+                <div class="quantity-options" id="quantityOptions">
+                    <!-- Les options de quantité seront générées dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Bouton de commande -->
+            <button class="order-button" onclick="placeOrder()">
+                <i class="fab fa-whatsapp"></i>
+                Commander Maintenant
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item active">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <i class="fas fa-th"></i>
+            <span>Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </nav>
+
+    <script>
+        // Données des produits avec support photos et vidéos
+        const productsData = [
+            {
+                id: 1,
+                name: "100K ROSIN",
+                farm: "100K",
+                vendor: "DONNY BURGER",
+                badge: "🔥 LIVE ROSIN",
+                media: [
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
+                    { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
+                ],
+                quantities: [
+                    { weight: '2G', price: '200€' },
+                    { weight: '4G', price: '380€' }
+                ]
+            },
+            {
+                id: 2,
+                name: "HASH BURGER",
+                farm: "ESTATICO",
+                vendor: "CHEF BURGER",
+                badge: "❄️ FROZEN USA",
+                media: [
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
+                ],
+                quantities: [
+                    { weight: '3G', price: '180€' },
+                    { weight: '5G', price: '290€' }
+                ]
+            },
+            {
+                id: 3,
+                name: "POTION",
+                farm: "WIZARD TREES",
+                vendor: "WIZARD MASTER",
+                badge: "🌿 TOPSHELF CALIFORNIA",
+                media: [
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
+                    { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
+                ],
+                quantities: [
+                    { weight: '3.5G', price: '110€' },
+                    { weight: '7G', price: '200€' }
+                ]
+            }
+        ];
+
+        // Variables globales
+        let currentSlide = 0;
+        let currentProduct = null;
+        let selectedQuantity = null;
+        let selectedPrice = null;
+        let mediaElements = [];
+
+        // Récupérer l'ID du produit depuis l'URL
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get('id')) || 1;
+        }
+
+        // Charger et afficher le produit
+        function loadProduct() {
+            const productId = getProductIdFromUrl();
+            currentProduct = productsData.find(p => p.id === productId) || productsData[0];
+
+            // Mettre à jour le titre de la page
+            document.title = `${currentProduct.name} - Al Gran`;
+
+            // Mettre à jour les informations du produit
+            document.getElementById('productTitle').textContent = currentProduct.name;
+            document.getElementById('productBadge').innerHTML = `<i class="fas fa-star"></i> ${currentProduct.badge}`;
+            document.getElementById('productFarm').innerHTML = `
+                <i class="fas fa-leaf"></i>
+                Farm: ${currentProduct.farm}
+            `;
+            document.getElementById('productVendor').innerHTML = `
+                <div class="vendor-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span class="vendor-name">${currentProduct.vendor}</span>
+            `;
+
+            // Générer le carousel de médias
+            generateMediaCarousel();
+
+            // Générer les options de quantité
+            generateQuantityOptions();
+        }
+
+        // Générer le carousel de médias (photos et vidéos)
+        function generateMediaCarousel() {
+            const carouselContainer = document.getElementById('carouselImages');
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+
+            carouselContainer.innerHTML = '';
+            indicatorsContainer.innerHTML = '';
+
+            currentProduct.media.forEach((media, index) => {
+                if (media.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = media.url;
+                    img.alt = currentProduct.name;
+                    img.className = 'carousel-image';
+                    img.onerror = function() {
+                        this.src = 'images/product-placeholder.jpg';
+                    };
+                    carouselContainer.appendChild(img);
+                } else if (media.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = media.url;
+                    video.className = 'carousel-video';
+                    video.controls = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    carouselContainer.appendChild(video);
+                }
+
+                // Créer l'indicateur
+                const indicator = document.createElement('span');
+                indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+                indicator.onclick = () => goToSlide(index);
+                indicatorsContainer.appendChild(indicator);
+            });
+
+            mediaElements = carouselContainer.children;
+        }
+
+        // Générer les options de quantité
+        function generateQuantityOptions() {
+            const quantityContainer = document.getElementById('quantityOptions');
+            quantityContainer.innerHTML = '';
+
+            currentProduct.quantities.forEach((qty, index) => {
+                const option = document.createElement('div');
+                option.className = 'quantity-option';
+                option.innerHTML = `
+                    <div class="quantity-weight">${qty.weight}</div>
+                    <div class="quantity-price">${qty.price}</div>
+                `;
+                option.onclick = function() {
+                    selectQuantity(this, qty.weight, qty.price);
+                };
+                quantityContainer.appendChild(option);
+            });
+        }
+
+        // Fonction pour afficher un slide
+        function showSlide(index) {
+            const carouselImages = document.getElementById('carouselImages');
+            if (index >= mediaElements.length) currentSlide = 0;
+            if (index < 0) currentSlide = mediaElements.length - 1;
+            
+            carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Mettre à jour les indicateurs
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === currentSlide);
+            });
+
+            // Gérer la lecture des vidéos
+            Array.from(mediaElements).forEach((element, i) => {
+                if (element.tagName === 'VIDEO') {
+                    if (i === currentSlide) {
+                        element.play().catch(e => console.log('Autoplay prevented'));
+                    } else {
+                        element.pause();
+                    }
+                }
+            });
+        }
+
+        // Changer de slide
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= mediaElements.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = mediaElements.length - 1;
+            showSlide(currentSlide);
+        }
+
+        // Aller à un slide spécifique
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        // Sélection de quantité
+        function selectQuantity(element, quantity, price) {
+            document.querySelectorAll('.quantity-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedQuantity = quantity;
+            selectedPrice = price;
+        }
+
+        // Passer commande
+        function placeOrder() {
+            if (!selectedQuantity) {
+                alert('⚠️ Veuillez sélectionner une quantité avant de continuer.');
+                return;
+            }
+            
+            // Créer le message WhatsApp
+            const message = `Bonjour! Je souhaite commander:\n\n🌿 ${currentProduct.name}\n📦 Quantité: ${selectedQuantity}\n💰 Prix: ${selectedPrice}\n🏷️ ${currentProduct.badge}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Auto-play carousel (optionnel)
+        let autoplayInterval = setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+
+        // Initialiser la page au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProduct();
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
