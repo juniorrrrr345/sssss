@@ -133,6 +133,10 @@ function handleNavigation(item) {
     if (section === 'dashboard') loadDashboard();
     if (section === 'products') loadProducts();
     if (section === 'categories') loadCategories();
+    if (section === 'farms') loadFarms();
+    if (section === 'services') loadServices();
+    if (section === 'social') loadSocialNetworks();
+    if (section === 'settings') loadSettings();
     if (section === 'settings') loadSettings();
 }
 
