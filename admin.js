@@ -99,7 +99,17 @@ function initEventListeners() {
         }
     });
     
-    // Plus de modal social - utilise des champs dynamiques maintenant
+    // Modal social
+    document.getElementById('addSocialBtn').addEventListener('click', () => openSocialModal());
+    document.getElementById('closeSocialModalBtn').addEventListener('click', closeSocialModal);
+    document.getElementById('socialForm').addEventListener('submit', handleSocialSubmit);
+    
+    // Fermer modal social en cliquant à l'extérieur
+    document.getElementById('socialModal').addEventListener('click', (e) => {
+        if (e.target.id === 'socialModal') {
+            closeSocialModal();
+        }
+    });
     
     // Modal category
     document.getElementById('addCategoryBtn').addEventListener('click', () => openCategoryModal());
@@ -1224,6 +1234,7 @@ window.editCategory = editCategory;
 window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
+// Exposer les fonctions sociales
 window.addSocialField = addSocialField;
 window.updateSocialLink = updateSocialLink;
 window.removeSocialLink = removeSocialLink;
