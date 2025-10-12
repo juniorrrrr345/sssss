@@ -7,7 +7,7 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "boutique-db"
-database_id = "5ee52135-17f2-43ee-80a8-c20fcaee99d5"
+database_id = "67562e42-d235-48c0-91e8-94d875bc5b3a"
 
 # Binding R2 Bucket pour les uploads
 [[r2_buckets]]
