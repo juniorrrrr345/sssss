@@ -121,7 +121,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, var(--primary-pink), #ff1493);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 20px;
@@ -173,7 +173,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            background: rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -245,7 +245,7 @@
         /* Bouton principal */
         .order-button {
             width: 100%;
-            background: linear-gradient(135deg, var(--primary-pink), #ff1493);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid #25D366;
             padding: 1.2rem;
@@ -372,76 +372,36 @@
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Accueil</span>
+        <a href="home.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
         </a>
         <a href="products.html" class="nav-item active">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Produits</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <i class="fas fa-th"></i>
-            <span>Catégories</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
-            <i class="fas fa-envelope"></i>
-            <span>Contact</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
         </a>
     </nav>
 
     <script>
-        // Données des produits avec support photos et vidéos
-        const productsData = [
-            {
-                id: 1,
-                name: "100K ROSIN",
-                farm: "100K",
-                vendor: "DONNY BURGER",
-                badge: "🔥 LIVE ROSIN",
-                media: [
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
-                    { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
-                ],
-                quantities: [
-                    { weight: '2G', price: '200€' },
-                    { weight: '4G', price: '380€' }
-                ]
-            },
-            {
-                id: 2,
-                name: "HASH BURGER",
-                farm: "ESTATICO",
-                vendor: "CHEF BURGER",
-                badge: "❄️ FROZEN USA",
-                media: [
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
-                ],
-                quantities: [
-                    { weight: '3G', price: '180€' },
-                    { weight: '5G', price: '290€' }
-                ]
-            },
-            {
-                id: 3,
-                name: "POTION",
-                farm: "WIZARD TREES",
-                vendor: "WIZARD MASTER",
-                badge: "🌿 TOPSHELF CALIFORNIA",
-                media: [
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
-                    { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
-                ],
-                quantities: [
-                    { weight: '3.5G', price: '110€' },
-                    { weight: '7G', price: '200€' }
-                ]
-            }
-        ];
-
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+        
         // Variables globales
         let currentSlide = 0;
         let currentProduct = null;
@@ -455,10 +415,42 @@
             return parseInt(urlParams.get('id')) || 1;
         }
 
-        // Charger et afficher le produit
-        function loadProduct() {
+        // Charger et afficher le produit depuis l'API
+        async function loadProduct() {
             const productId = getProductIdFromUrl();
-            currentProduct = productsData.find(p => p.id === productId) || productsData[0];
+            
+            try {
+                const response = await fetch(`${API_URL}/api/products/${productId}`);
+                if (!response.ok) {
+                    throw new Error('Produit non trouvé');
+                }
+                
+                const product = await response.json();
+                
+                // Convertir les données de l'API au format attendu
+                currentProduct = {
+                    id: product.id,
+                    name: product.name,
+                    farm: product.farm_name || 'Non spécifié',
+                    vendor: product.category_name || 'Non spécifié',
+                    badge: product.farm_name || '',
+                    media: product.video_url ? [{ type: 'video', url: product.video_url }] : [],
+                    quantities: (product.prices || []).map(p => ({
+                        weight: p.quantity,
+                        price: `${p.price}€`
+                    }))
+                };
+                
+                // Si pas de vidéo, afficher le message
+                if (currentProduct.media.length === 0) {
+                    currentProduct.media = [{ type: 'video', url: '' }];
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement du produit:', error);
+                // Rediriger vers la page produits si le produit n'est pas trouvé
+                window.location.href = 'products.html';
+                return;
+            }
 
             // Mettre à jour le titre de la page
             document.title = `${currentProduct.name} - Al Gran`;

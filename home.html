@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVEC AMOUR - Accueil</title>
+    <title>Al Gran - Accueil</title>
     <link rel="stylesheet" href="home-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
@@ -19,9 +19,9 @@
         <div class="bubble"></div>
     </div>
 
-    <!-- Logo géant AVEC en arrière-plan -->
-    <div class="giant-logo">AVEC</div>
-    <div class="logo-subtitle">Amour</div>
+    <!-- Logo géant en arrière-plan -->
+    <div class="giant-logo" id="giantLogo">Al Gran</div>
+    <div class="logo-subtitle" id="logoSubtitle">Boutique</div>
 
     <!-- Arc-en-ciel décoratif -->
     <div class="rainbow-arc"></div>
@@ -37,9 +37,8 @@
                 <i class="fas fa-heart"></i>
                 Nos Services
             </h2>
-            <div class="section-content">
-                <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
-                <p>Livraisons/Meetup dans toute l'ile de France, le jour même,envois de France à France ou à l'international avec suivis,preuves de dépôts et assurances. 👍 😜 🌍</p>
+            <div class="section-content" id="servicesContent">
+                <p>Chargement...</p>
             </div>
         </section>
 
@@ -49,8 +48,8 @@
                 <i class="fas fa-map-marker-alt"></i>
                 Zone de Livraison
             </h2>
-            <div class="section-content">
-                <div class="department-grid">
+            <div class="section-content" id="deliveryContent">
+                <div class="department-grid" id="departmentGrid">
                     <div class="department-badge">75</div>
                     <div class="department-badge">77</div>
                     <div class="department-badge">78</div>
@@ -93,14 +92,88 @@
     </nav>
 
     <script>
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+        
+        // Charger les données depuis l'API
+        async function loadHomeData() {
+            try {
+                // Charger les paramètres (nom de la boutique + image de fond)
+                const configResponse = await fetch(`${API_URL}/api/settings`);
+                if (configResponse.ok) {
+                    const data = await configResponse.json();
+                    if (data.success && data.settings) {
+                        // Nom de la boutique
+                        if (data.settings.shop_name) {
+                            document.getElementById('giantLogo').textContent = data.settings.shop_name;
+                            document.getElementById('logoSubtitle').textContent = '';
+                            document.title = data.settings.shop_name + ' - Accueil';
+                        }
+                        
+                        // Image de fond
+                        if (data.settings.background_image_url && data.settings.background_image_url.trim() !== '') {
+                            const cosmicBg = document.querySelector('.cosmic-background');
+                            if (cosmicBg) {
+                                cosmicBg.style.backgroundImage = `url('${data.settings.background_image_url}')`;
+                                cosmicBg.style.backgroundSize = 'cover';
+                                cosmicBg.style.backgroundPosition = 'center';
+                                cosmicBg.style.backgroundAttachment = 'fixed';
+                                cosmicBg.style.backgroundRepeat = 'no-repeat';
+                                cosmicBg.style.opacity = '1';
+                            }
+                        }
+                    }
+                }
+
+                // Charger les services
+                const servicesResponse = await fetch(`${API_URL}/api/services`);
+                if (servicesResponse.ok) {
+                    const servicesData = await servicesResponse.json();
+                    const servicesContent = document.getElementById('servicesContent');
+                    servicesContent.innerHTML = '';
+                    
+                    const servicesArray = servicesData.success ? servicesData.services : servicesData;
+                    if (servicesArray && servicesArray.length > 0) {
+                        servicesArray.forEach(service => {
+                            const p = document.createElement('p');
+                            p.textContent = service.content;
+                            servicesContent.appendChild(p);
+                        });
+                    }
+                }
+
+                // Charger la zone de livraison
+                const deliveryResponse = await fetch(`${API_URL}/api/delivery-zones`);
+                if (deliveryResponse.ok) {
+                    const zonesData = await deliveryResponse.json();
+                    const departmentGrid = document.getElementById('departmentGrid');
+                    
+                    const zonesArray = zonesData.success ? zonesData.zones : zonesData;
+                    if (zonesArray && zonesArray.length > 0) {
+                        departmentGrid.innerHTML = '';
+                        zonesArray.forEach(zone => {
+                            const badge = document.createElement('div');
+                            badge.className = 'department-badge';
+                            badge.textContent = zone.zone_code || zone.name;
+                            departmentGrid.appendChild(badge);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+            }
+        }
+
         // Initialiser l'animation Lottie hero
         document.addEventListener('DOMContentLoaded', () => {
+            loadHomeData();
+            
             lottie.loadAnimation({
                 container: document.getElementById('heroAnimation'),
                 renderer: 'svg',
                 loop: true,
                 autoplay: true,
-                path: 'https://lottie.host/b7f9d8e8-0a0c-4d52-a5e0-3a4d9c8f7b6a/VZ3gIHxd2M.json' // Animation cosmique/shopping
+                path: 'https://lottie.host/b7f9d8e8-0a0c-4d52-a5e0-3a4d9c8f7b6a/VZ3gIHxd2M.json'
             });
         });
     </script>
