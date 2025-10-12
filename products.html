@@ -3,27 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tous les Produits - Al Gran</title>
-    <link rel="stylesheet" href="style.css">
+    <title>AVEC AMOUR - Nos Produits</title>
+    <link rel="stylesheet" href="home-style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <script src="icons.js"></script>
     <style>
-        .container {
-            max-width: 1400px;
-            padding: 2rem 1.5rem 100px;
+        /* Styles spécifiques pour la page produits */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 10;
         }
 
-        .products-header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255, 62, 165, 0.5);
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 30px rgba(255, 62, 165, 0.5)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(255, 62, 165, 0.8)); }
         }
 
         .search-filter-bar {
             display: flex;
-            gap: 15px;
-            margin: 30px auto;
+            gap: 1rem;
+            margin: 2rem auto;
             max-width: 800px;
             flex-wrap: wrap;
             align-items: center;
+            position: relative;
+            z-index: 10;
         }
 
         .search-container {
@@ -37,17 +55,17 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
+            color: var(--primary-pink);
+            filter: drop-shadow(0 0 5px rgba(255, 62, 165, 0.6));
         }
 
         .search-input {
             width: 100%;
             padding: 15px 15px 15px 45px;
             border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 62, 165, 0.3);
+            background: rgba(26, 20, 60, 0.8);
+            backdrop-filter: blur(20px);
             color: white;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -55,8 +73,8 @@
 
         .search-input:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 25px rgba(255, 62, 165, 0.5);
         }
 
         .search-input::placeholder {
@@ -66,24 +84,24 @@
         .filter-btn {
             padding: 15px 35px;
             border-radius: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 62, 165, 0.3);
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.1), rgba(168, 85, 247, 0.1));
             color: white;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
         }
 
         .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 62, 165, 0.4);
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
+            border-color: var(--primary-pink);
         }
 
         .products-grid {
@@ -91,23 +109,42 @@
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
             margin: 40px auto;
+            position: relative;
+            z-index: 10;
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            border: 2px solid var(--card-border);
+            backdrop-filter: blur(20px);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 62, 165, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(255, 62, 165, 0.3);
+            border-color: rgba(255, 62, 165, 0.5);
         }
 
         .product-image-container {
@@ -115,12 +152,18 @@
             width: 100%;
             height: 280px;
             overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.1), rgba(168, 85, 247, 0.1));
         }
 
         .product-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
         }
 
         .product-badge {
@@ -129,8 +172,8 @@
             left: 15px;
             padding: 8px 16px;
             border-radius: 20px;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 39, 0.9);
+            backdrop-filter: blur(20px);
             font-size: 0.75rem;
             font-weight: 600;
             display: flex;
@@ -138,7 +181,8 @@
             gap: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--primary-pink);
+            box-shadow: 0 4px 20px rgba(255, 62, 165, 0.3);
         }
 
         .product-info {
@@ -147,7 +191,7 @@
 
         .product-name {
             font-size: 1.4rem;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 12px;
             color: white;
             text-transform: uppercase;
@@ -168,19 +212,24 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
+            background: var(--primary-pink);
+            box-shadow: 0 0 10px rgba(255, 62, 165, 0.8);
         }
 
         .product-price {
             font-size: 2rem;
-            font-weight: bold;
-            color: white;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(255, 62, 165, 0.5));
         }
 
         .product-price .unit {
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: normal;
+            opacity: 0.8;
+            font-weight: 600;
         }
 
         .no-results {
@@ -190,7 +239,72 @@
             font-size: 1.2rem;
         }
 
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(255, 62, 165, 0.5));
+        }
+
+        /* Animation d'entrée des produits */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card {
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        .product-card:nth-child(7) { animation-delay: 0.7s; }
+        .product-card:nth-child(8) { animation-delay: 0.8s; }
+        .product-card:nth-child(9) { animation-delay: 0.9s; }
+        .product-card:nth-child(10) { animation-delay: 1s; }
+
+        /* Container ajustements */
+        .container {
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Loader */
+        .loader-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 62, 165, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-pink);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
                 gap: 20px;
@@ -212,6 +326,7 @@
     </style>
 </head>
 <body>
+    <!-- Effet d'arrière-plan cosmique -->
     <div class="cosmic-background"></div>
     <div class="bubbles-container">
         <div class="bubble"></div>
@@ -221,24 +336,64 @@
         <div class="bubble"></div>
     </div>
 
+    <!-- Animation Lottie décorative -->
+    <div id="decorAnimation" style="position: fixed; bottom: 10%; left: 5%; width: 250px; height: 250px; z-index: 1; pointer-events: none; opacity: 0.4;"></div>
+
     <div class="container">
-        <div class="products-header">
-            <h1 class="title">Tous les Produits</h1>
+        <div class="page-header">
+            <h1 class="page-title">Nos Produits</h1>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 1.1rem;">Découvrez notre sélection exclusive</p>
         </div>
 
         <div class="search-filter-bar">
             <div class="search-container">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="search-icon" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 1.1rem; height: 1.1rem;"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="search-icon" style="width: 1.1rem; height: 1.1rem;"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
                 <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom, catégorie ou farm...">
             </div>
             <button class="filter-btn" id="filterBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em"><path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"/></svg>
                 Filtres
             </button>
         </div>
 
+        <div id="loadingContainer" class="loader-container" style="display: none;">
+            <div class="loader"></div>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-top: 20px;">Chargement des produits...</p>
+        </div>
+
         <div class="products-grid" id="productsGrid">
             <!-- Les produits seront générés ici par JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal des filtres -->
+    <div id="filterModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; backdrop-filter: blur(10px);">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card-bg); border-radius: 20px; padding: 2rem; max-width: 500px; width: 90%; border: 2px solid var(--primary-pink); box-shadow: 0 20px 60px rgba(255, 62, 165, 0.4);">
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem; text-align: center;">Filtres Avancés</h3>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.8);">Catégorie</label>
+                <select id="categoryFilter" style="width: 100%; padding: 10px; border-radius: 10px; background: rgba(26, 20, 60, 0.8); border: 1px solid rgba(255, 62, 165, 0.3); color: white;">
+                    <option value="">Toutes les catégories</option>
+                    <option value="rosin">🔥 Live Rosin</option>
+                    <option value="frozen">❄️ Frozen</option>
+                    <option value="topshelf">🌿 Topshelf</option>
+                    <option value="dry">💨 Dry</option>
+                    <option value="branded">💎 Branded</option>
+                    <option value="premium">💜 Premium</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.8);">Prix maximum</label>
+                <input type="range" id="priceFilter" min="0" max="300" value="300" style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                    <span>0€</span>
+                    <span id="priceValue">300€</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="applyFilters()" style="flex: 1; padding: 12px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple)); border: none; color: white; font-weight: 600; cursor: pointer;">Appliquer</button>
+                <button onclick="closeFilterModal()" style="flex: 1; padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; font-weight: 600; cursor: pointer;">Annuler</button>
+            </div>
         </div>
     </div>
 
@@ -270,110 +425,156 @@
         </a>
     </nav>
 
-    <script src="script.js"></script>
     <script>
-        // Données des produits - correspondant à l'image
+        // Données des produits enrichies
         const products = [
             {
                 id: 1,
                 name: "100K ROSIN",
                 farm: "100K",
                 badge: "🔥 LIVE ROSIN",
+                category: "rosin",
                 price: 200,
                 unit: "/ 2g",
-                image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop",
+                description: "Rosin de qualité supérieure, extraction à froid"
             },
             {
                 id: 2,
                 name: "HASH BURGER",
                 farm: "ESTATICO",
                 badge: "❄️ FROZEN USA US",
+                category: "frozen",
                 price: 120,
                 unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop",
+                description: "Hash congelé importé directement des USA"
             },
             {
                 id: 3,
                 name: "POTION",
                 farm: "WIZARD TREES",
                 badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
+                category: "topshelf",
                 price: 110,
                 unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop",
+                description: "Topshelf californien de la marque Wizard Trees"
             },
             {
                 id: 4,
                 name: "ZANGBANGER",
                 farm: "WIZARD TREES",
                 badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
+                category: "topshelf",
                 price: 110,
                 unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop",
+                description: "Variété exclusive de Wizard Trees"
             },
             {
                 id: 5,
                 name: "TOP DRY",
                 farm: "NOFARM",
                 badge: "💨 DRY MA",
+                category: "dry",
                 price: 50,
                 unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop",
+                description: "Dry sift marocain traditionnel"
             },
             {
                 id: 6,
                 name: "DARK MATTER",
                 farm: "COSMIC FARMS",
                 badge: "🌿 TOPSHELF",
+                category: "topshelf",
                 price: 110,
                 unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop",
+                description: "Variété cosmique aux effets puissants"
             },
             {
                 id: 7,
                 name: "CONCRETE JUNGLE",
                 farm: "URBAN GROW",
                 badge: "💎 BRANDED",
+                category: "branded",
                 price: 180,
                 unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop",
+                description: "Culture urbaine de qualité premium"
             },
             {
                 id: 8,
                 name: "ZKITTLEZ",
                 farm: "RAINBOW FARMS",
                 badge: "🌈 TOPSHELF",
+                category: "topshelf",
                 price: 180,
                 unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop",
+                description: "Saveurs fruitées intenses, génétique premium"
             },
             {
                 id: 9,
                 name: "BIG Z",
                 farm: "PURPLE HAZE",
                 badge: "💜 PREMIUM",
+                category: "premium",
                 price: 100,
                 unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop",
+                description: "Premium purple aux notes florales"
             },
             {
                 id: 10,
                 name: "GUSHMINTZ",
                 farm: "MINTY FRESH",
                 badge: "❄️ STATIC",
+                category: "frozen",
                 price: 170,
                 unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
+                image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop",
+                description: "Fusion mentholée ultra-fraîche"
+            },
+            {
+                id: 11,
+                name: "WEDDING CAKE",
+                farm: "CAKE FACTORY",
+                badge: "🎂 TOPSHELF",
+                category: "topshelf",
+                price: 140,
+                unit: "/ 3.5g",
+                image: "https://images.unsplash.com/photo-1598848492908-3e8a8f4e8e7e?w=500&h=400&fit=crop",
+                description: "Génétique Wedding Cake authentique"
+            },
+            {
+                id: 12,
+                name: "GELATO 41",
+                farm: "ITALIAN ICE",
+                badge: "🍦 PREMIUM",
+                category: "premium",
+                price: 150,
+                unit: "/ 3.5g",
+                image: "https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=500&h=400&fit=crop",
+                description: "Gelato #41 importé d'Italie"
             }
         ];
 
         let filteredProducts = [...products];
+        let currentFilters = {
+            search: '',
+            category: '',
+            maxPrice: 300
+        };
 
         // Créer une carte produit
         function createProductCard(product) {
             return `
                 <div class="product-card" data-id="${product.id}">
                     <div class="product-image-container">
-                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.background='linear-gradient(135deg, rgba(255, 62, 165, 0.3), rgba(168, 85, 247, 0.3))'">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.style.background='linear-gradient(135deg, rgba(255, 62, 165, 0.3), rgba(168, 85, 247, 0.3))'">
                         <div class="product-badge">${product.badge}</div>
                     </div>
                     <div class="product-info">
@@ -393,35 +594,77 @@
         // Afficher les produits
         function displayProducts(productsToDisplay) {
             const grid = document.getElementById('productsGrid');
-            if (productsToDisplay.length === 0) {
-                grid.innerHTML = '<div class="no-results"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" style="font-size: 3rem; margin-bottom: 1rem; display: block; width: 3rem; height: 3rem; margin-left: auto; margin-right: auto;"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>Aucun produit trouvé</div>';
-                return;
-            }
-            grid.innerHTML = productsToDisplay.map(createProductCard).join('');
+            const loader = document.getElementById('loadingContainer');
+            
+            // Afficher le loader
+            loader.style.display = 'block';
+            grid.style.display = 'none';
+            
+            // Simuler un léger délai pour l'effet de chargement
+            setTimeout(() => {
+                loader.style.display = 'none';
+                grid.style.display = 'grid';
+                
+                if (productsToDisplay.length === 0) {
+                    grid.innerHTML = `
+                        <div class="no-results" style="grid-column: 1 / -1;">
+                            <div class="empty-state-icon">🔍</div>
+                            <h3>Aucun produit trouvé</h3>
+                            <p>Essayez de modifier vos critères de recherche</p>
+                        </div>
+                    `;
+                    return;
+                }
+                grid.innerHTML = productsToDisplay.map(createProductCard).join('');
+            }, 300);
         }
 
-        // Recherche
-        function handleSearch(term) {
-            const searchTerm = term.toLowerCase().trim();
-            if (searchTerm === '') {
-                filteredProducts = [...products];
-            } else {
-                filteredProducts = products.filter(p => 
-                    p.name.toLowerCase().includes(searchTerm) ||
-                    p.farm.toLowerCase().includes(searchTerm) ||
-                    p.badge.toLowerCase().includes(searchTerm)
-                );
-            }
+        // Filtrer les produits
+        function filterProducts() {
+            filteredProducts = products.filter(product => {
+                const matchesSearch = currentFilters.search === '' || 
+                    product.name.toLowerCase().includes(currentFilters.search) ||
+                    product.farm.toLowerCase().includes(currentFilters.search) ||
+                    product.badge.toLowerCase().includes(currentFilters.search);
+                
+                const matchesCategory = currentFilters.category === '' || 
+                    product.category === currentFilters.category;
+                
+                const matchesPrice = product.price <= currentFilters.maxPrice;
+                
+                return matchesSearch && matchesCategory && matchesPrice;
+            });
+            
             displayProducts(filteredProducts);
         }
 
-        // Événements
+        // Recherche
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            handleSearch(e.target.value);
+            currentFilters.search = e.target.value.toLowerCase().trim();
+            filterProducts();
         });
 
+        // Ouvrir la modal des filtres
         document.getElementById('filterBtn').addEventListener('click', () => {
-            alert('Filtres avancés bientôt disponibles ! 🎯\n\nVous pourrez filtrer par :\n- Catégorie\n- Prix\n- Type\n- Farm');
+            document.getElementById('filterModal').style.display = 'block';
+        });
+
+        // Fermer la modal
+        function closeFilterModal() {
+            document.getElementById('filterModal').style.display = 'none';
+        }
+
+        // Appliquer les filtres
+        function applyFilters() {
+            currentFilters.category = document.getElementById('categoryFilter').value;
+            currentFilters.maxPrice = parseInt(document.getElementById('priceFilter').value);
+            filterProducts();
+            closeFilterModal();
+        }
+
+        // Mise à jour du prix en temps réel
+        document.getElementById('priceFilter').addEventListener('input', (e) => {
+            document.getElementById('priceValue').textContent = e.target.value + '€';
         });
 
         // Clic sur une carte produit
@@ -431,14 +674,36 @@
                 const productId = parseInt(card.dataset.id);
                 const product = products.find(p => p.id === productId);
                 if (product) {
-                    // Redirection vers la page de détail du produit
-                    window.location.href = `product-detail.html?id=${productId}`;
+                    // Animation de clic
+                    card.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        window.location.href = `product-detail.html?id=${productId}`;
+                    }, 150);
                 }
             }
         });
 
-        // Affichage initial
-        displayProducts(filteredProducts);
+        // Fermer la modal en cliquant à l'extérieur
+        document.getElementById('filterModal').addEventListener('click', (e) => {
+            if (e.target.id === 'filterModal') {
+                closeFilterModal();
+            }
+        });
+
+        // Initialiser les animations Lottie
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animation décorative
+            lottie.loadAnimation({
+                container: document.getElementById('decorAnimation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/c9a5b8e0-5c4a-4d7f-a5e0-3a4d9c8f7b6a/shopping-cart.json'
+            });
+            
+            // Affichage initial des produits
+            displayProducts(filteredProducts);
+        });
     </script>
 </body>
 </html>
