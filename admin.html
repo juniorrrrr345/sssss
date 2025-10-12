@@ -701,6 +701,16 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
+                        <label>Farm</label>
+                        <input type="text" id="productFarm" placeholder="ex: WIZARD TREES">
+                    </div>
+                    <div class="form-group">
+                        <label>Vendor</label>
+                        <input type="text" id="productVendor" placeholder="ex: CHEF BURGER">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
                         <label>Catégorie</label>
                         <select id="productCategory" required>
                             <option value="Extract">Extract</option>
@@ -711,20 +721,37 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>Badge</label>
+                        <input type="text" id="productBadge" placeholder="ex: 🔥 TOPSHELF">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
                         <label>Prix (€)</label>
                         <input type="number" id="productPrice" required>
                     </div>
+                    <div class="form-group">
+                        <label>Unité</label>
+                        <input type="text" id="productUnit" placeholder="ex: / 3.5g" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Unité</label>
-                    <input type="text" id="productUnit" placeholder="ex: / 3.5g" required>
+                    <label>Prix Multiples (pour page détails)</label>
+                    <div id="pricesContainer">
+                        <div class="price-item" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" class="price-weight" placeholder="5G" style="width: 30%;">
+                            <input type="text" class="price-value" placeholder="120€" style="width: 50%;">
+                            <button type="button" class="btn-remove-price" style="width: 20%; background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: var(--error); border-radius: 5px; cursor: pointer;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" id="addPriceBtn" class="btn btn-primary" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Ajouter un prix
+                    </button>
                 </div>
                 <div class="form-group">
-                    <label>Badge</label>
-                    <input type="text" id="productBadge" placeholder="ex: 🔥 TOPSHELF">
-                </div>
-                <div class="form-group">
-                    <label>Image URL (ou uploader vers R2)</label>
+                    <label>Image URL (principale)</label>
                     <input type="text" id="productImage">
                 </div>
                 <button type="submit" class="btn btn-success">

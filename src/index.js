@@ -168,6 +168,23 @@ async function getProduct(id, env, headers) {
     return jsonResponse({ error: 'Product not found' }, 404, headers);
   }
   
+  // Parser les JSON fields
+  if (product.prices_json) {
+    try {
+      product.prices = JSON.parse(product.prices_json);
+    } catch (e) {
+      product.prices = [];
+    }
+  }
+  
+  if (product.media_json) {
+    try {
+      product.media = JSON.parse(product.media_json);
+    } catch (e) {
+      product.media = [];
+    }
+  }
+  
   return jsonResponse({ success: true, product }, 200, headers);
 }
 
@@ -182,9 +199,13 @@ async function createProduct(request, env, headers) {
   
   const slug = generateSlug(data.name);
   
+  // Convertir les tableaux en JSON strings
+  const pricesJson = data.prices ? JSON.stringify(data.prices) : null;
+  const mediaJson = data.media ? JSON.stringify(data.media) : null;
+  
   const result = await env.DB.prepare(`
-    INSERT INTO products (name, slug, description, category_id, price, unit, badge, image_url, stock_quantity, is_active, is_featured)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (name, slug, description, category_id, price, unit, prices_json, badge, image_url, media_json, vendor, farm, stock_quantity, is_active, is_featured)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     data.name,
     slug,
@@ -192,8 +213,12 @@ async function createProduct(request, env, headers) {
     data.category_id,
     data.price,
     data.unit || '/ 3.5g',
+    pricesJson,
     data.badge || '',
     data.image_url || '',
+    mediaJson,
+    data.vendor || '',
+    data.farm || '',
     data.stock_quantity || 0,
     data.is_active !== undefined ? data.is_active : 1,
     data.is_featured || 0
@@ -243,6 +268,10 @@ async function updateProduct(id, request, env, headers) {
     updates.push('unit = ?');
     bindings.push(data.unit);
   }
+  if (data.prices !== undefined) {
+    updates.push('prices_json = ?');
+    bindings.push(JSON.stringify(data.prices));
+  }
   if (data.badge !== undefined) {
     updates.push('badge = ?');
     bindings.push(data.badge);
@@ -250,6 +279,18 @@ async function updateProduct(id, request, env, headers) {
   if (data.image_url !== undefined) {
     updates.push('image_url = ?');
     bindings.push(data.image_url);
+  }
+  if (data.media !== undefined) {
+    updates.push('media_json = ?');
+    bindings.push(JSON.stringify(data.media));
+  }
+  if (data.vendor !== undefined) {
+    updates.push('vendor = ?');
+    bindings.push(data.vendor);
+  }
+  if (data.farm !== undefined) {
+    updates.push('farm = ?');
+    bindings.push(data.farm);
   }
   if (data.stock_quantity !== undefined) {
     updates.push('stock_quantity = ?');

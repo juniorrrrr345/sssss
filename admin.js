@@ -59,11 +59,19 @@ function initEventListeners() {
     document.getElementById('addProductBtn').addEventListener('click', () => openProductModal());
     document.getElementById('closeModalBtn').addEventListener('click', closeProductModal);
     document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
+    document.getElementById('addPriceBtn').addEventListener('click', addPriceField);
     
     // Fermer modal en cliquant à l'extérieur
     document.getElementById('productModal').addEventListener('click', (e) => {
         if (e.target.id === 'productModal') {
             closeProductModal();
+        }
+    });
+    
+    // Délégation d'événements pour les boutons de suppression de prix
+    document.getElementById('pricesContainer').addEventListener('click', (e) => {
+        if (e.target.closest('.btn-remove-price')) {
+            removePriceField(e.target.closest('.price-item'));
         }
     });
 }
@@ -193,6 +201,32 @@ function displayProducts(productsToDisplay) {
     `).join('');
 }
 
+// Ajouter un champ de prix
+function addPriceField() {
+    const container = document.getElementById('pricesContainer');
+    const newPriceItem = document.createElement('div');
+    newPriceItem.className = 'price-item';
+    newPriceItem.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+    newPriceItem.innerHTML = `
+        <input type="text" class="price-weight" placeholder="10G" style="width: 30%;">
+        <input type="text" class="price-value" placeholder="210€" style="width: 50%;">
+        <button type="button" class="btn-remove-price" style="width: 20%; background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: var(--error); border-radius: 5px; cursor: pointer;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    container.appendChild(newPriceItem);
+}
+
+// Retirer un champ de prix
+function removePriceField(priceItem) {
+    const container = document.getElementById('pricesContainer');
+    if (container.children.length > 1) {
+        priceItem.remove();
+    } else {
+        showAlert('Il faut au moins un prix', 'warning');
+    }
+}
+
 // Ouvrir le modal produit
 async function openProductModal(productId = null) {
     editingProductId = productId;
@@ -205,6 +239,18 @@ async function openProductModal(productId = null) {
     // Réinitialiser le formulaire
     document.getElementById('productForm').reset();
     
+    // Réinitialiser les prix
+    const pricesContainer = document.getElementById('pricesContainer');
+    pricesContainer.innerHTML = `
+        <div class="price-item" style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" class="price-weight" placeholder="5G" style="width: 30%;">
+            <input type="text" class="price-value" placeholder="120€" style="width: 50%;">
+            <button type="button" class="btn-remove-price" style="width: 20%; background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: var(--error); border-radius: 5px; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
     if (productId) {
         // Mode édition
         const product = products.find(p => p.id === productId);
@@ -215,6 +261,34 @@ async function openProductModal(productId = null) {
             document.getElementById('productUnit').value = product.unit;
             document.getElementById('productBadge').value = product.badge || '';
             document.getElementById('productImage').value = product.image_url || '';
+            document.getElementById('productFarm').value = product.farm || '';
+            document.getElementById('productVendor').value = product.vendor || '';
+            
+            // Charger les prix multiples
+            if (product.prices_json) {
+                try {
+                    const prices = JSON.parse(product.prices_json);
+                    if (prices && prices.length > 0) {
+                        pricesContainer.innerHTML = '';
+                        prices.forEach(price => {
+                            const priceItem = document.createElement('div');
+                            priceItem.className = 'price-item';
+                            priceItem.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+                            priceItem.innerHTML = `
+                                <input type="text" class="price-weight" value="${price.weight}" placeholder="5G" style="width: 30%;">
+                                <input type="text" class="price-value" value="${price.price}" placeholder="120€" style="width: 50%;">
+                                <button type="button" class="btn-remove-price" style="width: 20%; background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: var(--error); border-radius: 5px; cursor: pointer;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            `;
+                            pricesContainer.appendChild(priceItem);
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing prices:', e);
+                }
+            }
+            
             document.querySelector('.modal-title').textContent = 'Modifier le Produit';
         }
     } else {
@@ -253,6 +327,17 @@ async function loadCategoriesForForm() {
 async function handleProductSubmit(e) {
     e.preventDefault();
     
+    // Récupérer les prix multiples
+    const priceItems = document.querySelectorAll('.price-item');
+    const prices = [];
+    priceItems.forEach(item => {
+        const weight = item.querySelector('.price-weight').value.trim();
+        const price = item.querySelector('.price-value').value.trim();
+        if (weight && price) {
+            prices.push({ weight, price });
+        }
+    });
+    
     const productData = {
         name: document.getElementById('productName').value,
         category_id: parseInt(document.getElementById('productCategory').value),
@@ -260,6 +345,9 @@ async function handleProductSubmit(e) {
         unit: document.getElementById('productUnit').value,
         badge: document.getElementById('productBadge').value,
         image_url: document.getElementById('productImage').value,
+        farm: document.getElementById('productFarm').value,
+        vendor: document.getElementById('productVendor').value,
+        prices: prices.length > 0 ? prices : null,
         is_active: 1
     };
     

@@ -391,56 +391,8 @@
     </nav>
 
     <script>
-        // Données des produits avec support photos et vidéos
-        const productsData = [
-            {
-                id: 1,
-                name: "100K ROSIN",
-                farm: "100K",
-                vendor: "DONNY BURGER",
-                badge: "🔥 LIVE ROSIN",
-                media: [
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
-                    { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
-                ],
-                quantities: [
-                    { weight: '2G', price: '200€' },
-                    { weight: '4G', price: '380€' }
-                ]
-            },
-            {
-                id: 2,
-                name: "HASH BURGER",
-                farm: "ESTATICO",
-                vendor: "CHEF BURGER",
-                badge: "❄️ FROZEN USA",
-                media: [
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
-                ],
-                quantities: [
-                    { weight: '3G', price: '180€' },
-                    { weight: '5G', price: '290€' }
-                ]
-            },
-            {
-                id: 3,
-                name: "POTION",
-                farm: "WIZARD TREES",
-                vendor: "WIZARD MASTER",
-                badge: "🌿 TOPSHELF CALIFORNIA",
-                media: [
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
-                    { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
-                    { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
-                ],
-                quantities: [
-                    { weight: '3.5G', price: '110€' },
-                    { weight: '7G', price: '200€' }
-                ]
-            }
-        ];
+        // Configuration API
+        const API_URL = 'http://localhost:8787'; // Utilisez votre URL d'API
 
         // Variables globales
         let currentSlide = 0;
@@ -455,33 +407,87 @@
             return parseInt(urlParams.get('id')) || 1;
         }
 
-        // Charger et afficher le produit
-        function loadProduct() {
+        // Charger et afficher le produit depuis l'API
+        async function loadProduct() {
             const productId = getProductIdFromUrl();
-            currentProduct = productsData.find(p => p.id === productId) || productsData[0];
+            
+            try {
+                const response = await fetch(`${API_URL}/api/products/${productId}`);
+                const data = await response.json();
+                
+                if (!data.success || !data.product) {
+                    throw new Error('Produit non trouvé');
+                }
+                
+                currentProduct = data.product;
+                
+                // Parser les données JSON si nécessaire
+                if (typeof currentProduct.prices === 'string') {
+                    try {
+                        currentProduct.prices = JSON.parse(currentProduct.prices);
+                    } catch (e) {
+                        currentProduct.prices = [];
+                    }
+                }
+                
+                if (typeof currentProduct.media === 'string') {
+                    try {
+                        currentProduct.media = JSON.parse(currentProduct.media);
+                    } catch (e) {
+                        currentProduct.media = [];
+                    }
+                }
+                
+                // Si pas de médias, utiliser l'image principale
+                if (!currentProduct.media || currentProduct.media.length === 0) {
+                    if (currentProduct.image_url) {
+                        currentProduct.media = [{ type: 'image', url: currentProduct.image_url }];
+                    } else {
+                        currentProduct.media = [{ type: 'image', url: 'images/product-placeholder.jpg' }];
+                    }
+                }
 
-            // Mettre à jour le titre de la page
-            document.title = `${currentProduct.name} - Al Gran`;
+                // Mettre à jour le titre de la page
+                document.title = `${currentProduct.name} - Al Gran`;
 
-            // Mettre à jour les informations du produit
-            document.getElementById('productTitle').textContent = currentProduct.name;
-            document.getElementById('productBadge').innerHTML = `<i class="fas fa-star"></i> ${currentProduct.badge}`;
-            document.getElementById('productFarm').innerHTML = `
-                <i class="fas fa-leaf"></i>
-                Farm: ${currentProduct.farm}
-            `;
-            document.getElementById('productVendor').innerHTML = `
-                <div class="vendor-icon">
-                    <i class="fas fa-user"></i>
+                // Mettre à jour les informations du produit
+                document.getElementById('productTitle').textContent = currentProduct.name;
+                document.getElementById('productBadge').innerHTML = `<i class="fas fa-star"></i> ${currentProduct.badge || currentProduct.category_icon || ''}`;
+                document.getElementById('productFarm').innerHTML = `
+                    <i class="fas fa-leaf"></i>
+                    Farm: ${currentProduct.farm || 'N/A'}
+                `;
+                document.getElementById('productVendor').innerHTML = `
+                    <div class="vendor-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="vendor-name">${currentProduct.vendor || 'Al Gran'}</span>
+                `;
+
+                // Générer le carousel de médias
+                generateMediaCarousel();
+
+                // Générer les options de quantité
+                generateQuantityOptions();
+                
+            } catch (error) {
+                console.error('Erreur lors du chargement du produit:', error);
+                showErrorMessage('Impossible de charger le produit. Veuillez réessayer.');
+            }
+        }
+        
+        // Afficher un message d'erreur
+        function showErrorMessage(message) {
+            document.getElementById('productTitle').textContent = 'Erreur';
+            document.querySelector('.product-info').innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 1rem;"></i>
+                    <p style="color: white; font-size: 1.1rem;">${message}</p>
+                    <button onclick="window.location.href='products.html'" style="margin-top: 1rem; padding: 0.8rem 1.5rem; background: var(--primary-pink); border: none; border-radius: 10px; color: white; cursor: pointer;">
+                        Retour aux produits
+                    </button>
                 </div>
-                <span class="vendor-name">${currentProduct.vendor}</span>
             `;
-
-            // Générer le carousel de médias
-            generateMediaCarousel();
-
-            // Générer les options de quantité
-            generateQuantityOptions();
         }
 
         // Générer le carousel de médias (photos et vidéos)
@@ -528,7 +534,12 @@
             const quantityContainer = document.getElementById('quantityOptions');
             quantityContainer.innerHTML = '';
 
-            currentProduct.quantities.forEach((qty, index) => {
+            // Utiliser les prix multiples si disponibles, sinon afficher le prix par défaut
+            const quantities = currentProduct.prices && currentProduct.prices.length > 0 
+                ? currentProduct.prices 
+                : [{ weight: currentProduct.unit || '3.5G', price: `${currentProduct.price}€` }];
+
+            quantities.forEach((qty, index) => {
                 const option = document.createElement('div');
                 option.className = 'quantity-option';
                 option.innerHTML = `
