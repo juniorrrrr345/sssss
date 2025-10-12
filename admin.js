@@ -485,11 +485,8 @@ async function saveSettings(e) {
     
     const settingsData = {
         shop_name: document.getElementById('shopName').value,
-        shop_email: document.getElementById('shopEmail').value,
-        shop_whatsapp: document.getElementById('shopWhatsapp').value,
-        shop_telegram: document.getElementById('shopTelegram').value,
-        shop_instagram: document.getElementById('shopInstagram').value,
-        shop_description: document.getElementById('shopDescription').value
+        shop_subtitle: document.getElementById('shopSubtitle').value,
+        background_image_url: document.getElementById('backgroundImage').value
     };
     
     // Si un nouveau mot de passe est fourni
