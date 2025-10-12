@@ -313,13 +313,13 @@ body {
 }
 
 .nav-item.active .nav-icon-circle {
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
 }
 
 .nav-item.active {
-    color: var(--text-primary);
+    color: #ffffff;
 }
 
 .nav-item.active .nav-icon-circle i {
@@ -327,13 +327,13 @@ body {
 }
 
 .nav-item:not(.active):hover .nav-icon-circle {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-3px);
 }
 
 .nav-item:not(.active):hover {
-    color: var(--text-primary);
+    color: #ffffff;
 }
 
 .nav-label {
