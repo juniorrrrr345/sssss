@@ -199,8 +199,39 @@
         // Configuration API
         const API_URL = 'https://algran-api.calitek-junior.workers.dev';
 
+        // Charger le nom de la boutique
+        async function loadShopName() {
+            console.log('Loading shop name...');
+            try {
+                const response = await fetch(`${API_URL}/api/settings`);
+                const data = await response.json();
+                console.log('Shop name data:', data);
+                
+                if (data.success && data.settings) {
+                    if (data.settings.shop_name) {
+                        document.getElementById('shopName').textContent = data.settings.shop_name;
+                        document.getElementById('shopName').style.color = '#ffffff';
+                        document.title = `Catégories - ${data.settings.shop_name}`;
+                    }
+                    
+                    // Appliquer l'image de fond si définie
+                    if (data.settings.background_image_url) {
+                        document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${data.settings.background_image_url}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                        document.body.style.backgroundAttachment = 'fixed';
+                        document.body.style.backgroundRepeat = 'no-repeat';
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur chargement nom boutique:', error);
+                document.getElementById('shopName').textContent = 'Al Gran';
+            }
+        }
+
         // Charger les catégories depuis l'API
         async function loadCategories() {
+            console.log('Loading categories...');
             try {
                 const [categoriesResponse, productsResponse, settingsResponse] = await Promise.all([
                     fetch(`${API_URL}/api/categories`),
@@ -208,9 +239,12 @@
                     fetch(`${API_URL}/api/settings`)
                 ]);
                 
+                console.log('Responses received');
                 const categoriesData = await categoriesResponse.json();
                 const productsData = await productsResponse.json();
                 const settingsData = await settingsResponse.json();
+                console.log('Categories:', categoriesData);
+                console.log('Products:', productsData);
                 
                 // Appliquer l'image de fond si définie
                 if (settingsData.success && settingsData.settings && settingsData.settings.background_image_url) {
