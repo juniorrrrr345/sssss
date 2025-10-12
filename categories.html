@@ -27,81 +27,11 @@
 
         <!-- Grille des catégories -->
         <div class="categories-grid" id="categoriesGrid">
-            <!-- Les catégories seront chargées ici -->
-            <a href="products.html?category=extract" class="category-card">
-                <div class="category-icon-large">🔥</div>
-                <div class="category-content">
-                    <h2 class="category-title">Extract</h2>
-                    <p class="category-description">Extraits premium de haute qualité</p>
-                    <div class="category-count">
-                        <i class="fas fa-box"></i>
-                        <span id="count-extract">...</span> produits
-                    </div>
-                </div>
-                <div class="category-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <a href="products.html?category=static-sift" class="category-card">
-                <div class="category-icon-large">💎</div>
-                <div class="category-content">
-                    <h2 class="category-title">Static-Sift</h2>
-                    <p class="category-description">Produits Static-Sift premium</p>
-                    <div class="category-count">
-                        <i class="fas fa-box"></i>
-                        <span id="count-static-sift">...</span> produits
-                    </div>
-                </div>
-                <div class="category-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <a href="products.html?category=frozen-sift" class="category-card">
-                <div class="category-icon-large">❄️</div>
-                <div class="category-content">
-                    <h2 class="category-title">Frozen-Sift</h2>
-                    <p class="category-description">Frozen-Sift de qualité supérieure</p>
-                    <div class="category-count">
-                        <i class="fas fa-box"></i>
-                        <span id="count-frozen-sift">...</span> produits
-                    </div>
-                </div>
-                <div class="category-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <a href="products.html?category=dry-sift" class="category-card">
-                <div class="category-icon-large">🌿</div>
-                <div class="category-content">
-                    <h2 class="category-title">Dry-Sift</h2>
-                    <p class="category-description">Dry-Sift artisanal</p>
-                    <div class="category-count">
-                        <i class="fas fa-box"></i>
-                        <span id="count-dry-sift">...</span> produits
-                    </div>
-                </div>
-                <div class="category-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <a href="products.html?category=weed" class="category-card">
-                <div class="category-icon-large">🍃</div>
-                <div class="category-content">
-                    <h2 class="category-title">Weed</h2>
-                    <p class="category-description">Fleurs premium sélectionnées</p>
-                    <div class="category-count">
-                        <i class="fas fa-box"></i>
-                        <span id="count-weed">...</span> produits
-                    </div>
-                </div>
-                <div class="category-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
+            <!-- Les catégories seront chargées dynamiquement depuis l'API -->
+            <div style="text-align: center; padding: 3rem; color: rgba(255,255,255,0.6); grid-column: 1/-1;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                <p style="margin-top: 1rem;">Chargement des catégories...</p>
+            </div>
         </div>
     </div>
 
@@ -144,7 +74,7 @@
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 25px;
             margin: 40px auto;
             max-width: 1200px;
@@ -155,17 +85,39 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 30px;
+            overflow: hidden;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 20px;
             position: relative;
-            overflow: hidden;
             text-decoration: none;
             color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-image-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-icon-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            z-index: 1;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .category-card::before {
@@ -190,15 +142,8 @@
             opacity: 0.1;
         }
 
-        .category-icon-large {
-            font-size: 4rem;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-        }
-
         .category-content {
-            flex: 1;
+            padding: 20px;
             position: relative;
             z-index: 1;
         }
@@ -246,51 +191,98 @@
                 padding-bottom: 100px;
             }
 
-            .category-card {
-                flex-direction: column;
-                text-align: center;
+            .category-image-container {
+                height: 180px;
             }
 
-            .category-arrow {
-                display: none;
+            .category-icon-overlay {
+                font-size: 4rem;
             }
         }
     </style>
 
     <script src="script.js"></script>
     <script>
-        // Configuration API - Changez cette URL après déploiement
+        // Configuration API
         const API_URL = 'https://algran-api.calitek-junior.workers.dev';
 
-        // Charger les catégories et compter les produits
+        // Charger les catégories depuis l'API
         async function loadCategories() {
             try {
-                const response = await fetch(`${API_URL}/api/products`);
-                const data = await response.json();
+                const [categoriesResponse, productsResponse] = await Promise.all([
+                    fetch(`${API_URL}/api/categories`),
+                    fetch(`${API_URL}/api/products`)
+                ]);
                 
-                if (data.success && data.products) {
+                const categoriesData = await categoriesResponse.json();
+                const productsData = await productsResponse.json();
+                
+                if (categoriesData.success && categoriesData.categories) {
                     // Compter les produits par catégorie
                     const categoryCounts = {};
-                    data.products.forEach(product => {
-                        const categorySlug = product.category_slug || 'unknown';
-                        categoryCounts[categorySlug] = (categoryCounts[categorySlug] || 0) + 1;
-                    });
+                    if (productsData.success && productsData.products) {
+                        productsData.products.forEach(product => {
+                            const categoryId = product.category_id;
+                            categoryCounts[categoryId] = (categoryCounts[categoryId] || 0) + 1;
+                        });
+                    }
                     
-                    // Mettre à jour les compteurs
-                    Object.keys(categoryCounts).forEach(slug => {
-                        const countElement = document.getElementById(`count-${slug}`);
-                        if (countElement) {
-                            countElement.textContent = categoryCounts[slug];
-                        }
-                    });
+                    // Afficher les catégories
+                    displayCategories(categoriesData.categories, categoryCounts);
                 }
             } catch (error) {
                 console.error('Erreur lors du chargement des catégories:', error);
-                // Mettre des valeurs par défaut
-                document.querySelectorAll('[id^="count-"]').forEach(el => {
-                    el.textContent = '0';
-                });
+                displayErrorMessage();
             }
+        }
+
+        // Afficher les catégories
+        function displayCategories(categories, productCounts) {
+            const grid = document.getElementById('categoriesGrid');
+            
+            if (categories.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                        <i class="fas fa-info-circle" style="font-size: 3rem; color: rgba(255,255,255,0.3);"></i>
+                        <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">Aucune catégorie disponible</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = categories.map(category => {
+                const productCount = productCounts[category.id] || 0;
+                const imageUrl = category.image_url || '';
+                
+                return `
+                    <a href="products.html?category=${category.slug}" class="category-card" data-category="${category.slug}">
+                        <div class="category-image-container">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${category.name}" class="category-image">` : ''}
+                            <div class="category-icon-overlay">${category.icon || '📦'}</div>
+                        </div>
+                        <div class="category-content">
+                            <h2 class="category-title">${category.name}</h2>
+                            <p class="category-description">${category.description || ''}</p>
+                            <div class="category-count">
+                                <i class="fas fa-box"></i>
+                                <span>${productCount}</span> ${productCount > 1 ? 'produits' : 'produit'}
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // Afficher un message d'erreur
+        function displayErrorMessage() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = `
+                <div style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: rgba(255,62,165,0.6);"></i>
+                    <p style="margin-top: 1rem; color: rgba(255,255,255,0.7);">Erreur de chargement des catégories</p>
+                    <p style="color: rgba(255,255,255,0.5);">Vérifiez votre connexion à l'API</p>
+                </div>
+            `;
         }
 
         // Charger les catégories au chargement de la page

@@ -379,7 +379,10 @@ function displayCategories(categoriesToDisplay) {
     
     tbody.innerHTML = categoriesToDisplay.map(cat => `
         <tr>
-            <td>${cat.icon || ''} ${cat.name}</td>
+            <td>
+                ${cat.image_url ? `<img src="${cat.image_url}" alt="${cat.name}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; margin-right: 10px; vertical-align: middle;">` : ''}
+                ${cat.icon || ''} ${cat.name}
+            </td>
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
             <td>
@@ -395,9 +398,17 @@ function displayCategories(categoriesToDisplay) {
 function editCategory(id) {
     const category = categories.find(c => c.id === id);
     if (category) {
-        const newName = prompt('Nouveau nom:', category.name);
+        // Créer un formulaire plus complet
+        const newName = prompt('Nom de la catégorie:', category.name);
         if (newName && newName !== category.name) {
-            updateCategoryAction(id, { name: newName });
+            const newDescription = prompt('Description:', category.description || '');
+            const newImageUrl = prompt('URL de l\'image (laissez vide pour garder l\'icône uniquement):', category.image_url || '');
+            
+            updateCategoryAction(id, { 
+                name: newName,
+                description: newDescription,
+                image_url: newImageUrl
+            });
         }
     }
 }
