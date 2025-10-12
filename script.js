@@ -1,135 +1,248 @@
-// Smooth animations on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // Add animation class to body
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-    }, 100);
-
-    // Interactive card effects
-    const cards = document.querySelectorAll('.contact-card:not(.disabled)');
-    
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-
-        // Add click animation
-        card.addEventListener('mousedown', function() {
-            this.style.transform = 'translateY(-5px) scale(0.98)';
-        });
-        
-        card.addEventListener('mouseup', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-    });
-
-    // Disabled card feedback
-    const disabledCards = document.querySelectorAll('.contact-card.disabled');
-    disabledCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Add shake animation
-            this.style.animation = 'shake 0.5s';
-            setTimeout(() => {
-                this.style.animation = '';
-            }, 500);
-        });
-    });
-
-    // Create additional floating particles
-    createParticles();
-});
-
-// Create animated particles
-function createParticles() {
-    const container = document.querySelector('.bubbles-container');
-    const particleCount = 20;
-
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.cssText = `
-            position: absolute;
-            width: ${Math.random() * 4 + 1}px;
-            height: ${Math.random() * 4 + 1}px;
-            background: rgba(255, 255, 255, ${Math.random() * 0.5 + 0.2});
-            border-radius: 50%;
-            top: ${Math.random() * 100}%;
-            left: ${Math.random() * 100}%;
-            animation: twinkle ${Math.random() * 3 + 2}s ease-in-out infinite;
-            animation-delay: ${Math.random() * 2}s;
-        `;
-        container.appendChild(particle);
+// Données des produits basées sur l'image
+const products = [
+    {
+        id: 1,
+        name: "100K ROSIN",
+        category: "100K",
+        badge: "🔥 LIVE ROSIN",
+        price: 200,
+        unit: "/ 2g",
+        image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
+    },
+    {
+        id: 2,
+        name: "HASH BURGER",
+        category: "ESTATICO",
+        badge: "💎 FROZEN USA us",
+        price: 120,
+        unit: "/ 5g",
+        image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
+    },
+    {
+        id: 3,
+        name: "POTION",
+        category: "WIZARD TREES",
+        badge: "🌿 TOPSHELF CALIFORNIA BRANDED us",
+        price: 110,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
+    },
+    {
+        id: 4,
+        name: "ZANGBANGER",
+        category: "WIZARD TREES",
+        badge: "🔥 TOPSHELF CALIFORNIA BRANDED us",
+        price: 110,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
+    },
+    {
+        id: 5,
+        name: "TOP DRY",
+        category: "MCAFARM",
+        badge: "💨 DRY us",
+        price: 50,
+        unit: "/ 3g",
+        image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
+    },
+    {
+        id: 6,
+        name: "DARK MATTER",
+        category: "WIZARD TREES",
+        badge: "🌿 TOPSHELF USA us",
+        price: 110,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
+    },
+    {
+        id: 7,
+        name: "CONCRETE JUNGLE",
+        category: "KARMA CARTEL",
+        badge: "💎 TOPSHELF BRANDED us",
+        price: 180,
+        unit: "/ 7g",
+        image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
+    },
+    {
+        id: 8,
+        name: "ZKITTLEZ",
+        category: "NORTH BAY GARDEN",
+        badge: "🌈 TOPSHELF BRANDED us",
+        price: 180,
+        unit: "/ 7g",
+        image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
+    },
+    {
+        id: 9,
+        name: "BIG Z",
+        category: "KARMA CARTEL",
+        badge: "💜 TOPSHELF BRANDED us",
+        price: 100,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
+    },
+    {
+        id: 10,
+        name: "GUSHMINTZ",
+        category: "ESTATICO",
+        badge: "❄️ STATIC USA us",
+        price: 170,
+        unit: "/ 5g",
+        image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
+    },
+    {
+        id: 11,
+        name: "WEDDING CAKE",
+        category: "PREMIUM",
+        badge: "💎 TOPSHELF BRANDED",
+        price: 150,
+        unit: "/ 7g",
+        image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=400&fit=crop"
+    },
+    {
+        id: 12,
+        name: "GELATO 41",
+        category: "EXCLUSIVE",
+        badge: "🔥 TOPSHELF USA",
+        price: 130,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=500&h=400&fit=crop"
+    },
+    {
+        id: 13,
+        name: "PURPLE PUNCH",
+        category: "WIZARD TREES",
+        badge: "💜 TOPSHELF CALIFORNIA",
+        price: 120,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=500&h=400&fit=crop"
+    },
+    {
+        id: 14,
+        name: "BLUE DREAM",
+        category: "CLASSIC",
+        badge: "💙 TOPSHELF BRANDED",
+        price: 95,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=500&h=400&fit=crop"
+    },
+    {
+        id: 15,
+        name: "OG KUSH",
+        category: "LEGEND",
+        badge: "👑 CLASSIC USA",
+        price: 140,
+        unit: "/ 5g",
+        image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop"
     }
+];
+
+let filteredProducts = [...products];
+
+// Fonction pour créer une carte produit
+function createProductCard(product) {
+    return `
+        <div class="product-card" data-id="${product.id}">
+            <div style="position: relative;">
+                <img src="${product.image}" alt="${product.name}" class="product-image">
+                <div class="product-badge">${product.badge}</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <div class="product-category">
+                    <span class="category-icon"></span>
+                    <span>${product.category}</span>
+                </div>
+                <div class="product-price">
+                    ${product.price}€ <span class="unit">${product.unit}</span>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
-// Add shake animation to CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
+// Fonction pour afficher les produits
+function displayProducts(productsToDisplay) {
+    const productsGrid = document.getElementById('productsGrid');
+    if (productsToDisplay.length === 0) {
+        productsGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px; font-size: 1.2rem;">Aucun produit trouvé 😔</p>';
+        return;
     }
-    
-    @keyframes twinkle {
-        0%, 100% { opacity: 0.2; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.5); }
-    }
-`;
-document.head.appendChild(style);
-
-// Add parallax effect to cosmic background
-document.addEventListener('mousemove', (e) => {
-    const mouseX = e.clientX / window.innerWidth;
-    const mouseY = e.clientY / window.innerHeight;
-    
-    const cosmicBg = document.querySelector('.cosmic-background');
-    if (cosmicBg) {
-        cosmicBg.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
-    }
-    
-    // Move bubbles with parallax
-    const bubbles = document.querySelectorAll('.bubble');
-    bubbles.forEach((bubble, index) => {
-        const speed = (index + 1) * 0.5;
-        bubble.style.transform = `translate(${mouseX * speed * 10}px, ${mouseY * speed * 10}px)`;
-    });
-});
-
-// Smooth scroll for navigation
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-        // Add click effect
-        this.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            this.style.transform = '';
-        }, 150);
-    });
-});
-
-// Optional: Add haptic feedback for mobile devices
-if ('vibrate' in navigator) {
-    document.querySelectorAll('.contact-card:not(.disabled)').forEach(card => {
-        card.addEventListener('click', () => {
-            navigator.vibrate(50);
-        });
-    });
+    productsGrid.innerHTML = productsToDisplay.map(createProductCard).join('');
 }
 
-// Handle visibility change (tab switching)
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        // Pause animations when tab is hidden
-        document.body.style.animationPlayState = 'paused';
+// Fonction de recherche
+function handleSearch(searchTerm) {
+    const term = searchTerm.toLowerCase().trim();
+    
+    if (term === '') {
+        filteredProducts = [...products];
     } else {
-        // Resume animations when tab is visible
-        document.body.style.animationPlayState = 'running';
+        filteredProducts = products.filter(product => 
+            product.name.toLowerCase().includes(term) ||
+            product.category.toLowerCase().includes(term) ||
+            product.badge.toLowerCase().includes(term)
+        );
+    }
+    
+    displayProducts(filteredProducts);
+}
+
+// Gestionnaire d'événements pour la recherche
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', (e) => {
+    handleSearch(e.target.value);
+});
+
+// Gestionnaire d'événements pour le bouton filtres
+const filterBtn = document.getElementById('filterBtn');
+filterBtn.addEventListener('click', () => {
+    alert('Les filtres avancés seront bientôt disponibles ! 🎯\n\nVous pourrez filtrer par :\n- Catégorie\n- Prix\n- Type de produit\n- Origine');
+});
+
+// Gestionnaire de clic sur les cartes produits
+document.addEventListener('click', (e) => {
+    const card = e.target.closest('.product-card');
+    if (card) {
+        const productId = parseInt(card.dataset.id);
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            showProductDetails(product);
+        }
+    }
+});
+
+// Fonction pour afficher les détails du produit
+function showProductDetails(product) {
+    alert(`🌿 ${product.name}\n\n` +
+          `Catégorie: ${product.category}\n` +
+          `${product.badge}\n\n` +
+          `Prix: ${product.price}€ ${product.unit}\n\n` +
+          `Cliquez pour ajouter au panier !`);
+}
+
+// Animation de chargement
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        displayProducts(filteredProducts);
+    }, 100);
+});
+
+// Affichage initial des produits
+displayProducts(filteredProducts);
+
+// Effet de parallaxe sur le scroll
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.main-title');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+            ticking = false;
+        });
+        ticking = true;
     }
 });
