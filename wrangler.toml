@@ -6,7 +6,7 @@ pages_build_output_dir = "public"
 # Binding D1 Database
 [[d1_databases]]
 binding = "DB"
-database_name = "boutique-db"
+database_name = "algran-db"
 database_id = "67562e42-d235-48c0-91e8-94d875bc5b3a"
 
 # Binding R2 Bucket pour les uploads
