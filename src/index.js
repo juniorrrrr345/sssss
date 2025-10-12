@@ -339,13 +339,18 @@ async function updateProduct(id, request, env, headers) {
 
 // DELETE /api/products/:id - Supprimer un produit
 async function deleteProduct(id, env, headers) {
-  const result = await env.DB.prepare('DELETE FROM products WHERE id = ?').bind(id).run();
-  
-  if (result.meta.changes === 0) {
-    return jsonResponse({ error: 'Product not found' }, 404, headers);
+  try {
+    const result = await env.DB.prepare('DELETE FROM products WHERE id = ?').bind(id).run();
+    
+    if (result.meta.changes === 0) {
+      return jsonResponse({ error: 'Product not found' }, 404, headers);
+    }
+    
+    return jsonResponse({ success: true, message: 'Product deleted successfully' }, 200, headers);
+  } catch (error) {
+    console.error('Delete product error:', error);
+    return jsonResponse({ success: false, message: error.message }, 500, headers);
   }
-  
-  return jsonResponse({ success: true, message: 'Product deleted successfully' }, 200, headers);
 }
 
 // GET /api/categories - Liste toutes les catégories
