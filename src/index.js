@@ -48,6 +48,12 @@ export default {
             stats: {
               'GET /api/stats': 'Statistiques de la boutique'
             },
+            services: {
+              'GET /api/services': 'Liste tous les services',
+              'POST /api/services': 'Crée un nouveau service',
+              'PUT /api/services/:id': 'Modifie un service',
+              'DELETE /api/services/:id': 'Supprime un service'
+            },
             upload: {
               'POST /api/upload': 'Upload une image vers R2'
             }
@@ -106,6 +112,25 @@ export default {
       
       if (path === '/api/stats' && method === 'GET') {
         return await getStats(env, corsHeaders);
+      }
+      
+      // Services
+      if (path === '/api/services' && method === 'GET') {
+        return await getServices(env, corsHeaders);
+      }
+      
+      if (path === '/api/services' && method === 'POST') {
+        return await createService(request, env, corsHeaders);
+      }
+      
+      if (path.match(/^\/api\/services\/\d+$/) && method === 'PUT') {
+        const id = path.split('/')[3];
+        return await updateService(id, request, env, corsHeaders);
+      }
+      
+      if (path.match(/^\/api\/services\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteService(id, env, corsHeaders);
       }
 
       // Upload image to R2
@@ -410,6 +435,96 @@ async function getStats(env, headers) {
   stats.totalImages = totalImages.count;
   
   return jsonResponse({ success: true, stats }, 200, headers);
+}
+
+// GET /api/services - Liste tous les services
+async function getServices(env, headers) {
+  const { results } = await env.DB.prepare(`
+    SELECT * FROM services 
+    ORDER BY display_order ASC, id ASC
+  `).all();
+  
+  return jsonResponse({ success: true, services: results }, 200, headers);
+}
+
+// POST /api/services - Créer un service
+async function createService(request, env, headers) {
+  const data = await request.json();
+  
+  if (!data.title || !data.content) {
+    return jsonResponse({ error: 'Title and content are required' }, 400, headers);
+  }
+  
+  const result = await env.DB.prepare(`
+    INSERT INTO services (title, content, icon, display_order, is_active)
+    VALUES (?, ?, ?, ?, ?)
+  `).bind(
+    data.title,
+    data.content,
+    data.icon || '📌',
+    data.display_order || 0,
+    data.is_active !== undefined ? data.is_active : 1
+  ).run();
+  
+  return jsonResponse({
+    success: true,
+    message: 'Service created successfully',
+    id: result.meta.last_row_id
+  }, 201, headers);
+}
+
+// PUT /api/services/:id - Modifier un service
+async function updateService(id, request, env, headers) {
+  const data = await request.json();
+  
+  const updates = [];
+  const bindings = [];
+  
+  if (data.title !== undefined) {
+    updates.push('title = ?');
+    bindings.push(data.title);
+  }
+  if (data.content !== undefined) {
+    updates.push('content = ?');
+    bindings.push(data.content);
+  }
+  if (data.icon !== undefined) {
+    updates.push('icon = ?');
+    bindings.push(data.icon);
+  }
+  if (data.display_order !== undefined) {
+    updates.push('display_order = ?');
+    bindings.push(data.display_order);
+  }
+  if (data.is_active !== undefined) {
+    updates.push('is_active = ?');
+    bindings.push(data.is_active);
+  }
+  
+  if (updates.length === 0) {
+    return jsonResponse({ error: 'No fields to update' }, 400, headers);
+  }
+  
+  bindings.push(id);
+  
+  await env.DB.prepare(`
+    UPDATE services 
+    SET ${updates.join(', ')}
+    WHERE id = ?
+  `).bind(...bindings).run();
+  
+  return jsonResponse({ success: true, message: 'Service updated successfully' }, 200, headers);
+}
+
+// DELETE /api/services/:id - Supprimer un service
+async function deleteService(id, env, headers) {
+  const result = await env.DB.prepare('DELETE FROM services WHERE id = ?').bind(id).run();
+  
+  if (result.meta.changes === 0) {
+    return jsonResponse({ error: 'Service not found' }, 404, headers);
+  }
+  
+  return jsonResponse({ success: true, message: 'Service deleted successfully' }, 200, headers);
 }
 
 // POST /api/upload - Upload image vers R2

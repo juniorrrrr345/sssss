@@ -44,6 +44,18 @@ CREATE TABLE IF NOT EXISTS settings (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table des services (pour la page d'accueil)
+CREATE TABLE IF NOT EXISTS services (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    icon TEXT,
+    display_order INTEGER DEFAULT 0,
+    is_active INTEGER DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Table des images (historique uploads R2)
 CREATE TABLE IF NOT EXISTS images (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -111,6 +123,12 @@ BEGIN
     UPDATE orders SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
 END;
 
+CREATE TRIGGER IF NOT EXISTS update_services_timestamp 
+AFTER UPDATE ON services
+BEGIN
+    UPDATE services SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
 -- Trigger pour incrémenter/décrémenter le compteur de produits dans les catégories
 CREATE TRIGGER IF NOT EXISTS increment_category_count
 AFTER INSERT ON products
@@ -146,6 +164,12 @@ INSERT OR IGNORE INTO categories (name, slug, description, icon) VALUES
 ('Frozen-Sift', 'frozen-sift', 'Frozen-Sift de qualité supérieure', '❄️'),
 ('Dry-Sift', 'dry-sift', 'Dry-Sift artisanal', '🌿'),
 ('Weed', 'weed', 'Fleurs premium sélectionnées', '🍃');
+
+-- Insérer les services par défaut
+INSERT OR IGNORE INTO services (id, title, content, icon, display_order, is_active) VALUES
+(1, 'Nos Services', 'Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀', '❤️', 1, 1),
+(2, 'Livraison', 'Livraisons/Meetup dans toute l''ile de France, le jour même, envois de France à France ou à l''international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍', '🚚', 2, 1),
+(3, 'Zone de Livraison', '75,77,78,91,92,93,94,95', '📍', 3, 1);
 
 -- Insérer les paramètres par défaut
 INSERT OR IGNORE INTO settings (key, value, description) VALUES

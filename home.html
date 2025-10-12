@@ -30,30 +30,9 @@
     <div id="heroAnimation" style="position: fixed; top: 10%; right: 5%; width: 300px; height: 300px; z-index: 1; pointer-events: none; opacity: 0.6;"></div>
 
     <!-- Contenu principal -->
-    <div class="container">
-        <!-- Section Nos Services -->
-        <section class="service-section">
-            <h2 class="section-title">
-                <i class="fas fa-heart"></i>
-                Nos Services
-            </h2>
-            <div class="section-content" id="servicesContent">
-                <p>Chargement...</p>
-            </div>
-        </section>
-
-        <!-- Section Zone de Livraison -->
-        <section class="delivery-section">
-            <h2 class="section-title">
-                <i class="fas fa-map-marker-alt"></i>
-                Zone de Livraison
-            </h2>
-            <div class="section-content">
-                <div class="department-grid" id="deliveryZones">
-                    <div class="department-badge">Chargement...</div>
-                </div>
-            </div>
-        </section>
+    <div class="container" id="servicesContainer">
+        <!-- Les services seront chargés ici dynamiquement -->
+        <p style="text-align: center; color: rgba(255,255,255,0.7); padding: 2rem;">Chargement...</p>
     </div>
 
     <!-- Bas de page / Navigation -->
@@ -86,25 +65,40 @@
 
     <script src="config.js"></script>
     <script>
-        // Charger les paramètres de la page d'accueil
-        async function loadHomeSettings() {
+        // Charger les services depuis l'API
+        async function loadServices() {
             try {
-                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                const data = await fetchApi('/api/services');
                 
-                if (data.success) {
-                    const settings = data.settings;
-                    updateHomeContent(settings);
+                if (data.success && data.services) {
+                    // Filtrer seulement les services actifs et les trier par ordre
+                    const activeServices = data.services
+                        .filter(s => s.is_active)
+                        .sort((a, b) => a.display_order - b.display_order);
+                    
+                    displayServices(activeServices);
                 }
             } catch (error) {
-                console.error('Erreur lors du chargement des paramètres:', error);
-                // Afficher le contenu par défaut en cas d'erreur
+                console.error('Erreur lors du chargement des services:', error);
                 showDefaultContent();
             }
         }
 
-        // Mettre à jour le contenu de la page
-        function updateHomeContent(settings) {
-            // Titre principal
+        // Charger les paramètres (pour le titre)
+        async function loadSettings() {
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                
+                if (data.success && data.settings) {
+                    updateTitle(data.settings);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des paramètres:', error);
+            }
+        }
+
+        // Mettre à jour le titre
+        function updateTitle(settings) {
             if (settings.home_welcome_title) {
                 const words = settings.home_welcome_title.split(' ');
                 const mainLogo = document.getElementById('mainLogo');
@@ -118,53 +112,108 @@
                     subLogo.textContent = '';
                 }
             }
+        }
 
-            // Textes de présentation
-            const servicesContent = document.getElementById('servicesContent');
-            if (settings.home_services_text || settings.home_delivery_text) {
-                let html = '';
-                if (settings.home_services_text) {
-                    html += `<p>${settings.home_services_text}</p>`;
-                }
-                if (settings.home_delivery_text) {
-                    html += `<p>${settings.home_delivery_text}</p>`;
-                }
-                servicesContent.innerHTML = html;
+        // Afficher les services
+        function displayServices(services) {
+            const container = document.getElementById('servicesContainer');
+            
+            if (services.length === 0) {
+                showDefaultContent();
+                return;
             }
-
-            // Zones de livraison
-            if (settings.home_delivery_zones) {
-                const zones = settings.home_delivery_zones.split(',').map(z => z.trim());
-                const deliveryZones = document.getElementById('deliveryZones');
-                deliveryZones.innerHTML = zones.map(zone => 
-                    `<div class="department-badge">${zone}</div>`
-                ).join('');
-            }
+            
+            let html = '';
+            
+            services.forEach(service => {
+                // Vérifier si c'est un service de type "Zone de Livraison" (avec départements)
+                const isDeliveryZone = service.title.toLowerCase().includes('zone') || 
+                                     service.title.toLowerCase().includes('livraison') && 
+                                     service.content.match(/^\d+/);
+                
+                if (isDeliveryZone && service.content.match(/^[\d,\s]+$/)) {
+                    // Service avec départements
+                    const zones = service.content.split(',').map(z => z.trim());
+                    html += `
+                        <section class="delivery-section">
+                            <h2 class="section-title">
+                                ${service.icon ? `<span style="font-size: 1.2em;">${service.icon}</span>` : '<i class="fas fa-map-marker-alt"></i>'}
+                                ${service.title}
+                            </h2>
+                            <div class="section-content">
+                                <div class="department-grid">
+                                    ${zones.map(zone => `<div class="department-badge">${zone}</div>`).join('')}
+                                </div>
+                            </div>
+                        </section>
+                    `;
+                } else {
+                    // Service standard avec texte
+                    html += `
+                        <section class="service-section">
+                            <h2 class="section-title">
+                                ${service.icon ? `<span style="font-size: 1.2em;">${service.icon}</span>` : '<i class="fas fa-heart"></i>'}
+                                ${service.title}
+                            </h2>
+                            <div class="section-content">
+                                <p>${service.content}</p>
+                            </div>
+                        </section>
+                    `;
+                }
+            });
+            
+            container.innerHTML = html;
         }
 
         // Afficher le contenu par défaut en cas d'erreur
         function showDefaultContent() {
-            document.getElementById('servicesContent').innerHTML = `
-                <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
-                <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
-            `;
-            
-            document.getElementById('deliveryZones').innerHTML = `
-                <div class="department-badge">75</div>
-                <div class="department-badge">77</div>
-                <div class="department-badge">78</div>
-                <div class="department-badge">91</div>
-                <div class="department-badge">92</div>
-                <div class="department-badge">93</div>
-                <div class="department-badge">94</div>
-                <div class="department-badge">95</div>
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = `
+                <section class="service-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-heart"></i>
+                        Nos Services
+                    </h2>
+                    <div class="section-content">
+                        <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
+                    </div>
+                </section>
+                <section class="service-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-truck"></i>
+                        Livraison
+                    </h2>
+                    <div class="section-content">
+                        <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+                    </div>
+                </section>
+                <section class="delivery-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Zone de Livraison
+                    </h2>
+                    <div class="section-content">
+                        <div class="department-grid">
+                            <div class="department-badge">75</div>
+                            <div class="department-badge">77</div>
+                            <div class="department-badge">78</div>
+                            <div class="department-badge">91</div>
+                            <div class="department-badge">92</div>
+                            <div class="department-badge">93</div>
+                            <div class="department-badge">94</div>
+                            <div class="department-badge">95</div>
+                        </div>
+                    </div>
+                </section>
             `;
         }
 
-        // Initialiser l'animation Lottie hero
+        // Initialiser
         document.addEventListener('DOMContentLoaded', () => {
-            // Charger les paramètres
-            loadHomeSettings();
+            // Charger les services et le titre
+            loadServices();
+            loadSettings();
             
             // Animation Lottie (optionnel - peut causer des erreurs 403)
             try {

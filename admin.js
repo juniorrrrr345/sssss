@@ -11,7 +11,9 @@ const ADMIN_PASSWORD = 'votre_nouveau_mot_de_passe'; // À changer après premie
 let currentSection = 'dashboard';
 let products = [];
 let categories = [];
+let services = [];
 let editingProductId = null;
+let editingServiceId = null;
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -66,6 +68,18 @@ function initEventListeners() {
             closeProductModal();
         }
     });
+    
+    // Modal service
+    document.getElementById('addServiceBtn').addEventListener('click', () => openServiceModal());
+    document.getElementById('closeServiceModalBtn').addEventListener('click', closeServiceModal);
+    document.getElementById('serviceForm').addEventListener('submit', handleServiceSubmit);
+    
+    // Fermer modal service en cliquant à l'extérieur
+    document.getElementById('serviceModal').addEventListener('click', (e) => {
+        if (e.target.id === 'serviceModal') {
+            closeServiceModal();
+        }
+    });
 }
 
 // Gestion de la connexion
@@ -109,6 +123,7 @@ function handleNavigation(item) {
         dashboard: 'Dashboard',
         products: 'Gestion des Produits',
         categories: 'Gestion des Catégories',
+        services: 'Gestion des Services',
         settings: 'Paramètres'
     };
     document.getElementById('pageTitle').textContent = titles[section];
@@ -117,6 +132,7 @@ function handleNavigation(item) {
     if (section === 'dashboard') loadDashboard();
     if (section === 'products') loadProducts();
     if (section === 'categories') loadCategories();
+    if (section === 'services') loadServices();
     if (section === 'settings') loadSettings();
 }
 
@@ -506,8 +522,173 @@ function showAlert(message, type = 'success') {
     }, 4000);
 }
 
+// ===== GESTION DES SERVICES =====
+
+// Charger les services
+async function loadServices() {
+    try {
+        const response = await fetch(`${API_URL}/api/services`);
+        const data = await response.json();
+        
+        if (data.success) {
+            services = data.services;
+            displayServices(services);
+        }
+    } catch (error) {
+        console.error('Error loading services:', error);
+        showAlert('Erreur lors du chargement des services', 'error');
+    }
+}
+
+// Afficher les services dans le tableau
+function displayServices(servicesToDisplay) {
+    const tbody = document.getElementById('servicesTableBody');
+    
+    if (servicesToDisplay.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Aucun service</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = servicesToDisplay.map(service => `
+        <tr>
+            <td style="font-size: 1.5rem;">${service.icon || '📌'}</td>
+            <td><strong>${service.title}</strong></td>
+            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                ${service.content.substring(0, 100)}${service.content.length > 100 ? '...' : ''}
+            </td>
+            <td>${service.display_order}</td>
+            <td>
+                <span class="badge ${service.is_active ? 'badge-success' : 'badge-warning'}">
+                    ${service.is_active ? 'Actif' : 'Inactif'}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="editService(${service.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteServiceConfirm(${service.id}, '${service.title.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Ouvrir le modal service
+async function openServiceModal(serviceId = null) {
+    editingServiceId = serviceId;
+    
+    // Réinitialiser le formulaire
+    document.getElementById('serviceForm').reset();
+    document.getElementById('serviceActive').checked = true;
+    
+    if (serviceId) {
+        // Mode édition
+        const service = services.find(s => s.id === serviceId);
+        if (service) {
+            document.getElementById('serviceTitle').value = service.title;
+            document.getElementById('serviceContent').value = service.content;
+            document.getElementById('serviceIcon').value = service.icon || '';
+            document.getElementById('serviceOrder').value = service.display_order || 0;
+            document.getElementById('serviceActive').checked = service.is_active === 1;
+            document.querySelector('#serviceModal .modal-title').textContent = 'Modifier le Service';
+        }
+    } else {
+        // Mode création
+        document.querySelector('#serviceModal .modal-title').textContent = 'Ajouter un Service';
+    }
+    
+    document.getElementById('serviceModal').classList.add('active');
+}
+
+// Fermer le modal service
+function closeServiceModal() {
+    document.getElementById('serviceModal').classList.remove('active');
+    editingServiceId = null;
+}
+
+// Soumettre le formulaire service
+async function handleServiceSubmit(e) {
+    e.preventDefault();
+    
+    const serviceData = {
+        title: document.getElementById('serviceTitle').value,
+        content: document.getElementById('serviceContent').value,
+        icon: document.getElementById('serviceIcon').value,
+        display_order: parseInt(document.getElementById('serviceOrder').value) || 0,
+        is_active: document.getElementById('serviceActive').checked ? 1 : 0
+    };
+    
+    try {
+        let response;
+        if (editingServiceId) {
+            // Mise à jour
+            response = await fetch(`${API_URL}/api/services/${editingServiceId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(serviceData)
+            });
+        } else {
+            // Création
+            response = await fetch(`${API_URL}/api/services`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(serviceData)
+            });
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(editingServiceId ? 'Service modifié avec succès !' : 'Service créé avec succès !', 'success');
+            closeServiceModal();
+            loadServices();
+        } else {
+            showAlert('Erreur: ' + (data.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving service:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
+    }
+}
+
+// Éditer un service
+function editService(id) {
+    openServiceModal(id);
+}
+
+// Confirmer la suppression d'un service
+function deleteServiceConfirm(id, title) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer "${title}" ?`)) {
+        deleteServiceAction(id);
+    }
+}
+
+// Supprimer un service
+async function deleteServiceAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/services/${id}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Service supprimé avec succès !', 'success');
+            loadServices();
+        } else {
+            showAlert('Erreur lors de la suppression', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting service:', error);
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
 // Exposer les fonctions globalement pour les boutons inline
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.editService = editService;
+window.deleteServiceConfirm = deleteServiceConfirm;
 window.saveSettings = saveSettings;

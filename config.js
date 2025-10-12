@@ -14,6 +14,7 @@ const API_CONFIG = {
     ENDPOINTS: {
         PRODUCTS: '/api/products',
         CATEGORIES: '/api/categories',
+        SERVICES: '/api/services',
         SETTINGS: '/api/settings',
         STATS: '/api/stats',
         UPLOAD: '/api/upload'
