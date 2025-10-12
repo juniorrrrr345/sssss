@@ -4,8 +4,13 @@
  */
 
 // Configuration API
-const API_URL = 'http://localhost:8787'; // Pour dev local - Changez pour production: https://algran-api.juniorrrrr345.workers.dev
+// ⚠️ IMPORTANT: Remplacez cette URL par votre URL Cloudflare Workers après déploiement
+// Exemple: https://algran-api-votre-nom.workers.dev
+const API_URL = 'http://localhost:8787'; 
 const ADMIN_PASSWORD = 'admin123'; // À changer après premier login
+
+// Vérifier si l'API est accessible
+let API_AVAILABLE = false;
 
 // État global
 let currentSection = 'dashboard';
@@ -123,7 +128,18 @@ function handleNavigation(item) {
 // Charger le dashboard
 async function loadDashboard() {
     try {
+        // Afficher un message de chargement
+        document.getElementById('totalProducts').textContent = '...';
+        document.getElementById('totalCategories').textContent = '...';
+        document.getElementById('activeProducts').textContent = '...';
+        document.getElementById('totalImages').textContent = '...';
+        
         const response = await fetch(`${API_URL}/api/stats`);
+        
+        if (!response.ok) {
+            throw new Error(`API non disponible (${response.status})`);
+        }
+        
         const data = await response.json();
         
         if (data.success) {
@@ -131,10 +147,17 @@ async function loadDashboard() {
             document.getElementById('totalCategories').textContent = data.stats.totalCategories;
             document.getElementById('activeProducts').textContent = data.stats.activeProducts;
             document.getElementById('totalImages').textContent = data.stats.totalImages;
+            API_AVAILABLE = true;
         }
     } catch (error) {
         console.error('Error loading dashboard:', error);
-        showAlert('Erreur lors du chargement du dashboard', 'error');
+        document.getElementById('totalProducts').textContent = '0';
+        document.getElementById('totalCategories').textContent = '0';
+        document.getElementById('activeProducts').textContent = '0';
+        document.getElementById('totalImages').textContent = '0';
+        
+        // Message d'erreur plus clair
+        showAlert('⚠️ API NON DISPONIBLE ! Vérifiez que vous avez bien déployé l\'API et mis l\'URL correcte dans admin.js ligne 9. Exemple: https://algran-api-xxx.workers.dev', 'error');
     }
 }
 

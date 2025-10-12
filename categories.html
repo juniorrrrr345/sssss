@@ -3,117 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catégories - Aimiri</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Catégories - Al Gran</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="background">
-        <div class="stars"></div>
-        <div class="cosmic-effect"></div>
+    <!-- Effet d'arrière-plan cosmique -->
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
     </div>
 
-    <main class="container">
-        <h1 class="main-title">Explorez Nos Catégories</h1>
+    <div class="container">
+        <!-- Logo/Titre -->
+        <div class="logo-text">Al Gran</div>
         
-        <div class="categories-grid">
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Extract">
-                </div>
-                <div class="category-info">
+        <h1 class="title">Nos Catégories</h1>
+        <p class="subtitle">Explorez notre sélection par catégorie</p>
+
+        <!-- Grille des catégories -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront chargées ici -->
+            <a href="products.html?category=extract" class="category-card">
+                <div class="category-icon-large">🔥</div>
+                <div class="category-content">
                     <h2 class="category-title">Extract</h2>
-                    <p class="category-description">Explore Extract</p>
+                    <p class="category-description">Extraits premium de haute qualité</p>
+                    <div class="category-count">
+                        <i class="fas fa-box"></i>
+                        <span id="count-extract">...</span> produits
+                    </div>
                 </div>
-            </div>
+                <div class="category-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
 
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Static-Sift">
-                </div>
-                <div class="category-info">
+            <a href="products.html?category=static-sift" class="category-card">
+                <div class="category-icon-large">💎</div>
+                <div class="category-content">
                     <h2 class="category-title">Static-Sift</h2>
-                    <p class="category-description">Explore Static-Sift</p>
+                    <p class="category-description">Produits Static-Sift premium</p>
+                    <div class="category-count">
+                        <i class="fas fa-box"></i>
+                        <span id="count-static-sift">...</span> produits
+                    </div>
                 </div>
-            </div>
+                <div class="category-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
 
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Frozen-Sift">
-                </div>
-                <div class="category-info">
+            <a href="products.html?category=frozen-sift" class="category-card">
+                <div class="category-icon-large">❄️</div>
+                <div class="category-content">
                     <h2 class="category-title">Frozen-Sift</h2>
-                    <p class="category-description">Explore Frozen-Sift</p>
+                    <p class="category-description">Frozen-Sift de qualité supérieure</p>
+                    <div class="category-count">
+                        <i class="fas fa-box"></i>
+                        <span id="count-frozen-sift">...</span> produits
+                    </div>
                 </div>
-            </div>
+                <div class="category-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
 
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Dry-Sift">
-                </div>
-                <div class="category-info">
+            <a href="products.html?category=dry-sift" class="category-card">
+                <div class="category-icon-large">🌿</div>
+                <div class="category-content">
                     <h2 class="category-title">Dry-Sift</h2>
-                    <p class="category-description">Explore Dry-Sift</p>
+                    <p class="category-description">Dry-Sift artisanal</p>
+                    <div class="category-count">
+                        <i class="fas fa-box"></i>
+                        <span id="count-dry-sift">...</span> produits
+                    </div>
                 </div>
-            </div>
+                <div class="category-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
 
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Weed">
-                </div>
-                <div class="category-info">
+            <a href="products.html?category=weed" class="category-card">
+                <div class="category-icon-large">🍃</div>
+                <div class="category-content">
                     <h2 class="category-title">Weed</h2>
-                    <p class="category-description">Explore Weed</p>
+                    <p class="category-description">Fleurs premium sélectionnées</p>
+                    <div class="category-count">
+                        <i class="fas fa-box"></i>
+                        <span id="count-weed">...</span> produits
+                    </div>
                 </div>
-            </div>
+                <div class="category-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
         </div>
+    </div>
 
-        <div class="aimiri-logo">
-            <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
-                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="logo-text">Aimiri</text>
-            </svg>
-        </div>
-    </main>
-
+    <!-- Navigation du bas -->
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+                <i class="fas fa-home"></i>
             </div>
             <span class="nav-label">Accueil</span>
         </a>
         <a href="products.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
+                <i class="fas fa-shopping-bag"></i>
             </div>
             <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item active">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
+                <i class="fas fa-th"></i>
             </div>
             <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
+                <i class="fas fa-envelope"></i>
             </div>
             <span class="nav-label">Contact</span>
         </a>
     </nav>
+
+    <style>
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            margin-top: -20px;
+            margin-bottom: 40px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px auto;
+            max-width: 1200px;
+            padding: 0 20px 100px 20px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 15px 40px rgba(255, 62, 165, 0.3);
+        }
+
+        .category-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .category-icon-large {
+            font-size: 4rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .category-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .category-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-pink);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .category-arrow {
+            font-size: 1.5rem;
+            color: var(--primary-pink);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-card:hover .category-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                padding-bottom: 100px;
+            }
+
+            .category-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .category-arrow {
+                display: none;
+            }
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuration API - Changez cette URL après déploiement
+        const API_URL = 'http://localhost:8787';
+
+        // Charger les catégories et compter les produits
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+                
+                if (data.success && data.products) {
+                    // Compter les produits par catégorie
+                    const categoryCounts = {};
+                    data.products.forEach(product => {
+                        const categorySlug = product.category_slug || 'unknown';
+                        categoryCounts[categorySlug] = (categoryCounts[categorySlug] || 0) + 1;
+                    });
+                    
+                    // Mettre à jour les compteurs
+                    Object.keys(categoryCounts).forEach(slug => {
+                        const countElement = document.getElementById(`count-${slug}`);
+                        if (countElement) {
+                            countElement.textContent = categoryCounts[slug];
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des catégories:', error);
+                // Mettre des valeurs par défaut
+                document.querySelectorAll('[id^="count-"]').forEach(el => {
+                    el.textContent = '0';
+                });
+            }
+        }
+
+        // Charger les catégories au chargement de la page
+        document.addEventListener('DOMContentLoaded', loadCategories);
+    </script>
 </body>
 </html>
