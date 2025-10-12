@@ -608,3 +608,78 @@ async function deleteService(id, env, headers) {
   await env.DB.prepare('DELETE FROM services WHERE id = ?').bind(id).run();
   return jsonResponse({ success: true }, 200, headers);
 }
+
+// ==================== FARMS ====================
+
+// GET /api/farms
+async function getFarms(env, headers) {
+  try {
+    const { results } = await env.DB.prepare(`
+      SELECT * FROM farms 
+      WHERE is_active = 1 
+      ORDER BY display_order ASC, name ASC
+    `).all();
+    
+    return jsonResponse({ success: true, farms: results }, 200, headers);
+  } catch (error) {
+    return jsonResponse({ success: true, farms: [] }, 200, headers);
+  }
+}
+
+// POST /api/farms
+async function createFarm(request, env, headers) {
+  const data = await request.json();
+  const slug = generateSlug(data.name);
+  
+  const { results } = await env.DB.prepare(`
+    INSERT INTO farms (name, slug, description, country, display_order)
+    VALUES (?, ?, ?, ?, ?)
+    RETURNING *
+  `).bind(data.name, slug, data.description || '', data.country || '', data.display_order || 0).all();
+  
+  return jsonResponse({ success: true, farm: results[0] }, 201, headers);
+}
+
+// PUT /api/farms/:id
+async function updateFarm(id, request, env, headers) {
+  const data = await request.json();
+  const slug = data.name ? generateSlug(data.name) : null;
+  
+  let updates = [];
+  let bindings = [];
+  
+  if (data.name) {
+    updates.push('name = ?');
+    bindings.push(data.name);
+    updates.push('slug = ?');
+    bindings.push(slug);
+  }
+  if (data.description !== undefined) {
+    updates.push('description = ?');
+    bindings.push(data.description);
+  }
+  if (data.country !== undefined) {
+    updates.push('country = ?');
+    bindings.push(data.country);
+  }
+  if (data.display_order !== undefined) {
+    updates.push('display_order = ?');
+    bindings.push(data.display_order);
+  }
+  
+  bindings.push(id);
+  
+  await env.DB.prepare(`
+    UPDATE farms 
+    SET ${updates.join(', ')}
+    WHERE id = ?
+  `).bind(...bindings).run();
+  
+  return jsonResponse({ success: true }, 200, headers);
+}
+
+// DELETE /api/farms/:id
+async function deleteFarm(id, env, headers) {
+  await env.DB.prepare('DELETE FROM farms WHERE id = ?').bind(id).run();
+  return jsonResponse({ success: true }, 200, headers);
+}

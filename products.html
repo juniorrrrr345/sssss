@@ -93,28 +93,54 @@
         .filters-container {
             padding: 1rem;
             display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            scrollbar-width: none;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .filters-container::-webkit-scrollbar {
-            display: none;
+        .filter-select {
+            flex: 1;
+            min-width: 180px;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .filter-select:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 15px rgba(255, 62, 165, 0.3);
+        }
+
+        .filter-select option {
+            background: #1a0a2e;
+            color: white;
+            padding: 0.5rem;
         }
 
         .filter-btn {
-            padding: 0.6rem 1.2rem;
+            padding: 0.8rem 1.5rem;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            border-radius: 15px;
             color: white;
             font-size: 0.9rem;
             white-space: nowrap;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .filter-btn:hover, .filter-btn.active {
+        .filter-btn:hover {
             background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
             border-color: transparent;
             transform: scale(1.05);
@@ -309,8 +335,17 @@
 
     <!-- Filters -->
     <div class="filters-container" id="filtersContainer">
-        <button class="filter-btn active" data-category="all">Tous</button>
-        <!-- Les filtres seront chargés dynamiquement -->
+        <select class="filter-select" id="categoryFilter">
+            <option value="all">📦 Toutes les catégories</option>
+        </select>
+        
+        <select class="filter-select" id="farmFilter">
+            <option value="all">🌿 Tous les farms</option>
+        </select>
+        
+        <button class="filter-btn" id="resetFilters">
+            <i class="fas fa-redo"></i> Réinitialiser
+        </button>
     </div>
 
     <!-- Products Grid -->
@@ -347,18 +382,24 @@
 
         let allProducts = [];
         let allCategories = [];
-        let currentFilter = 'all';
+        let allFarms = [];
+        let currentCategoryFilter = 'all';
+        let currentFarmFilter = 'all';
 
         // Charger les données au démarrage
         document.addEventListener('DOMContentLoaded', async () => {
             await Promise.all([
                 loadShopName(),
                 loadProducts(),
-                loadCategories()
+                loadCategories(),
+                loadFarms()
             ]);
             
             // Event listeners
             document.getElementById('searchInput').addEventListener('input', handleSearch);
+            document.getElementById('categoryFilter').addEventListener('change', handleCategoryFilter);
+            document.getElementById('farmFilter').addEventListener('change', handleFarmFilter);
+            document.getElementById('resetFilters').addEventListener('click', resetFilters);
         });
 
         // Charger le nom de la boutique
@@ -402,74 +443,99 @@
                 
                 if (data.success && data.categories) {
                     allCategories = data.categories;
-                    displayFilters(allCategories);
+                    populateCategoryFilter(allCategories);
                 }
             } catch (error) {
                 console.error('Erreur chargement catégories:', error);
             }
         }
 
-        // Afficher les filtres
-        function displayFilters(categories) {
-            const container = document.getElementById('filtersContainer');
-            
-            const filtersHTML = categories.map(cat => `
-                <button class="filter-btn" data-category="${cat.id}">
-                    ${cat.icon || ''} ${cat.name}
-                </button>
-            `).join('');
-            
-            container.innerHTML = `
-                <button class="filter-btn active" data-category="all">✨ Tous</button>
-                ${filtersHTML}
-            `;
-            
-            // Event listeners pour les filtres
-            container.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Retirer active de tous
-                    container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    // Ajouter active au cliqué
-                    btn.classList.add('active');
-                    
-                    const categoryId = btn.dataset.category;
-                    currentFilter = categoryId;
-                    filterProducts(categoryId);
-                });
-            });
-        }
-
-        // Filtrer les produits par catégorie
-        function filterProducts(categoryId) {
-            if (categoryId === 'all') {
-                displayProducts(allProducts);
-            } else {
-                const filtered = allProducts.filter(p => p.category_id == categoryId);
-                displayProducts(filtered);
+        // Charger les farms
+        async function loadFarms() {
+            try {
+                const response = await fetch(`${API_URL}/api/farms`);
+                const data = await response.json();
+                
+                if (data.success && data.farms) {
+                    allFarms = data.farms;
+                    populateFarmFilter(allFarms);
+                }
+            } catch (error) {
+                console.error('Erreur chargement farms:', error);
             }
         }
 
-        // Recherche
-        function handleSearch(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            
+        // Remplir le select des catégories
+        function populateCategoryFilter(categories) {
+            const select = document.getElementById('categoryFilter');
+            const options = categories.map(cat => 
+                `<option value="${cat.id}">${cat.icon || '📦'} ${cat.name}</option>`
+            ).join('');
+            select.innerHTML = `<option value="all">📦 Toutes les catégories</option>${options}`;
+        }
+
+        // Remplir le select des farms
+        function populateFarmFilter(farms) {
+            const select = document.getElementById('farmFilter');
+            const options = farms.map(farm => 
+                `<option value="${farm.id}">🌿 ${farm.name}</option>`
+            ).join('');
+            select.innerHTML = `<option value="all">🌿 Tous les farms</option>${options}`;
+        }
+
+        // Filtrer par catégorie
+        function handleCategoryFilter(e) {
+            currentCategoryFilter = e.target.value;
+            applyFilters();
+        }
+
+        // Filtrer par farm
+        function handleFarmFilter(e) {
+            currentFarmFilter = e.target.value;
+            applyFilters();
+        }
+
+        // Réinitialiser les filtres
+        function resetFilters() {
+            currentCategoryFilter = 'all';
+            currentFarmFilter = 'all';
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('farmFilter').value = 'all';
+            document.getElementById('searchInput').value = '';
+            applyFilters();
+        }
+
+        // Appliquer tous les filtres
+        function applyFilters() {
             let filtered = allProducts;
             
-            // Filtrer par catégorie si nécessaire
-            if (currentFilter !== 'all') {
-                filtered = filtered.filter(p => p.category_id == currentFilter);
+            // Filtrer par catégorie
+            if (currentCategoryFilter !== 'all') {
+                filtered = filtered.filter(p => p.category_id == currentCategoryFilter);
+            }
+            
+            // Filtrer par farm
+            if (currentFarmFilter !== 'all') {
+                filtered = filtered.filter(p => p.farm_id == currentFarmFilter);
             }
             
             // Recherche textuelle
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             if (searchTerm) {
                 filtered = filtered.filter(p => 
                     p.name.toLowerCase().includes(searchTerm) ||
                     (p.description && p.description.toLowerCase().includes(searchTerm)) ||
-                    (p.category_name && p.category_name.toLowerCase().includes(searchTerm))
+                    (p.category_name && p.category_name.toLowerCase().includes(searchTerm)) ||
+                    (p.farm_name && p.farm_name.toLowerCase().includes(searchTerm))
                 );
             }
             
             displayProducts(filtered);
+        }
+
+        // Recherche
+        function handleSearch(e) {
+            applyFilters();
         }
 
         // Afficher les produits
