@@ -1,0 +1,42 @@
+═══════════════════════════════════════════════════════════════════
+    📥 RÉINSÉRER LES SERVICES & RÉSEAUX SOCIAUX PAR DÉFAUT
+═══════════════════════════════════════════════════════════════════
+
+Vous ne voyez rien dans Services et Réseaux Sociaux ?
+Exécutez ces commandes pour ajouter des données par défaut :
+
+═══════════════════════════════════════════════════════════════════
+
+cd C:\Users\PC\Documents\sssss
+
+# 1. Récupérer les nouveaux fichiers SQL
+git pull origin cursor/deploy-local-web-store-from-github-901c
+
+# 2. Réinsérer les services (avec exemples)
+wrangler d1 execute algran-db --file=schema-services.sql --remote
+
+# 3. Réinsérer les réseaux sociaux (avec exemples)
+wrangler d1 execute algran-db --file=schema-social-networks.sql --remote
+
+# 4. Recharger le panel admin
+# Ouvrez : http://localhost:8005/admin.html
+# Faites : Ctrl + Shift + R
+
+═══════════════════════════════════════════════════════════════════
+
+Vous verrez maintenant :
+
+SERVICES (3 exemples) :
+- Nos Services
+- Zone de Livraison
+- Meetup Paris
+
+RÉSEAUX SOCIAUX (4 exemples) :
+- WhatsApp
+- Telegram
+- Instagram
+- Email
+
+Vous pouvez les MODIFIER ou les SUPPRIMER ! ✅
+
+═══════════════════════════════════════════════════════════════════
