@@ -428,17 +428,24 @@
         // Commander le produit
         async function orderProduct() {
             try {
-                // Récupérer les paramètres (liens WhatsApp, Telegram)
-                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                // Récupérer le lien de commande depuis les paramètres
+                const response = await fetch('http://localhost:8787/api/settings');
+                const data = await response.json();
                 const settings = data.settings || {};
 
+                // Si un lien de commande est configuré, l'utiliser
+                if (settings.order_link && settings.order_link.trim() !== '') {
+                    window.open(settings.order_link, '_blank');
+                    return;
+                }
+
+                // Sinon, essayer WhatsApp ou Telegram avec message pré-rempli
                 const product = document.querySelector('.product-title').textContent;
                 const price = document.querySelector('.variant-option.selected').dataset.price;
                 const unit = document.querySelector('.variant-option.selected').dataset.unit;
                 
-                const message = `Bonjour ! Je voudrais commander :\n\n🛍️ ${product}\n💰 ${price}€ ${unit}`;
+                const message = `Bonjour ! Je voudrais commander : ${product} - ${price}€ ${unit}`;
 
-                // Priorité WhatsApp, puis Telegram
                 if (settings.shop_whatsapp) {
                     const phone = settings.shop_whatsapp.replace(/\D/g, '');
                     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
@@ -446,7 +453,7 @@
                     const username = settings.shop_telegram.replace('@', '');
                     window.open(`https://t.me/${username}`, '_blank');
                 } else {
-                    alert('⚠️ Aucun moyen de contact configuré. Veuillez contacter le vendeur.');
+                    alert('⚠️ Aucun lien de commande configuré. Allez dans Admin → Lien Commande pour le configurer.');
                 }
             } catch (error) {
                 console.error('Erreur:', error);
