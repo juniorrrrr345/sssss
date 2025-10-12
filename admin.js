@@ -623,10 +623,12 @@ async function loadSettings() {
 async function saveSettings(e) {
     e.preventDefault();
     
+    const shopNameEl = document.getElementById('shopName');
+    const bgImageEl = document.getElementById('backgroundImage');
+    
     const settingsData = {
-        shop_name: document.getElementById('shopName').value,
-        shop_subtitle: document.getElementById('shopSubtitle').value,
-        background_image_url: document.getElementById('backgroundImage').value
+        shop_name: shopNameEl ? shopNameEl.value : '',
+        background_image_url: bgImageEl ? bgImageEl.value : ''
     };
     
     // Si un nouveau mot de passe est fourni
