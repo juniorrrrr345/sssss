@@ -3,98 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tous les Produits</title>
+    <title>Menu Cannabis - Saveurs Cosmiques</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="cosmic-background">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+    </div>
+    
     <div class="container">
         <header>
-            <h1 class="main-title">Tous les Produits</h1>
-            
-            <div class="search-filter-bar">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom, catégorie ou farm...">
-                </div>
-                <button class="filter-btn" id="filterBtn">
-                    <span>🔻</span> Filtres
-                </button>
-            </div>
+            <h1 class="main-title">Explorez Nos Catégories</h1>
         </header>
-
-        <!-- Loader Lottie -->
-        <div id="loadingAnimation" style="display: none; text-align: center; padding: 60px 0;">
-            <div id="lottieLoader" style="width: 200px; height: 200px; margin: 0 auto;"></div>
-            <p style="color: rgba(255, 255, 255, 0.7); margin-top: 20px; font-size: 1.1rem;">Chargement des produits...</p>
-        </div>
-
-        <div class="products-grid" id="productsGrid">
-            <!-- Les produits seront générés dynamiquement -->
-        </div>
-
-        <!-- Animation État Vide -->
-        <div id="emptyStateAnimation" style="display: none; text-align: center; padding: 60px 20px;">
-            <div id="lottieEmpty" style="width: 300px; height: 300px; margin: 0 auto;"></div>
-            <h3 style="color: rgba(255, 255, 255, 0.9); margin-top: 20px; font-size: 1.5rem;">Aucun produit trouvé</h3>
-            <p style="color: rgba(255, 255, 255, 0.6); margin-top: 10px;">Essayez une autre recherche</p>
-        </div>
-    </div>
-
-    <!-- Modal des filtres -->
-    <div class="filter-modal" id="filterModal">
-        <div class="filter-modal-content">
-            <div class="filter-modal-header">
-                <h2>Filtres</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <div class="filter-modal-body">
-                <div class="filter-intro">
-                    <p>Les filtres avancés seront bientôt disponibles ! 🎯</p>
+        
+        <section class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1616772663125-cf6ee5c8f731?w=400&h=400&fit=crop" alt="Extract">
                 </div>
-                <div class="filter-options">
-                    <h3>Vous pourrez filtrer par :</h3>
-                    <ul class="filter-list">
-                        <li>📂 Catégorie</li>
-                        <li>💰 Prix</li>
-                        <li>📦 Type de produit</li>
-                        <li>🌍 Origine</li>
-                    </ul>
+                <div class="product-info">
+                    <h3>Extract</h3>
+                    <p>Explore Extract</p>
                 </div>
             </div>
-            <div class="filter-modal-footer">
-                <button class="btn-ok" id="btnOk">OK</button>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1587686187091-478d65e0dd05?w=400&h=400&fit=crop" alt="Static-Sift">
+                </div>
+                <div class="product-info">
+                    <h3>Static-Sift</h3>
+                    <p>Explore Static-Sift</p>
+                </div>
             </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?w=400&h=400&fit=crop" alt="Frozen-Sift">
+                </div>
+                <div class="product-info">
+                    <h3>Frozen-Sift</h3>
+                    <p>Explore Frozen-Sift</p>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1556928045-16f7f50be0f3?w=400&h=400&fit=crop" alt="Dry-Sift">
+                </div>
+                <div class="product-info">
+                    <h3>Dry-Sift</h3>
+                    <p>Explore Dry-Sift</p>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=400&fit=crop" alt="Weed">
+                </div>
+                <div class="product-info">
+                    <h3>Weed</h3>
+                    <p>Explore Weed</p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="neon-logo">
+            <h2 class="menu-title">Menu</h2>
+            <h2 class="humour-title">Humour</h2>
         </div>
     </div>
-
+    
     <nav class="bottom-nav">
-        <a href="home.html" class="nav-item active">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">🏠</span>
-            </div>
-            <span class="nav-label">Accueil</span>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Accueil</span>
         </a>
-        <a href="products.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">📦</span>
-            </div>
-            <span class="nav-label">Produits</span>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+            <span>Produits</span>
         </a>
-        <a href="categories.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">🛒</span>
-            </div>
-            <span class="nav-label">Catégories</span>
+        <a href="#" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Catégories</span>
         </a>
-        <a href="contact.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">✉️</span>
-            </div>
-            <span class="nav-label">Contact</span>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Contact</span>
         </a>
     </nav>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
