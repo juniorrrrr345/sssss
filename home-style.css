@@ -8,8 +8,8 @@
     --dark-bg: #ffffff;
     --card-bg: rgba(26, 20, 60, 0.85);
     --card-border: rgba(255, 255, 255, 0.2);
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-primary: #000000;
+    --text-secondary: rgba(0, 0, 0, 0.7);
 }
 
 * {
