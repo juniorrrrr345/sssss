@@ -518,12 +518,12 @@ async function getSocialNetworks(env, headers) {
   try {
     const { results } = await env.DB.prepare(`
       SELECT * FROM social_networks 
-      WHERE is_active = 1 
       ORDER BY display_order ASC
     `).all();
     
-    return jsonResponse({ success: true, networks: results }, 200, headers);
+    return jsonResponse({ success: true, networks: results || [] }, 200, headers);
   } catch (error) {
+    console.error('Error fetching social networks:', error);
     return jsonResponse({ success: true, networks: [] }, 200, headers);
   }
 }
@@ -567,12 +567,12 @@ async function getServices(env, headers) {
   try {
     const { results } = await env.DB.prepare(`
       SELECT * FROM services 
-      WHERE is_active = 1 
       ORDER BY display_order ASC
     `).all();
     
-    return jsonResponse({ success: true, services: results }, 200, headers);
+    return jsonResponse({ success: true, services: results || [] }, 200, headers);
   } catch (error) {
+    console.error('Error fetching services:', error);
     return jsonResponse({ success: true, services: [] }, 200, headers);
   }
 }
@@ -616,12 +616,12 @@ async function getFarms(env, headers) {
   try {
     const { results } = await env.DB.prepare(`
       SELECT * FROM farms 
-      WHERE is_active = 1 
       ORDER BY display_order ASC, name ASC
     `).all();
     
-    return jsonResponse({ success: true, farms: results }, 200, headers);
+    return jsonResponse({ success: true, farms: results || [] }, 200, headers);
   } catch (error) {
+    console.error('Error fetching farms:', error);
     return jsonResponse({ success: true, farms: [] }, 200, headers);
   }
 }
