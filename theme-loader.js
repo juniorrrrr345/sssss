@@ -5,7 +5,9 @@
 
 async function loadThemeBackground() {
     try {
-        const data = await fetchApi('/api/settings');
+        const url = 'http://localhost:8787/api/settings';
+        const response = await fetch(url);
+        const data = await response.json();
         
         if (data.success && data.settings && data.settings.theme_background_url) {
             const bgUrl = data.settings.theme_background_url;
@@ -17,6 +19,13 @@ async function loadThemeBackground() {
                 document.body.style.backgroundPosition = 'center';
                 document.body.style.backgroundAttachment = 'fixed';
                 document.body.style.backgroundRepeat = 'no-repeat';
+                document.body.style.setProperty('background-color', '#000', 'important');
+                
+                // Masquer le fond cosmique s'il existe
+                const cosmicBg = document.querySelector('.cosmic-background');
+                if (cosmicBg) {
+                    cosmicBg.style.display = 'none';
+                }
                 
                 // Assombrir un peu pour la lisibilité
                 const overlay = document.createElement('div');
@@ -26,8 +35,8 @@ async function loadThemeBackground() {
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0, 0, 0, 0.4);
-                    z-index: -1;
+                    background: rgba(0, 0, 0, 0.3);
+                    z-index: 0;
                     pointer-events: none;
                 `;
                 document.body.insertBefore(overlay, document.body.firstChild);
@@ -36,7 +45,7 @@ async function loadThemeBackground() {
             }
         }
     } catch (error) {
-        console.log('⚠️ Pas de fond de thème personnalisé');
+        console.log('⚠️ Pas de fond de thème personnalisé', error);
     }
 }
 
