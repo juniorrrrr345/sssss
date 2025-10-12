@@ -68,7 +68,8 @@ function initEventListeners() {
     // Formulaire paramètres
     document.getElementById('settingsForm').addEventListener('submit', saveSettings);
     
-    // Boutons Services et Social
+    // Boutons Farms, Services et Social
+    document.getElementById('addFarmBtn').addEventListener('click', () => openFarmModal());
     document.getElementById('addServiceBtn').addEventListener('click', () => openServiceModal());
     document.getElementById('addSocialBtn').addEventListener('click', () => openSocialModal());
     
@@ -121,6 +122,7 @@ function handleNavigation(item) {
         dashboard: 'Dashboard',
         products: 'Gestion des Produits',
         categories: 'Gestion des Catégories',
+        farms: 'Gestion des Farms',
         services: 'Gestion des Services',
         social: 'Réseaux Sociaux',
         settings: 'Paramètres'
@@ -538,6 +540,140 @@ function showAlert(message, type = 'success') {
     }, 5000);
 }
 
+// ==================== FARMS ====================
+
+let farms = [];
+
+// Charger les farms
+async function loadFarms() {
+    try {
+        const response = await fetch(`${API_URL}/api/farms`);
+        const data = await response.json();
+        
+        if (data.success) {
+            farms = data.farms || [];
+            displayFarms(farms);
+        } else {
+            displayFarms([]);
+        }
+    } catch (error) {
+        console.error('Error loading farms:', error);
+        displayFarms([]);
+    }
+}
+
+// Afficher les farms
+function displayFarms(farmsToDisplay) {
+    const tbody = document.getElementById('farmsTableBody');
+    
+    if (farmsToDisplay.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Aucune farm</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = farmsToDisplay.map(farm => `
+        <tr>
+            <td><strong>${farm.name}</strong></td>
+            <td>${farm.country || '-'}</td>
+            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${farm.description || '-'}</td>
+            <td>${farm.display_order || 0}</td>
+            <td>
+                <button class="btn btn-primary" onclick="editFarm(${farm.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteFarmConfirm(${farm.id}, '${farm.name}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Ouvrir modal farm
+function openFarmModal(farmId = null) {
+    const name = farmId ? prompt('Nom de la farm:', farms.find(f => f.id === farmId)?.name || '') : prompt('Nom de la farm (ex: WIZARD TREES):', '');
+    if (!name) return;
+    
+    const country = prompt('Pays (ex: USA, FR):', farmId ? farms.find(f => f.id === farmId)?.country : 'USA');
+    const description = prompt('Description:', farmId ? farms.find(f => f.id === farmId)?.description : '');
+    const order = prompt('Ordre d\'affichage:', farmId ? farms.find(f => f.id === farmId)?.display_order : farms.length + 1);
+    
+    const farmData = { 
+        name, 
+        country: country || '', 
+        description: description || '', 
+        display_order: parseInt(order) || 0 
+    };
+    
+    if (farmId) {
+        updateFarmAction(farmId, farmData);
+    } else {
+        createFarmAction(farmData);
+    }
+}
+
+// Créer une farm
+async function createFarmAction(data) {
+    try {
+        const response = await fetch(`${API_URL}/api/farms`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Farm créée avec succès !', 'success');
+            loadFarms();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la création', 'error');
+    }
+}
+
+// Modifier une farm
+function editFarm(id) {
+    openFarmModal(id);
+}
+
+// Mettre à jour une farm
+async function updateFarmAction(id, data) {
+    try {
+        const response = await fetch(`${API_URL}/api/farms/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Farm modifiée avec succès !', 'success');
+            loadFarms();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la mise à jour', 'error');
+    }
+}
+
+// Confirmer suppression farm
+function deleteFarmConfirm(id, name) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer "${name}" ?`)) {
+        deleteFarmAction(id);
+    }
+}
+
+// Supprimer une farm
+async function deleteFarmAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/farms/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Farm supprimée avec succès !', 'success');
+            loadFarms();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
 // ==================== SERVICES ====================
 
 let services = [];
@@ -806,6 +942,8 @@ async function deleteSocialNetworkAction(id) {
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.editFarm = editFarm;
+window.deleteFarmConfirm = deleteFarmConfirm;
 window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.editSocialNetwork = editSocialNetwork;
