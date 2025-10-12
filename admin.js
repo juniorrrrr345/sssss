@@ -249,15 +249,20 @@ async function openProductModal(productId = null) {
         // Mode édition
         const product = products.find(p => p.id === productId);
         if (product) {
+            console.log('Product data:', product); // Debug
             document.getElementById('productName').value = product.name;
             document.getElementById('productCategory').value = product.category_id;
             document.getElementById('productFarm').value = product.farm_id || '';
             
             // Gérer les prix multiples
             if (product.prices) {
-                const prices = JSON.parse(product.prices);
-                const pricesText = prices.map(p => `${p.quantity}|${p.price}`).join('\n');
-                document.getElementById('productPrices').value = pricesText;
+                try {
+                    const prices = JSON.parse(product.prices);
+                    const pricesText = prices.map(p => `${p.quantity}|${p.price}`).join('\n');
+                    document.getElementById('productPrices').value = pricesText;
+                } catch (e) {
+                    document.getElementById('productPrices').value = `${product.unit || '1g'}|${product.price}`;
+                }
             } else {
                 // Ancien format (prix unique)
                 document.getElementById('productPrices').value = `${product.unit || '1g'}|${product.price}`;
@@ -267,6 +272,8 @@ async function openProductModal(productId = null) {
             document.getElementById('productImage').value = product.image_url || '';
             document.getElementById('productVideo').value = product.video_url || '';
             document.getElementById('productDescription').value = product.description || '';
+            console.log('Image URL:', product.image_url); // Debug
+            console.log('Video URL:', product.video_url); // Debug
             document.querySelector('.modal-title').textContent = 'Modifier le Produit';
         }
     } else {
