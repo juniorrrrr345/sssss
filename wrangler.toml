@@ -1,0 +1,23 @@
+name = "algran-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Cloudflare D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "algran-db"
+database_id = "5ee52135-17f2-43ee-80a8-c20fcaee99d5"
+
+# Cloudflare R2 Storage
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "boutique-images"
+
+# Variables d'environnement
+[vars]
+ADMIN_PASSWORD = "admin123"
+R2_PUBLIC_URL = "https://pub-b38679a01a274648827751df94818418.r2.dev"
+
+# CORS Configuration
+[env.production]
+name = "algran-api-production"
