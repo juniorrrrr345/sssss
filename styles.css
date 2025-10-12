@@ -234,40 +234,77 @@ header {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(10, 14, 39, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     justify-content: space-around;
-    padding: 15px 0;
-    z-index: 1000;
+    padding: 0.8rem 0;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    color: rgba(255, 255, 255, 0.6);
+    gap: 0.3rem;
+    color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
+    font-size: 0.75rem;
     transition: all 0.3s ease;
-    padding: 5px 20px;
+    padding: 0.5rem 1rem;
+    position: relative;
+}
+
+.nav-icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.nav-item.active .nav-icon-circle {
+    background: linear-gradient(135deg, #ff1493, #a855f7);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(255, 62, 165, 0.5);
 }
 
 .nav-item.active {
-    color: #ff1493;
+    color: #ffffff;
 }
 
-.nav-item:hover {
-    color: #ff69b4;
+.nav-item.active .nav-icon-circle svg {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+.nav-item:not(.active):hover .nav-icon-circle {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 62, 165, 0.4);
+    transform: translateY(-3px);
+}
+
+.nav-item:not(.active):hover {
+    color: #ffffff;
 }
 
 .nav-icon {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-label {
-    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
 }
 
 /* Responsive */
