@@ -117,13 +117,13 @@ header {
     padding: 15px 30px;
     border-radius: 25px;
     border: none;
-    background: linear-gradient(135deg, #ff1493, #ff69b4);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
 .filter-btn:hover {
@@ -220,7 +220,7 @@ header {
 .product-price {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #ff69b4;
+    color: #ffffff;
 }
 
 .product-price .unit {
@@ -408,7 +408,7 @@ header {
 .filter-modal-header h2 {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #ff69b4;
+    color: #ffffff;
     margin: 0;
 }
 
@@ -460,7 +460,7 @@ header {
 .filter-options h3 {
     font-size: 1.2rem;
     margin-bottom: 15px;
-    color: #ff69b4;
+    color: #ffffff;
 }
 
 .filter-list {
@@ -498,13 +498,13 @@ header {
     padding: 15px 60px;
     border-radius: 25px;
     border: none;
-    background: linear-gradient(135deg, #ff1493, #ff69b4);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
 .btn-ok:hover {
