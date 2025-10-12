@@ -213,7 +213,7 @@ body {
 }
 
 .section-content {
-    color: var(--text-secondary);
+    color: #ffffff !important;
     line-height: 1.7;
     font-size: 0.95rem;
 }
@@ -225,7 +225,16 @@ body {
 
 .section-content ul,
 .section-content li,
-.section-content div {
+.section-content div,
+.section-content span,
+.section-content strong {
+    color: #ffffff !important;
+}
+
+.delivery-section,
+.delivery-section *,
+.service-section,
+.service-section * {
     color: #ffffff !important;
 }
 
