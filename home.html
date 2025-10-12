@@ -92,29 +92,33 @@
     </nav>
 
     <script>
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+        
         // Charger les données depuis l'API
         async function loadHomeData() {
             try {
                 // Charger le nom de la boutique
-                const configResponse = await fetch('/api/config');
+                const configResponse = await fetch(`${API_URL}/api/settings`);
                 if (configResponse.ok) {
-                    const config = await configResponse.json();
-                    if (config && config.shop_name) {
-                        document.getElementById('giantLogo').textContent = config.shop_name;
+                    const data = await configResponse.json();
+                    if (data.success && data.settings && data.settings.shop_name) {
+                        document.getElementById('giantLogo').textContent = data.settings.shop_name;
                         document.getElementById('logoSubtitle').textContent = '';
-                        document.title = config.shop_name + ' - Accueil';
+                        document.title = data.settings.shop_name + ' - Accueil';
                     }
                 }
 
                 // Charger les services
-                const servicesResponse = await fetch('/api/services');
+                const servicesResponse = await fetch(`${API_URL}/api/services`);
                 if (servicesResponse.ok) {
-                    const services = await servicesResponse.json();
+                    const servicesData = await servicesResponse.json();
                     const servicesContent = document.getElementById('servicesContent');
                     servicesContent.innerHTML = '';
                     
-                    if (services && services.length > 0) {
-                        services.forEach(service => {
+                    const servicesArray = servicesData.success ? servicesData.services : servicesData;
+                    if (servicesArray && servicesArray.length > 0) {
+                        servicesArray.forEach(service => {
                             const p = document.createElement('p');
                             p.textContent = service.content;
                             servicesContent.appendChild(p);
@@ -123,14 +127,15 @@
                 }
 
                 // Charger la zone de livraison
-                const deliveryResponse = await fetch('/api/delivery-zones');
+                const deliveryResponse = await fetch(`${API_URL}/api/delivery-zones`);
                 if (deliveryResponse.ok) {
-                    const zones = await deliveryResponse.json();
+                    const zonesData = await deliveryResponse.json();
                     const departmentGrid = document.getElementById('departmentGrid');
                     
-                    if (zones && zones.length > 0) {
+                    const zonesArray = zonesData.success ? zonesData.zones : zonesData;
+                    if (zonesArray && zonesArray.length > 0) {
                         departmentGrid.innerHTML = '';
-                        zones.forEach(zone => {
+                        zonesArray.forEach(zone => {
                             const badge = document.createElement('div');
                             badge.className = 'department-badge';
                             badge.textContent = zone.zone_code || zone.name;

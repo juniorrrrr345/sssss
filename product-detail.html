@@ -391,6 +391,9 @@
     </nav>
 
     <script>
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+        
         // Variables globales
         let currentSlide = 0;
         let currentProduct = null;
@@ -409,7 +412,7 @@
             const productId = getProductIdFromUrl();
             
             try {
-                const response = await fetch(`/api/products/${productId}`);
+                const response = await fetch(`${API_URL}/api/products/${productId}`);
                 if (!response.ok) {
                     throw new Error('Produit non trouvé');
                 }
