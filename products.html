@@ -26,6 +26,37 @@
             align-items: center;
         }
 
+        #filtersContainer {
+            display: none;
+        }
+
+        #filtersContainer.active {
+            display: grid;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
         .search-container {
             flex: 1;
             min-width: 250px;
@@ -88,9 +119,27 @@
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
             margin: 40px auto;
+        }
+
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
         }
 
         .product-card {
@@ -237,6 +286,17 @@
             </button>
         </div>
 
+        <div id="filtersContainer" style="display: none;" class="max-w-800px mx-auto mb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">Toutes les Catégories</option>
+                </select>
+                <select id="farmFilter" class="filter-select">
+                    <option value="">Toutes les Farms</option>
+                </select>
+            </div>
+        </div>
+
         <div class="products-grid" id="productsGrid">
             <!-- Les produits seront générés ici par JavaScript -->
         </div>
@@ -270,9 +330,13 @@
         </a>
     </nav>
 
-    <script src="script.js"></script>
+    <!-- Scripts de l'application -->
+    <script src="api-client.js"></script>
+    <script src="products-script.js"></script>
     <script>
-        // Données des produits - correspondant à l'image
+        // Ancien code statique - supprimé pour utiliser l'API
+        // Les données des produits sont maintenant chargées depuis l'API
+        /*
         const products = [
             {
                 id: 1,
@@ -437,8 +501,9 @@
             }
         });
 
-        // Affichage initial
-        displayProducts(filteredProducts);
+        // Affichage initial - géré par products-script.js
+        // displayProducts(filteredProducts);
+        */
     </script>
 </body>
 </html>

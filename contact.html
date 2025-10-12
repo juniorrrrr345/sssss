@@ -22,59 +22,11 @@
         
         <h1 class="title">Nous Contacter</h1>
 
-        <div class="contact-cards">
-            <!-- LinkTree Card -->
-            <div class="contact-card disabled">
-                <div class="card-icon">
-                    <i class="fas fa-tree"></i>
-                </div>
-                <div class="card-content">
-                    <h3>LinkTree</h3>
-                    <p>Non disponible</p>
-                </div>
+        <div class="contact-cards" id="contactLinksContainer">
+            <!-- Les liens de contact seront chargés dynamiquement depuis l'API -->
+            <div class="col-span-full flex justify-center items-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
             </div>
-
-            <!-- WhatsApp Card -->
-            <a href="https://wa.me/votre_numero" class="contact-card" target="_blank">
-                <div class="card-icon whatsapp">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <div class="card-content">
-                    <h3>WhatsApp</h3>
-                    <p>Contactez-nous directement sur WhatsApp</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <!-- Telegram Card -->
-            <a href="https://t.me/votre_canal" class="contact-card" target="_blank">
-                <div class="card-icon telegram">
-                    <i class="fab fa-telegram"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Canal Telegram</h3>
-                    <p>Rejoignez notre canal Telegram pour les dernières mises à jour</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <!-- Instagram Card -->
-            <a href="https://instagram.com/votre_compte" class="contact-card" target="_blank">
-                <div class="card-icon instagram">
-                    <i class="fab fa-instagram"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Instagram</h3>
-                    <p>Suivez-nous sur Instagram</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
         </div>
     </div>
 
@@ -106,6 +58,8 @@
         </a>
     </nav>
 
-    <script src="script.js"></script>
+    <!-- Scripts de l'application -->
+    <script src="api-client.js"></script>
+    <script src="contact-script.js"></script>
 </body>
 </html>

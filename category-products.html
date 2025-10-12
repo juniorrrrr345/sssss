@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - Al Gran</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .container {
+            max-width: 1400px;
+            padding: 2rem 1.5rem 100px;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateX(-4px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 40px auto;
+        }
+
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="container">
+        <a href="categories.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Retour aux catégories
+        </a>
+
+        <div class="category-header">
+            <h1 class="title" id="categoryTitle">Chargement...</h1>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Les produits seront générés ici par JavaScript -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <!-- Scripts de l'application -->
+    <script src="api-client.js"></script>
+    <script src="products-script.js"></script>
+    <script>
+        // Script spécifique pour les produits par catégorie
+        let currentCategory = '';
+        
+        // Récupérer la catégorie depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        currentCategory = urlParams.get('category') || '';
+
+        // Surcharger la fonction fetchProducts pour récupérer par catégorie
+        async function fetchProducts() {
+            try {
+                if (!currentCategory) {
+                    throw new Error('Aucune catégorie spécifiée');
+                }
+
+                // Mettre à jour le titre
+                document.getElementById('categoryTitle').textContent = currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1);
+
+                const response = await API.products.getByCategory(currentCategory);
+                
+                if (response.success && response.products) {
+                    allProducts = response.products;
+                    filteredProducts = [...allProducts];
+                } else {
+                    throw new Error('Format de réponse invalide');
+                }
+            } catch (error) {
+                console.error('Erreur de récupération des produits:', error);
+                throw error;
+            }
+        }
+
+        // Réinitialiser et charger
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initProductsPage();
+        });
+    </script>
+</body>
+</html>

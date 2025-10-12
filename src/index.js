@@ -113,6 +113,22 @@ export default {
         return await uploadImage(request, env, corsHeaders);
       }
 
+      // Get products by category
+      if (path.match(/^\/api\/products\/category\/[^\/]+$/) && method === 'GET') {
+        const category = decodeURIComponent(path.split('/')[4]);
+        return await getProductsByCategory(category, env, corsHeaders);
+      }
+
+      // Get links
+      if (path === '/api/links' && method === 'GET') {
+        return await getLinks(env, corsHeaders);
+      }
+
+      // Get farms
+      if (path === '/api/farms' && method === 'GET') {
+        return await getFarms(env, corsHeaders);
+      }
+
       return jsonResponse({ error: 'Route not found' }, 404, corsHeaders);
       
     } catch (error) {
@@ -146,13 +162,35 @@ function generateSlug(text) {
 // GET /api/products - Liste tous les produits
 async function getProducts(env, headers) {
   const { results } = await env.DB.prepare(`
-    SELECT p.*, c.name as category_name, c.icon as category_icon
+    SELECT 
+      p.id as _id,
+      p.name,
+      p.description,
+      c.name as category,
+      p.farm,
+      p.image1,
+      p.image2,
+      p.image3,
+      p.image4,
+      p.image5,
+      p.video,
+      p.created_at as createdAt
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.is_active = 1
     ORDER BY p.created_at DESC
   `).all();
   
-  return jsonResponse({ success: true, products: results }, 200, headers);
+  // Récupérer les prix pour chaque produit
+  const productsWithPrices = await Promise.all(results.map(async (product) => {
+    const { results: prices } = await env.DB.prepare(`
+      SELECT id as _id, gram, price FROM product_prices WHERE product_id = ?
+    `).bind(product._id).all();
+    
+    return { ...product, prices };
+  }));
+  
+  return jsonResponse({ success: true, products: productsWithPrices }, 200, headers);
 }
 
 // GET /api/products/:id - Récupère un produit
@@ -452,4 +490,66 @@ async function uploadImage(request, env, headers) {
     console.error('Upload error:', error);
     return jsonResponse({ error: 'Upload failed: ' + error.message }, 500, headers);
   }
+}
+
+// GET /api/products/category/:category - Récupère les produits par catégorie
+async function getProductsByCategory(categoryName, env, headers) {
+  const { results } = await env.DB.prepare(`
+    SELECT 
+      p.id as _id,
+      p.name,
+      p.description,
+      c.name as category,
+      p.farm,
+      p.image1,
+      p.image2,
+      p.image3,
+      p.image4,
+      p.image5,
+      p.video,
+      p.created_at as createdAt
+    FROM products p
+    LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.is_active = 1 AND LOWER(c.name) = LOWER(?)
+    ORDER BY p.created_at DESC
+  `).bind(categoryName).all();
+  
+  // Récupérer les prix pour chaque produit
+  const productsWithPrices = await Promise.all(results.map(async (product) => {
+    const { results: prices } = await env.DB.prepare(`
+      SELECT id as _id, gram, price FROM product_prices WHERE product_id = ?
+    `).bind(product._id).all();
+    
+    return { ...product, prices };
+  }));
+  
+  return jsonResponse({ success: true, products: productsWithPrices }, 200, headers);
+}
+
+// GET /api/links - Récupère les liens de contact
+async function getLinks(env, headers) {
+  const settings = await env.DB.prepare(`
+    SELECT key, value FROM settings 
+    WHERE key IN ('contact_whatsapp', 'link_trees', 'lien_canal', 'lien_instagram')
+  `).all();
+  
+  const links = {};
+  settings.results.forEach(row => {
+    if (row.key === 'contact_whatsapp') links.contact = row.value;
+    if (row.key === 'link_trees') links.linkTrees = row.value;
+    if (row.key === 'lien_canal') links.lienCanal = row.value;
+    if (row.key === 'lien_instagram') links.lienInstagram = row.value;
+  });
+  
+  return jsonResponse({ success: true, links }, 200, headers);
+}
+
+// GET /api/farms - Récupère la liste des farms
+async function getFarms(env, headers) {
+  const { results } = await env.DB.prepare(`
+    SELECT DISTINCT farm FROM products WHERE farm IS NOT NULL AND farm != '' ORDER BY farm
+  `).all();
+  
+  const farms = results.map(r => r.farm);
+  return jsonResponse({ success: true, farms }, 200, headers);
 }
