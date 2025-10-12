@@ -1,0 +1,43 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║  🔍 VÉRIFICATION DES FICHIERS                             ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+📝 COMMANDES À EXÉCUTER SUR VOTRE PC :
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cd C:\Users\PC\Documents\sssss
+
+# 1. Voir l'état actuel
+git status
+
+# 2. Voir quelle branche vous êtes
+git branch
+
+# 3. Annuler TOUS les conflits locaux
+git reset --hard HEAD
+git clean -fd
+
+# 4. Récupérer depuis GitHub
+git fetch origin
+git reset --hard origin/cursor/reconfigure-shop-with-cloudflare-ba7c
+
+# 5. Vérifier que Farms est présent
+findstr /n "Farms" admin.html
+
+Vous DEVEZ voir plusieurs lignes avec "Farms"
+Si vous ne voyez RIEN = Le fichier n'est pas à jour !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SI ÇA NE MARCHE TOUJOURS PAS :
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Téléchargez directement depuis GitHub :
+1. Allez sur : https://github.com/juniorrrrr345/Black-
+2. Changez de branche : cursor/reconfigure-shop-with-cloudflare-ba7c
+3. Téléchargez admin.html
+4. Téléchargez admin.js
+5. Remplacez les fichiers dans votre dossier
+
