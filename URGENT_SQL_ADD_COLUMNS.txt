@@ -1,0 +1,43 @@
+🚨 URGENT - CORRECTION BASE DE DONNÉES 🚨
+==========================================
+
+ERREUR: "no such column: farm_id"
+
+VOUS DEVEZ EXÉCUTER CE SCRIPT SQL MAINTENANT !
+
+📋 ÉTAPES À SUIVRE (dans PowerShell ou CMD) :
+
+1️⃣ Ouvrir le terminal dans le dossier du projet :
+   cd C:\Users\PC\Documents\sssss
+
+2️⃣ Exécuter ce script SQL pour ajouter les colonnes manquantes :
+   
+   wrangler d1 execute algran-db --file=add-farm-id-to-products.sql --remote
+
+3️⃣ Déployer l'API mise à jour :
+   
+   npm run deploy
+
+4️⃣ Redémarrer le serveur local :
+   
+   python -m http.server 8005
+
+5️⃣ Recharger la page avec Ctrl + Shift + R
+
+==========================================
+
+⚠️ SANS CES ÉTAPES, VOUS NE POURREZ PAS :
+   - Modifier un produit
+   - Ajouter une farm à un produit
+   - Ajouter une vidéo à un produit
+   - Ajouter plusieurs prix
+
+==========================================
+
+✅ APRÈS EXÉCUTION :
+   - Toutes les erreurs "no such column" disparaîtront
+   - Vous pourrez modifier les produits normalement
+   - Les vidéos s'enregistreront
+   - Les farms s'enregistreront
+
+==========================================
