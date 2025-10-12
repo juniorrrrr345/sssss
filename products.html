@@ -372,7 +372,7 @@
     <!-- Filters -->
     <div class="filters-container" id="filtersContainer">
         <select class="filter-select" id="categoryFilter">
-            <option value="all">📦 Toutes les catégories</option>
+            <option value="all">Toutes les catégories</option>
         </select>
         
         <select class="filter-select" id="farmFilter">
@@ -524,9 +524,9 @@
         function populateCategoryFilter(categories) {
             const select = document.getElementById('categoryFilter');
             const options = categories.map(cat => 
-                `<option value="${cat.id}">${cat.icon || '📦'} ${cat.name}</option>`
+                `<option value="${cat.id}">${cat.name}</option>`
             ).join('');
-            select.innerHTML = `<option value="all">📦 Toutes les catégories</option>${options}`;
+            select.innerHTML = `<option value="all">Toutes les catégories</option>${options}`;
         }
 
         // Remplir le select des farms
@@ -643,6 +643,11 @@
         // Afficher les détails d'un produit
         function showProductDetails(productId) {
             window.location.href = `product-detail.html?id=${productId}`;
+        }
+    </script>
+</body>
+</html>
+n.href = `product-detail.html?id=${productId}`;
         }
     </script>
 </body>
