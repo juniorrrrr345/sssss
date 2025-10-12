@@ -272,101 +272,53 @@
 
     <script src="script.js"></script>
     <script>
-        // Données des produits - correspondant à l'image
-        const products = [
-            {
-                id: 1,
-                name: "100K ROSIN",
-                farm: "100K",
-                badge: "🔥 LIVE ROSIN",
-                price: 200,
-                unit: "/ 2g",
-                image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
-            },
-            {
-                id: 2,
-                name: "HASH BURGER",
-                farm: "ESTATICO",
-                badge: "❄️ FROZEN USA US",
-                price: 120,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
-            },
-            {
-                id: 3,
-                name: "POTION",
-                farm: "WIZARD TREES",
-                badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
-                price: 110,
-                unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
-            },
-            {
-                id: 4,
-                name: "ZANGBANGER",
-                farm: "WIZARD TREES",
-                badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
-                price: 110,
-                unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
-            },
-            {
-                id: 5,
-                name: "TOP DRY",
-                farm: "NOFARM",
-                badge: "💨 DRY MA",
-                price: 50,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
-            },
-            {
-                id: 6,
-                name: "DARK MATTER",
-                farm: "COSMIC FARMS",
-                badge: "🌿 TOPSHELF",
-                price: 110,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
-            },
-            {
-                id: 7,
-                name: "CONCRETE JUNGLE",
-                farm: "URBAN GROW",
-                badge: "💎 BRANDED",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
-            },
-            {
-                id: 8,
-                name: "ZKITTLEZ",
-                farm: "RAINBOW FARMS",
-                badge: "🌈 TOPSHELF",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
-            },
-            {
-                id: 9,
-                name: "BIG Z",
-                farm: "PURPLE HAZE",
-                badge: "💜 PREMIUM",
-                price: 100,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
-            },
-            {
-                id: 10,
-                name: "GUSHMINTZ",
-                farm: "MINTY FRESH",
-                badge: "❄️ STATIC",
-                price: 170,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
-            }
-        ];
+        // Configuration API
+        const API_URL = 'http://localhost:8787'; // Utilisez votre URL d'API
 
-        let filteredProducts = [...products];
+        let products = [];
+        let filteredProducts = [];
+
+        // Charger les produits depuis l'API
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+                
+                if (data.success && data.products) {
+                    products = data.products.map(product => ({
+                        id: product.id,
+                        name: product.name,
+                        farm: product.farm || 'N/A',
+                        badge: product.badge || product.category_icon || '📦',
+                        price: product.price,
+                        unit: product.unit || '/ 3.5g',
+                        image: product.image_url || 'https://via.placeholder.com/500x400?text=' + encodeURIComponent(product.name)
+                    }));
+                    
+                    filteredProducts = [...products];
+                    displayProducts(filteredProducts);
+                } else {
+                    throw new Error('Impossible de charger les produits');
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des produits:', error);
+                displayError();
+            }
+        }
+        
+        // Afficher une erreur
+        function displayError() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = `
+                <div class="no-results" style="grid-column: 1/-1;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                    Erreur lors du chargement des produits. Veuillez réessayer.
+                    <button onclick="loadProducts()" style="margin-top: 1rem; padding: 0.8rem 1.5rem; background: var(--primary-pink); border: none; border-radius: 10px; color: white; cursor: pointer;">
+                        Réessayer
+                    </button>
+                </div>
+            `;
+        }
 
         // Créer une carte produit
         function createProductCard(product) {
@@ -438,7 +390,7 @@
         });
 
         // Affichage initial
-        displayProducts(filteredProducts);
+        loadProducts();
     </script>
 </body>
 </html>

@@ -24,8 +24,12 @@ CREATE TABLE IF NOT EXISTS products (
     category_id INTEGER NOT NULL,
     price REAL NOT NULL,
     unit TEXT DEFAULT '/ 3.5g',
+    prices_json TEXT, -- Format: [{"weight":"5G","price":"120€"},{"weight":"10G","price":"210€"}]
     badge TEXT,
     image_url TEXT,
+    media_json TEXT, -- Format: [{"type":"image","url":"..."},{"type":"video","url":"..."}]
+    vendor TEXT, -- Nom du vendeur/cultivateur
+    farm TEXT, -- Nom de la ferme
     stock_quantity INTEGER DEFAULT 0,
     is_active INTEGER DEFAULT 1,
     is_featured INTEGER DEFAULT 0,
