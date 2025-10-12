@@ -287,7 +287,7 @@ async function loadCategoriesForForm() {
             categories = catData.categories;
             const catSelect = document.getElementById('productCategory');
             catSelect.innerHTML = categories.map(cat => 
-                `<option value="${cat.id}">${cat.icon || ''} ${cat.name}</option>`
+                `<option value="${cat.id}">${cat.name}</option>`
             ).join('');
         }
         
@@ -417,9 +417,9 @@ function displayCategories(categoriesToDisplay) {
     tbody.innerHTML = categoriesToDisplay.map(cat => `
         <tr>
             <td>
-                ${cat.image_url ? `<img src="${cat.image_url}" alt="${cat.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">` : `<div style="width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">${cat.icon || '📦'}</div>`}
+                ${cat.image_url ? `<img src="${cat.image_url}" alt="${cat.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">` : `<div style="width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700;">Pas d'image</div>`}
             </td>
-            <td><strong>${cat.icon || ''} ${cat.name}</strong></td>
+            <td><strong>${cat.name}</strong></td>
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
             <td>
@@ -839,7 +839,7 @@ function displayFarms(farmsToDisplay) {
     tbody.innerHTML = farmsToDisplay.map(farm => `
         <tr>
             <td>
-                ${farm.logo_url ? `<img src="${farm.logo_url}" alt="${farm.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">` : `<div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🌿</div>`}
+                ${farm.logo_url ? `<img src="${farm.logo_url}" alt="${farm.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">` : `<div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">Logo</div>`}
             </td>
             <td><strong>${farm.name}</strong></td>
             <td>${farm.description || ''}</td>

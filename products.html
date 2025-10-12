@@ -336,20 +336,20 @@
         // Créer une carte produit
         function createProductCard(product) {
             const imageUrl = product.image_url || 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop';
-            const badge = product.badge || (product.category_icon ? `${product.category_icon} ${product.category_name}` : '');
+            const badge = product.badge || product.category_name || '';
             
             return `
                 <div class="product-card" data-id="${product.id}">
                     <div class="product-image-container">
-                        <img src="${imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/400x280/1a1a2e/ffffff?text=${encodeURIComponent(product.name)}'">
+                        <img src="${imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/400x280/000000/ffffff?text=${encodeURIComponent(product.name)}'">
                         ${badge ? `<div class="product-badge">${badge}</div>` : ''}
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
-                        ${product.description ? `
+                        ${product.farm_name ? `
                         <div class="product-farm">
                             <span class="farm-icon"></span>
-                            <span>${product.description.substring(0, 50)}${product.description.length > 50 ? '...' : ''}</span>
+                            <span>${product.farm_name}</span>
                         </div>` : ''}
                         <div class="product-price">
                             ${product.price}€ <span class="unit">${product.unit || '/ 3.5g'}</span>
