@@ -32,10 +32,30 @@
             transition: transform 0.3s ease;
         }
 
-        .carousel-image {
+        .carousel-image, .carousel-video {
             min-width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .carousel-video {
+            background: #000;
+        }
+
+        .media-type-indicator {
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10;
         }
 
         .carousel-button {
@@ -292,16 +312,14 @@
     </div>
 
     <div class="product-detail-container">
-        <!-- Carousel d'images du produit -->
+        <!-- Carousel d'images/vidéos du produit -->
         <div class="product-carousel">
-            <div class="product-badge">
+            <div class="product-badge" id="productBadge">
                 <i class="fas fa-star"></i> LIVE ROSIN
             </div>
 
             <div class="carousel-images" id="carouselImages">
-                <img src="images/product-placeholder.jpg" alt="100K ROSIN" class="carousel-image">
-                <img src="images/product-placeholder.jpg" alt="100K ROSIN" class="carousel-image">
-                <img src="images/product-placeholder.jpg" alt="100K ROSIN" class="carousel-image">
+                <!-- Les médias seront générés dynamiquement -->
             </div>
 
             <button class="carousel-button prev" onclick="changeSlide(-1)">
@@ -312,26 +330,24 @@
             </button>
 
             <div class="carousel-indicators" id="carouselIndicators">
-                <span class="indicator active" onclick="goToSlide(0)"></span>
-                <span class="indicator" onclick="goToSlide(1)"></span>
-                <span class="indicator" onclick="goToSlide(2)"></span>
+                <!-- Les indicateurs seront générés dynamiquement -->
             </div>
         </div>
 
         <!-- Informations du produit -->
         <div class="product-info">
-            <h1 class="product-title">100K ROSIN</h1>
+            <h1 class="product-title" id="productTitle">Chargement...</h1>
 
-            <div class="product-farm">
+            <div class="product-farm" id="productFarm">
                 <i class="fas fa-leaf"></i>
-                Farm: 100K
+                Farm: ...
             </div>
 
-            <div class="product-vendor">
+            <div class="product-vendor" id="productVendor">
                 <div class="vendor-icon">
                     <i class="fas fa-user"></i>
                 </div>
-                <span class="vendor-name">DONNY BURGER</span>
+                <span class="vendor-name">...</span>
             </div>
 
             <!-- Sélection de la quantité -->
@@ -341,22 +357,15 @@
                     Sélectionner la Quantité
                 </div>
 
-                <div class="quantity-options">
-                    <div class="quantity-option" onclick="selectQuantity(this, '2G', '290€')">
-                        <div class="quantity-weight">2G</div>
-                        <div class="quantity-price">290€</div>
-                    </div>
-                    <div class="quantity-option" onclick="selectQuantity(this, '4G', '380€')">
-                        <div class="quantity-weight">4G</div>
-                        <div class="quantity-price">380€</div>
-                    </div>
+                <div class="quantity-options" id="quantityOptions">
+                    <!-- Les options de quantité seront générées dynamiquement -->
                 </div>
             </div>
 
             <!-- Bouton de commande -->
             <button class="order-button" onclick="placeOrder()">
-                <i class="fas fa-shopping-cart"></i>
-                Commencer Maintenant
+                <i class="fab fa-whatsapp"></i>
+                Commander Maintenant
             </button>
         </div>
     </div>
@@ -381,70 +390,233 @@
         </a>
     </nav>
 
-    <script src="script.js"></script>
     <script>
-        // Carousel functionality
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-image');
-        const indicators = document.querySelectorAll('.indicator');
+        // Données des produits avec support photos et vidéos
+        const productsData = [
+            {
+                id: 1,
+                name: "100K ROSIN",
+                farm: "100K",
+                vendor: "DONNY BURGER",
+                badge: "🔥 LIVE ROSIN",
+                media: [
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
+                    { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
+                ],
+                quantities: [
+                    { weight: '2G', price: '200€' },
+                    { weight: '4G', price: '380€' }
+                ]
+            },
+            {
+                id: 2,
+                name: "HASH BURGER",
+                farm: "ESTATICO",
+                vendor: "CHEF BURGER",
+                badge: "❄️ FROZEN USA",
+                media: [
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
+                ],
+                quantities: [
+                    { weight: '3G', price: '180€' },
+                    { weight: '5G', price: '290€' }
+                ]
+            },
+            {
+                id: 3,
+                name: "POTION",
+                farm: "WIZARD TREES",
+                vendor: "WIZARD MASTER",
+                badge: "🌿 TOPSHELF CALIFORNIA",
+                media: [
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
+                    { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
+                    { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
+                ],
+                quantities: [
+                    { weight: '3.5G', price: '110€' },
+                    { weight: '7G', price: '200€' }
+                ]
+            }
+        ];
 
-        function showSlide(index) {
-            const carouselImages = document.getElementById('carouselImages');
-            if (index >= slides.length) currentSlide = 0;
-            if (index < 0) currentSlide = slides.length - 1;
-            
-            carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // Update indicators
-            indicators.forEach((indicator, i) => {
-                indicator.classList.toggle('active', i === currentSlide);
+        // Variables globales
+        let currentSlide = 0;
+        let currentProduct = null;
+        let selectedQuantity = null;
+        let selectedPrice = null;
+        let mediaElements = [];
+
+        // Récupérer l'ID du produit depuis l'URL
+        function getProductIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get('id')) || 1;
+        }
+
+        // Charger et afficher le produit
+        function loadProduct() {
+            const productId = getProductIdFromUrl();
+            currentProduct = productsData.find(p => p.id === productId) || productsData[0];
+
+            // Mettre à jour le titre de la page
+            document.title = `${currentProduct.name} - Al Gran`;
+
+            // Mettre à jour les informations du produit
+            document.getElementById('productTitle').textContent = currentProduct.name;
+            document.getElementById('productBadge').innerHTML = `<i class="fas fa-star"></i> ${currentProduct.badge}`;
+            document.getElementById('productFarm').innerHTML = `
+                <i class="fas fa-leaf"></i>
+                Farm: ${currentProduct.farm}
+            `;
+            document.getElementById('productVendor').innerHTML = `
+                <div class="vendor-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span class="vendor-name">${currentProduct.vendor}</span>
+            `;
+
+            // Générer le carousel de médias
+            generateMediaCarousel();
+
+            // Générer les options de quantité
+            generateQuantityOptions();
+        }
+
+        // Générer le carousel de médias (photos et vidéos)
+        function generateMediaCarousel() {
+            const carouselContainer = document.getElementById('carouselImages');
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+
+            carouselContainer.innerHTML = '';
+            indicatorsContainer.innerHTML = '';
+
+            currentProduct.media.forEach((media, index) => {
+                if (media.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = media.url;
+                    img.alt = currentProduct.name;
+                    img.className = 'carousel-image';
+                    img.onerror = function() {
+                        this.src = 'images/product-placeholder.jpg';
+                    };
+                    carouselContainer.appendChild(img);
+                } else if (media.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = media.url;
+                    video.className = 'carousel-video';
+                    video.controls = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    carouselContainer.appendChild(video);
+                }
+
+                // Créer l'indicateur
+                const indicator = document.createElement('span');
+                indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+                indicator.onclick = () => goToSlide(index);
+                indicatorsContainer.appendChild(indicator);
+            });
+
+            mediaElements = carouselContainer.children;
+        }
+
+        // Générer les options de quantité
+        function generateQuantityOptions() {
+            const quantityContainer = document.getElementById('quantityOptions');
+            quantityContainer.innerHTML = '';
+
+            currentProduct.quantities.forEach((qty, index) => {
+                const option = document.createElement('div');
+                option.className = 'quantity-option';
+                option.innerHTML = `
+                    <div class="quantity-weight">${qty.weight}</div>
+                    <div class="quantity-price">${qty.price}</div>
+                `;
+                option.onclick = function() {
+                    selectQuantity(this, qty.weight, qty.price);
+                };
+                quantityContainer.appendChild(option);
             });
         }
 
+        // Fonction pour afficher un slide
+        function showSlide(index) {
+            const carouselImages = document.getElementById('carouselImages');
+            if (index >= mediaElements.length) currentSlide = 0;
+            if (index < 0) currentSlide = mediaElements.length - 1;
+            
+            carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Mettre à jour les indicateurs
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === currentSlide);
+            });
+
+            // Gérer la lecture des vidéos
+            Array.from(mediaElements).forEach((element, i) => {
+                if (element.tagName === 'VIDEO') {
+                    if (i === currentSlide) {
+                        element.play().catch(e => console.log('Autoplay prevented'));
+                    } else {
+                        element.pause();
+                    }
+                }
+            });
+        }
+
+        // Changer de slide
         function changeSlide(direction) {
             currentSlide += direction;
-            if (currentSlide >= slides.length) currentSlide = 0;
-            if (currentSlide < 0) currentSlide = slides.length - 1;
+            if (currentSlide >= mediaElements.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = mediaElements.length - 1;
             showSlide(currentSlide);
         }
 
+        // Aller à un slide spécifique
         function goToSlide(index) {
             currentSlide = index;
             showSlide(currentSlide);
         }
 
-        // Quantity selection
-        let selectedQuantity = null;
-        let selectedPrice = null;
-
+        // Sélection de quantité
         function selectQuantity(element, quantity, price) {
-            // Remove selected class from all options
             document.querySelectorAll('.quantity-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            // Add selected class to clicked option
             element.classList.add('selected');
             selectedQuantity = quantity;
             selectedPrice = price;
         }
 
-        // Place order
+        // Passer commande
         function placeOrder() {
             if (!selectedQuantity) {
-                alert('Veuillez sélectionner une quantité avant de continuer.');
+                alert('⚠️ Veuillez sélectionner une quantité avant de continuer.');
                 return;
             }
             
-            // Rediriger vers la page de contact ou afficher un message
-            alert(`Commande: 100K ROSIN - ${selectedQuantity} pour ${selectedPrice}\n\nNous allons vous rediriger vers notre service de commande.`);
-            window.location.href = 'contact.html';
+            // Créer le message WhatsApp
+            const message = `Bonjour! Je souhaite commander:\n\n🌿 ${currentProduct.name}\n📦 Quantité: ${selectedQuantity}\n💰 Prix: ${selectedPrice}\n🏷️ ${currentProduct.badge}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
         }
 
-        // Auto-play carousel (optional)
-        setInterval(() => {
+        // Auto-play carousel (optionnel)
+        let autoplayInterval = setInterval(() => {
             changeSlide(1);
         }, 5000);
+
+        // Initialiser la page au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProduct();
+        });
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
