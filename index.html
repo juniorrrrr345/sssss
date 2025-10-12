@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVEC AMOUR - Accueil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1447 25%, #2d1b4e 50%, #1a1447 75%, #0a0e27 100%);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animation de fond cosmique */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(255, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 60%, rgba(0, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            animation: cosmic 15s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes cosmic {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Étoiles scintillantes */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Conteneur principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* En-tête */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-family: 'Brush Script MT', cursive;
+            background: linear-gradient(45deg, #ff1493, #ff69b4, #da70d6, #ba55d3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .subtitle {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #ff69b4;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+        }
+
+        /* Logo AVEC stylisé */
+        .logo-avec {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: bold;
+            background: linear-gradient(180deg, 
+                #ff1493 0%, 
+                #ba55d3 25%, 
+                #8b008b 50%, 
+                #ba55d3 75%, 
+                #ff1493 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 
+                0 0 40px rgba(255, 20, 147, 0.6),
+                0 0 80px rgba(186, 85, 211, 0.4);
+            letter-spacing: 15px;
+            margin: 30px 0;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Sections accordéon */
+        .section {
+            background: rgba(20, 20, 60, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: rgba(255, 105, 180, 0.6);
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
+        }
+
+        .section-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 105, 180, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: rgba(255, 105, 180, 0.2);
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: #ff69b4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+        }
+
+        .chevron {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: #ff69b4;
+        }
+
+        .section.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0 25px;
+        }
+
+        .section.active .section-content {
+            max-height: 1000px;
+            padding: 25px;
+        }
+
+        /* Contenu des services */
+        .services-content p {
+            line-height: 1.8;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        /* Zone de livraison */
+        .delivery-zones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .zone-badge {
+            background: linear-gradient(135deg, #ff1493, #ba55d3);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .zone-badge:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.6);
+        }
+
+        .alert-box {
+            background: rgba(255, 193, 7, 0.15);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .alert-icon {
+            color: #ffc107;
+            font-size: 1.5rem;
+        }
+
+        .alert-box p {
+            color: #ffd54f;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Navigation en bas */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 2px solid rgba(255, 105, 180, 0.3);
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: #ff69b4;
+            transform: translateY(-3px);
+        }
+
+        .nav-icon {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #ff1493, #ba55d3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            filter: brightness(1.3);
+        }
+
+        .nav-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .logo-avec {
+                font-size: 4rem;
+                letter-spacing: 5px;
+            }
+
+            .delivery-zones {
+                justify-content: center;
+            }
+
+            .nav-label {
+                font-size: 0.75rem;
+            }
+
+            .nav-icon {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Étoiles scintillantes -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Conteneur principal -->
+    <div class="container">
+        <!-- En-tête -->
+        <header class="header">
+            <h1>Bienvenue Dans L'Univers</h1>
+            <p class="subtitle">AVEC</p>
+            <div class="logo-avec">AVEC</div>
+        </header>
+
+        <!-- Section Nos Services -->
+        <div class="section active">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>
+                    <span class="section-icon">🎨</span>
+                    Nos Services
+                </h2>
+                <span class="chevron">^</span>
+            </div>
+            <div class="section-content">
+                <div class="services-content">
+                    <p>
+                        Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🛍️
+                    </p>
+                    <p>
+                        Livraisons/Meetup dans toute l'Île de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 📦✈️
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Zone de Livraison -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>
+                    <span class="section-icon">📍</span>
+                    Zone de Livraison
+                </h2>
+                <span class="chevron">^</span>
+            </div>
+            <div class="section-content">
+                <div class="delivery-zones">
+                    <div class="zone-badge">75</div>
+                    <div class="zone-badge">77</div>
+                    <div class="zone-badge">78</div>
+                    <div class="zone-badge">91</div>
+                    <div class="zone-badge">92</div>
+                    <div class="zone-badge">93</div>
+                    <div class="zone-badge">94</div>
+                    <div class="zone-badge">95</div>
+                </div>
+                <div class="alert-box">
+                    <span class="alert-icon">⚠️</span>
+                    <p>
+                        Attention des frais de livraison peuvent vous être demandés en fonction de votre département
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Meet up -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>
+                    <span class="section-icon">🤝</span>
+                    Meet up
+                </h2>
+                <span class="chevron">^</span>
+            </div>
+            <div class="section-content">
+                <div class="services-content">
+                    <p>
+                        Nous proposons également des rencontres en personne pour récupérer vos commandes dans toute l'Île-de-France. C'est rapide, pratique et sécurisé !
+                    </p>
+                    <p>
+                        Contactez-nous pour organiser votre meet-up au moment et à l'endroit qui vous conviennent le mieux. 📱
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation en bas -->
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Accueil</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🛍️</span>
+                <span class="nav-label">Produits</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Catégories</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">✉️</span>
+                <span class="nav-label">Contact</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Fonction pour basculer l'accordéon
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('active');
+        }
+
+        // Générer des étoiles scintillantes
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 50;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Position aléatoire
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Taille aléatoire
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // Délai d'animation aléatoire
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Navigation active
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(navItem => {
+                    navItem.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Initialiser les étoiles au chargement
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>
