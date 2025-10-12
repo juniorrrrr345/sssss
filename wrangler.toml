@@ -1,23 +1,42 @@
-name = "algran-api"
-main = "src/index.js"
+name = "boutique-avec-amour"
+main = "functions/api/[[route]].js"
 compatibility_date = "2024-01-01"
 
-# Cloudflare D1 Database
+# Configuration du site statique
+[site]
+bucket = "./public"
+
+# Binding D1 Database
 [[d1_databases]]
 binding = "DB"
-database_name = "algran-db"
-database_id = "5ee52135-17f2-43ee-80a8-c20fcaee99d5"
+database_name = "boutique-db"
+database_id = "YOUR_DATABASE_ID"
 
-# Cloudflare R2 Storage
+# Binding R2 Bucket pour les uploads
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "boutique-images"
 
-# Variables d'environnement
+# Variables d'environnement (à configurer dans Cloudflare Dashboard)
 [vars]
-ADMIN_PASSWORD = "admin123"
-R2_PUBLIC_URL = "https://pub-b38679a01a274648827751df94818418.r2.dev"
+# ADMIN_PASSWORD = "votre_mot_de_passe_admin"
+# CLOUDFLARE_R2_PUBLIC_URL = "https://pub-xxxx.r2.dev"
 
-# CORS Configuration
-[env.production]
-name = "algran-api-production"
+# Routes
+[routes]
+exclude = ["api/*"]
+include = ["/*"]
+
+# Configuration pour le développement local
+[env.development]
+vars = { ADMIN_PASSWORD = "admin123" }
+
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "boutique-db-dev"
+database_id = "local"
+
+# Build command pour Cloudflare Pages
+[build]
+command = ""
+watch_paths = ["functions/**/*.js", "public/**/*"]
