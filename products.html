@@ -280,6 +280,10 @@
 
         // Charger les produits depuis l'API
         async function loadProducts() {
+            console.log('📦 Chargement des produits...');
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: white;">⏳ Chargement...</div>';
+            
             try {
                 const url = `${API_CONFIG.BASE_URL}/api/products`;
                 console.log('📡 Fetching:', url);
