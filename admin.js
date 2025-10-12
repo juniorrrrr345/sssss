@@ -757,11 +757,15 @@ async function createFarmAction(data) {
             body: JSON.stringify(data)
         });
         const result = await response.json();
+        console.log('Create farm result:', result);
         if (result.success) {
             showAlert('Farm créée avec succès !', 'success');
             loadFarms();
+        } else {
+            showAlert(`Erreur: ${result.error || 'Erreur inconnue'}`, 'error');
         }
     } catch (error) {
+        console.error('Create farm error:', error);
         showAlert('Erreur lors de la création', 'error');
     }
 }

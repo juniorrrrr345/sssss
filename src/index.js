@@ -430,6 +430,22 @@ async function updateCategory(id, request, env, headers) {
   return jsonResponse({ success: true, message: 'Category updated successfully' }, 200, headers);
 }
 
+// DELETE /api/categories/:id - Supprimer une catégorie
+async function deleteCategory(id, env, headers) {
+  try {
+    // Supprimer tous les produits de cette catégorie
+    await env.DB.prepare('DELETE FROM products WHERE category_id = ?').bind(id).run();
+    
+    // Supprimer la catégorie
+    await env.DB.prepare('DELETE FROM categories WHERE id = ?').bind(id).run();
+    
+    return jsonResponse({ success: true, message: 'Category and related products deleted successfully' }, 200, headers);
+  } catch (error) {
+    console.error('Delete category error:', error);
+    return jsonResponse({ success: false, message: error.message }, 500, headers);
+  }
+}
+
 // GET /api/settings - Récupère tous les paramètres
 async function getSettings(env, headers) {
   const { results } = await env.DB.prepare('SELECT * FROM settings').all();
