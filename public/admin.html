@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Avec Amour</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <h2>Panel Admin</h2>
+            <nav class="admin-nav">
+                <a href="#products" class="admin-nav-item active" data-section="products">
+                    <span>🛍️</span> Produits
+                </a>
+                <a href="#farms" class="admin-nav-item" data-section="farms">
+                    <span>🌱</span> Farms
+                </a>
+                <a href="#categories" class="admin-nav-item" data-section="categories">
+                    <span>📁</span> Catégories
+                </a>
+                <a href="#socials" class="admin-nav-item" data-section="socials">
+                    <span>🔗</span> Réseaux sociaux
+                </a>
+                <a href="#settings" class="admin-nav-item" data-section="settings">
+                    <span>⚙️</span> Paramètres
+                </a>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+        </aside>
+
+        <!-- Main content -->
+        <main class="admin-main">
+            <!-- Section Produits -->
+            <section id="products" class="admin-section active">
+                <h2>Gestion des produits</h2>
+                <button id="addProductBtn" class="btn btn-primary">+ Ajouter un produit</button>
+                <div id="productsList" class="items-list">
+                    <!-- Les produits seront chargés ici -->
+                </div>
+            </section>
+
+            <!-- Section Farms -->
+            <section id="farms" class="admin-section">
+                <h2>Gestion des farms</h2>
+                <div class="form-inline">
+                    <input type="text" id="farmName" placeholder="Nom du farm">
+                    <button id="addFarmBtn" class="btn btn-primary">Ajouter</button>
+                </div>
+                <div id="farmsList" class="items-list">
+                    <!-- Les farms seront chargés ici -->
+                </div>
+            </section>
+
+            <!-- Section Catégories -->
+            <section id="categories" class="admin-section">
+                <h2>Gestion des catégories</h2>
+                <div class="form-inline">
+                    <input type="text" id="categoryName" placeholder="Nom de la catégorie">
+                    <button id="addCategoryBtn" class="btn btn-primary">Ajouter</button>
+                </div>
+                <div id="categoriesList" class="items-list">
+                    <!-- Les catégories seront chargées ici -->
+                </div>
+            </section>
+
+            <!-- Section Réseaux sociaux -->
+            <section id="socials" class="admin-section">
+                <h2>Réseaux sociaux</h2>
+                <div class="form-group">
+                    <input type="text" id="socialName" placeholder="Nom (ex: Instagram)">
+                    <input type="url" id="socialUrl" placeholder="URL">
+                    <button id="addSocialBtn" class="btn btn-primary">Ajouter</button>
+                </div>
+                <div id="socialsList" class="items-list">
+                    <!-- Les liens seront chargés ici -->
+                </div>
+            </section>
+
+            <!-- Section Paramètres -->
+            <section id="settings" class="admin-section">
+                <h2>Paramètres du site</h2>
+                <form id="settingsForm" class="settings-form">
+                    <div class="form-group">
+                        <label>Nom de la boutique</label>
+                        <input type="text" id="shopName" placeholder="Avec Amour">
+                    </div>
+                    <div class="form-group">
+                        <label>URL de l'image de fond</label>
+                        <input type="url" id="themeBgUrl" placeholder="https://example.com/background.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>URL de commande (WhatsApp, etc.)</label>
+                        <input type="url" id="commandUrl" placeholder="https://wa.me/...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal pour ajouter/éditer un produit -->
+    <div id="productModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Ajouter un produit</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>Nom du produit</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Catégorie</label>
+                        <select id="productCategory">
+                            <option value="">Sélectionner...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Farm</label>
+                        <select id="productFarm">
+                            <option value="">Sélectionner...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL du média (image ou vidéo YouTube)</label>
+                    <input type="url" id="productMediaUrl" required>
+                </div>
+                <div class="form-group">
+                    <label>Type de média</label>
+                    <select id="productMediaType">
+                        <option value="image">Image</option>
+                        <option value="video">Vidéo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prix (plusieurs possibles)</label>
+                    <div id="pricesList">
+                        <div class="price-input">
+                            <input type="text" placeholder="Quantité (ex: 2g)" class="price-qty">
+                            <input type="text" placeholder="Prix (ex: 20€)" class="price-value">
+                            <button type="button" class="btn-remove">×</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addPriceBtn" class="btn btn-secondary">+ Ajouter un prix</button>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de connexion -->
+    <div id="loginModal" class="modal" style="display: flex;">
+        <div class="modal-content">
+            <h2>Connexion Admin</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
