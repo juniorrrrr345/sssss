@@ -96,6 +96,11 @@ export default {
         return await updateCategory(id, request, env, corsHeaders);
       }
       
+      if (path.match(/^\/api\/categories\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteCategory(id, env, corsHeaders);
+      }
+      
       if (path === '/api/settings' && method === 'GET') {
         return await getSettings(env, corsHeaders);
       }

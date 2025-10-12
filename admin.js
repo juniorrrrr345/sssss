@@ -234,9 +234,12 @@ function displayProducts(productsToDisplay) {
 async function openProductModal(productId = null) {
     editingProductId = productId;
     
-    // Charger les catégories si pas déjà fait
+    // Charger les catégories et farms si pas déjà fait
     if (categories.length === 0) {
         await loadCategoriesForForm();
+    }
+    if (farms.length === 0) {
+        await loadFarmsForForm();
     }
     
     // Réinitialiser le formulaire
@@ -248,10 +251,22 @@ async function openProductModal(productId = null) {
         if (product) {
             document.getElementById('productName').value = product.name;
             document.getElementById('productCategory').value = product.category_id;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productUnit').value = product.unit;
+            document.getElementById('productFarm').value = product.farm_id || '';
+            
+            // Gérer les prix multiples
+            if (product.prices) {
+                const prices = JSON.parse(product.prices);
+                const pricesText = prices.map(p => `${p.quantity}|${p.price}`).join('\n');
+                document.getElementById('productPrices').value = pricesText;
+            } else {
+                // Ancien format (prix unique)
+                document.getElementById('productPrices').value = `${product.unit || '1g'}|${product.price}`;
+            }
+            
             document.getElementById('productBadge').value = product.badge || '';
             document.getElementById('productImage').value = product.image_url || '';
+            document.getElementById('productVideo').value = product.video_url || '';
+            document.getElementById('productDescription').value = product.description || '';
             document.querySelector('.modal-title').textContent = 'Modifier le Produit';
         }
     } else {
@@ -397,8 +412,11 @@ function displayCategories(categoriesToDisplay) {
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
             <td>
-                <button class="btn btn-primary" onclick="editCategory(${cat.id})">
-                    <i class="fas fa-edit"></i> Modifier
+                <button class="btn btn-primary" onclick="editCategory(${cat.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteCategoryConfirm(${cat.id}, '${cat.name}')">
+                    <i class="fas fa-trash"></i>
                 </button>
             </td>
         </tr>
@@ -945,6 +963,7 @@ async function deleteSocialNetworkAction(id) {
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
 window.editService = editService;
