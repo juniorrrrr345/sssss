@@ -532,6 +532,9 @@
                 <li class="nav-item" data-section="farms">
                     <i class="fas fa-seedling"></i> Farms
                 </li>
+                <li class="nav-item" data-section="social">
+                    <i class="fas fa-share-alt"></i> Réseaux Sociaux
+                </li>
                 <li class="nav-item" data-section="services">
                     <i class="fas fa-concierge-bell"></i> Services
                 </li>
@@ -640,8 +643,11 @@
             <!-- Categories Section -->
             <section class="content-section" id="categories">
                 <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Gestion des Catégories</h2>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 class="card-title"><i class="fas fa-th"></i> Gestion des Catégories</h2>
+                        <button class="btn btn-success" id="addCategoryBtn">
+                            <i class="fas fa-plus"></i> Ajouter une Catégorie
+                        </button>
                     </div>
                     <div class="table-container">
                         <table>
@@ -696,6 +702,37 @@
                 </div>
             </section>
 
+            <!-- Social Links Section -->
+            <section class="content-section" id="social">
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 class="card-title"><i class="fas fa-share-alt"></i> Gestion des Réseaux Sociaux</h2>
+                        <button class="btn btn-success" id="addSocialBtn">
+                            <i class="fas fa-plus"></i> Ajouter un Réseau
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Icône</th>
+                                    <th>Nom</th>
+                                    <th>URL</th>
+                                    <th>Ordre</th>
+                                    <th>Statut</th>
+                                    <th style="width: 180px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="socialLinksTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 2rem;">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <!-- Services Section -->
             <section class="content-section" id="services">
                 <div class="card">
@@ -732,64 +769,14 @@
                 <!-- Informations Générales -->
                 <div class="card" style="margin-bottom: 25px;">
                     <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-store"></i> Informations Générales</h2>
+                        <h2 class="card-title"><i class="fas fa-store"></i> Nom de la Boutique</h2>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
                             <label>Nom de la boutique</label>
                             <input type="text" id="setting_shop_name" class="form-control" placeholder="Al Gran">
                         </div>
-                        <div class="form-group">
-                            <label>Description de la boutique</label>
-                            <textarea id="setting_shop_description" class="form-control" rows="3" placeholder="Découvrez notre univers unique"></textarea>
-                        </div>
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div class="form-group">
-                                <label>Email de contact</label>
-                                <input type="email" id="setting_shop_email" class="form-control" placeholder="contact@algran.com">
-                            </div>
-                            <div class="form-group">
-                                <label>Téléphone</label>
-                                <input type="tel" id="setting_shop_phone" class="form-control" placeholder="+33 6 XX XX XX XX">
-                            </div>
-                        </div>
                         <button type="button" onclick="saveSettings('general')" class="btn btn-success">
-                            <i class="fas fa-save"></i> Sauvegarder
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Liens Sociaux et Contact -->
-                <div class="card" style="margin-bottom: 25px;">
-                    <div class="card-header">
-                        <h2 class="card-title"><i class="fas fa-share-alt"></i> Liens Sociaux et Contact</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div class="form-group">
-                                <label><i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp</label>
-                                <input type="text" id="setting_shop_whatsapp" class="form-control" placeholder="+33612345678 ou 33612345678">
-                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Numéro avec indicatif pays (sans espaces)</small>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fab fa-telegram" style="color: #0088cc;"></i> Telegram</label>
-                                <input type="text" id="setting_shop_telegram" class="form-control" placeholder="@votre_canal ou votre_canal">
-                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Nom d'utilisateur ou canal (avec ou sans @)</small>
-                            </div>
-                        </div>
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div class="form-group">
-                                <label><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</label>
-                                <input type="text" id="setting_shop_instagram" class="form-control" placeholder="@votre_compte ou votre_compte">
-                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Nom d'utilisateur (avec ou sans @)</small>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-tree" style="color: #43E55E;"></i> LinkTree</label>
-                                <input type="url" id="setting_shop_linktree" class="form-control" placeholder="https://linktr.ee/votre_profil">
-                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">URL complète de votre LinkTree</small>
-                            </div>
-                        </div>
-                        <button type="button" onclick="saveSettings('social')" class="btn btn-success">
                             <i class="fas fa-save"></i> Sauvegarder
                         </button>
                     </div>
@@ -1022,6 +1009,79 @@
         </div>
     </div>
 
-    <script src="admin.js?v=20251012-FINAL3"></script>
+    <!-- Add/Edit Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-th"></i> Ajouter une Catégorie</h2>
+                <button class="btn-close" id="closeCategoryModalBtn">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label>Nom de la catégorie *</label>
+                    <input type="text" id="categoryName" required placeholder="ex: Extract, Weed">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="categoryDescription" rows="3" placeholder="Description de la catégorie..."></textarea>
+                </div>
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Icône (emoji)</label>
+                        <input type="text" id="categoryIcon" placeholder="ex: 🔥 💎 ❄️">
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL (optionnel)</label>
+                        <input type="url" id="categoryImageUrl" placeholder="https://imgur.com/...">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Social Link Modal -->
+    <div class="modal" id="socialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-share-alt"></i> Ajouter un Réseau Social</h2>
+                <button class="btn-close" id="closeSocialModalBtn">&times;</button>
+            </div>
+            <form id="socialForm">
+                <div class="form-group">
+                    <label>Nom du réseau *</label>
+                    <input type="text" id="socialName" required placeholder="ex: WhatsApp, Telegram, TikTok">
+                </div>
+                <div class="form-group">
+                    <label>URL *</label>
+                    <input type="url" id="socialUrl" required placeholder="https://...">
+                    <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">URL complète vers votre réseau social</small>
+                </div>
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Icône (emoji)</label>
+                        <input type="text" id="socialIcon" placeholder="ex: 📱 ✈️ 📷">
+                    </div>
+                    <div class="form-group">
+                        <label>Ordre d'affichage</label>
+                        <input type="number" id="socialOrder" min="0" value="0" placeholder="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="socialActive" checked>
+                        <span>Actif (visible sur la page contact)</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js?v=20251012-FINAL4"></script>
 </body>
 </html>

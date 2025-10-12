@@ -13,9 +13,12 @@ let products = [];
 let categories = [];
 let services = [];
 let farms = [];
+let socialLinks = [];
 let editingProductId = null;
 let editingServiceId = null;
 let editingFarmId = null;
+let editingSocialId = null;
+let editingCategoryId = null;
 let productVariants = []; // Prix multiples
 
 // Initialisation
@@ -139,6 +142,7 @@ function handleNavigation(item) {
         products: 'Gestion des Produits',
         categories: 'Gestion des Catégories',
         farms: 'Gestion des Farms',
+        social: 'Gestion des Réseaux Sociaux',
         services: 'Gestion des Services',
         settings: 'Paramètres'
     };
@@ -149,6 +153,7 @@ function handleNavigation(item) {
     if (section === 'products') loadProducts();
     if (section === 'categories') loadCategories();
     if (section === 'farms') loadFarms();
+    if (section === 'social') loadSocialLinks();
     if (section === 'services') loadServices();
     if (section === 'settings') loadSettings();
 }
@@ -536,11 +541,7 @@ async function saveSettings(section) {
     // Déterminer quels champs sauvegarder selon la section
     let fields = [];
     if (section === 'general') {
-        fields = ['shop_name', 'shop_description', 'shop_email', 'shop_phone'];
-    } else if (section === 'social') {
-        fields = ['shop_whatsapp', 'shop_telegram', 'shop_instagram', 'shop_linktree'];
-    } else if (section === 'home') {
-        fields = ['home_welcome_title', 'home_services_text', 'home_delivery_text', 'home_delivery_zones'];
+        fields = ['shop_name'];
     } else if (section === 'theme') {
         fields = ['theme_background_url'];
     } else if (section === 'advanced') {
