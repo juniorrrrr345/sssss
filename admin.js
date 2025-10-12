@@ -301,6 +301,24 @@ async function loadCategoriesForForm() {
     }
 }
 
+// Charger les farms pour le formulaire
+async function loadFarmsForForm() {
+    try {
+        const response = await fetch(`${API_URL}/api/farms`);
+        const data = await response.json();
+        
+        if (data.success && data.farms) {
+            const select = document.getElementById('productFarm');
+            select.innerHTML = '<option value="">Aucune</option>' + 
+                data.farms.map(farm => 
+                    `<option value="${farm.id}">🌿 ${farm.name}</option>`
+                ).join('');
+        }
+    } catch (error) {
+        console.error('Error loading farms for form:', error);
+    }
+}
+
 // Soumettre le formulaire produit
 async function handleProductSubmit(e) {
     e.preventDefault();
@@ -1045,6 +1063,10 @@ window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
 window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
+window.editSocialNetwork = editSocialNetwork;
+window.deleteSocialConfirm = deleteSocialConfirm;
+window.escapeHtml = escapeHtml;
+ceConfirm;
 window.editSocialNetwork = editSocialNetwork;
 window.deleteSocialConfirm = deleteSocialConfirm;
 window.escapeHtml = escapeHtml;
