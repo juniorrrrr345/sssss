@@ -5,7 +5,7 @@
 
 async function loadThemeBackground() {
     try {
-        const url = 'http://localhost:8787/api/settings';
+        const url = 'https://algran-api.calitek-junior.workers.dev/api/settings';
         const response = await fetch(url);
         const data = await response.json();
         

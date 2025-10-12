@@ -4,11 +4,11 @@
  */
 
 // URL de l'API Cloudflare Workers
-// Pour développement local : http://localhost:8787
+// Pour développement local : https://algran-api.calitek-junior.workers.dev
 // Pour production : https://algran-api.VOTRE-SUBDOMAIN.workers.dev
 const API_CONFIG = {
     // URL de base de l'API
-    BASE_URL: 'http://localhost:8787',
+    BASE_URL: 'https://algran-api.calitek-junior.workers.dev',
     
     // Endpoints
     ENDPOINTS: {
