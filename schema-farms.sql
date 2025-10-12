@@ -5,20 +5,8 @@ CREATE TABLE IF NOT EXISTS farms (
     description TEXT,
     country TEXT,
     display_order INTEGER DEFAULT 0,
-    is_active INTEGER DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
--- Index pour les farms
-CREATE INDEX IF NOT EXISTS idx_farms_active ON farms(is_active);
-
--- Trigger pour mettre à jour updated_at
-CREATE TRIGGER IF NOT EXISTS update_farms_timestamp 
-AFTER UPDATE ON farms
-BEGIN
-    UPDATE farms SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
-END;
 
 -- Insérer quelques farms par défaut
 INSERT OR IGNORE INTO farms (id, name, country, display_order) VALUES
