@@ -323,13 +323,32 @@ async function loadFarmsForForm() {
 async function handleProductSubmit(e) {
     e.preventDefault();
     
+    // Parser les prix multiples
+    const pricesText = document.getElementById('productPrices').value;
+    const pricesArray = pricesText.split('\n')
+        .filter(line => line.trim())
+        .map(line => {
+            const [quantity, price] = line.split('|');
+            return { quantity: quantity.trim(), price: parseFloat(price) };
+        });
+    
+    // Validation
+    if (pricesArray.length === 0) {
+        showAlert('Veuillez entrer au moins un prix !', 'error');
+        return;
+    }
+    
     const productData = {
         name: document.getElementById('productName').value,
         category_id: parseInt(document.getElementById('productCategory').value),
-        price: parseFloat(document.getElementById('productPrice').value),
-        unit: document.getElementById('productUnit').value,
+        farm_id: document.getElementById('productFarm').value ? parseInt(document.getElementById('productFarm').value) : null,
+        prices: JSON.stringify(pricesArray),
+        price: pricesArray[0].price,
+        unit: pricesArray[0].quantity,
         badge: document.getElementById('productBadge').value,
         image_url: document.getElementById('productImage').value,
+        video_url: document.getElementById('productVideo').value,
+        description: document.getElementById('productDescription').value || '',
         is_active: 1
     };
     
