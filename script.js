@@ -196,8 +196,30 @@ searchInput.addEventListener('input', (e) => {
 
 // Gestionnaire d'événements pour le bouton filtres
 const filterBtn = document.getElementById('filterBtn');
+const filterModal = document.getElementById('filterModal');
+const closeModal = document.getElementById('closeModal');
+const btnOk = document.getElementById('btnOk');
+
+// Ouvrir le modal
 filterBtn.addEventListener('click', () => {
-    alert('Les filtres avancés seront bientôt disponibles ! 🎯\n\nVous pourrez filtrer par :\n- Catégorie\n- Prix\n- Type de produit\n- Origine');
+    filterModal.classList.add('active');
+});
+
+// Fermer le modal avec le bouton X
+closeModal.addEventListener('click', () => {
+    filterModal.classList.remove('active');
+});
+
+// Fermer le modal avec le bouton OK
+btnOk.addEventListener('click', () => {
+    filterModal.classList.remove('active');
+});
+
+// Fermer le modal en cliquant en dehors
+filterModal.addEventListener('click', (e) => {
+    if (e.target === filterModal) {
+        filterModal.classList.remove('active');
+    }
 });
 
 // Gestionnaire de clic sur les cartes produits
