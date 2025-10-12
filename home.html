@@ -33,9 +33,8 @@
                 <i class="fas fa-heart"></i>
                 Nos Services
             </h2>
-            <div class="section-content">
-                <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
-                <p>Livraisons/Meetup dans toute l'ile de France, le jour même,envois de France à France ou à l'international avec suivis,preuves de dépôts et assurances. 👍 😜 🌍</p>
+            <div class="section-content" id="serviceContent">
+                <p>Chargement des informations...</p>
             </div>
         </section>
 
@@ -87,5 +86,52 @@
             <span class="nav-label">Contact</span>
         </a>
     </nav>
+
+    <script>
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+
+        // Charger les informations de la boutique
+        async function loadShopInfo() {
+            try {
+                const response = await fetch(`${API_URL}/api/settings`);
+                const data = await response.json();
+                
+                if (data.success && data.settings) {
+                    const settings = data.settings;
+                    
+                    // Mettre à jour le nom de la boutique dans le logo
+                    const shopName = settings.shop_name || 'AVEC AMOUR';
+                    document.querySelector('.giant-logo').textContent = shopName.split(' ')[0] || 'AVEC';
+                    document.querySelector('.logo-subtitle').textContent = shopName.split(' ')[1] || 'Amour';
+                    
+                    // Mettre à jour la description
+                    const description = settings.shop_description || 
+                        'Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀';
+                    
+                    document.getElementById('serviceContent').innerHTML = `
+                        <p>Bienvenue sur ${shopName} ! ${description}</p>
+                        <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+                    `;
+                } else {
+                    // Valeurs par défaut
+                    document.getElementById('serviceContent').innerHTML = `
+                        <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
+                        <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                // Valeurs par défaut en cas d'erreur
+                document.getElementById('serviceContent').innerHTML = `
+                    <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
+                    <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+                `;
+            }
+        }
+
+        // Charger au démarrage
+        document.addEventListener('DOMContentLoaded', loadShopInfo);
+    </script>
 </body>
 </html>
