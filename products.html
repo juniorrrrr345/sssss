@@ -244,15 +244,25 @@
                 if (response.ok) {
                     const data = await response.json();
                     const productsArray = data.success ? data.products : data;
-                    products = productsArray.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        category: p.category_name || 'Sans catégorie',
-                        badge: p.farm_name || '',
-                        price: p.prices && p.prices.length > 0 ? parseInt(p.prices[0].price) : 0,
-                        unit: p.prices && p.prices.length > 0 ? `/ ${p.prices[0].quantity}` : '',
-                        image: p.image_url || 'images/product-placeholder.jpg'
-                    }));
+                    products = productsArray.map(p => {
+                        // Parser les prices qui sont en string JSON
+                        let pricesArray = [];
+                        try {
+                            pricesArray = typeof p.prices === 'string' ? JSON.parse(p.prices) : p.prices;
+                        } catch (e) {
+                            pricesArray = [];
+                        }
+                        
+                        return {
+                            id: p.id,
+                            name: p.name,
+                            category: p.category_name || 'Sans catégorie',
+                            badge: p.badge || p.farm_name || '',
+                            price: pricesArray && pricesArray.length > 0 ? parseInt(pricesArray[0].price) : (p.price || 0),
+                            unit: pricesArray && pricesArray.length > 0 ? `/ ${pricesArray[0].quantity}` : (p.unit ? `/ ${p.unit}` : ''),
+                            image: p.image_url || 'images/product-placeholder.jpg'
+                        };
+                    });
                     filteredProducts = [...products];
                     displayProducts(filteredProducts);
                 }
@@ -444,7 +454,7 @@
             return `
                 <div class="product-card" data-id="${product.id}">
                     <div style="position: relative;">
-                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.background='linear-gradient(135deg, rgba(255, 62, 165, 0.3), rgba(168, 85, 247, 0.3))'">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.background='rgba(255, 255, 255, 0.1)'">
                         <div class="product-badge">${product.badge}</div>
                     </div>
                     <div class="product-info">
