@@ -271,25 +271,39 @@
     </nav>
 
     <script src="config.js"></script>
-    <script src="script.js"></script>
     <script>
-        // Charger les produits depuis l'API
-        let products = [];
+        console.log('🚀 Products.html chargé - Version FINALE');
+        
+        // Variables pour les produits
+        let productsData = [];
         let allProducts = [];
 
         // Charger les produits depuis l'API
         async function loadProducts() {
             try {
-                const data = await fetchApi(API_CONFIG.ENDPOINTS.PRODUCTS);
-                if (data.success) {
+                const url = `${API_CONFIG.BASE_URL}/api/products`;
+                console.log('📡 Fetching:', url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('✅ Données reçues:', data);
+                
+                if (data.success && data.products) {
                     // Filtrer seulement les produits actifs
                     allProducts = data.products.filter(p => p.is_active);
                     productsData = [...allProducts];
+                    
+                    console.log(`📦 ${productsData.length} produit(s) actif(s)`);
+                    
                     displayProducts(productsData);
+                } else {
+                    console.warn('⚠️ Pas de produits dans la réponse');
+                    showError('Aucun produit disponible');
                 }
             } catch (error) {
-                console.error('Erreur lors du chargement des produits:', error);
-                showError('Impossible de charger les produits. Veuillez réessayer plus tard.');
+                console.error('❌ Erreur lors du chargement:', error);
+                showError('Impossible de charger les produits. Vérifiez que l\'API est démarrée.');
             }
         }
 
