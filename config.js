@@ -55,3 +55,61 @@ async function fetchApi(endpoint, options = {}) {
 window.API_URL = API_URL;
 window.config = config;
 window.fetchApi = fetchApi;
+
+// Charger automatiquement les paramètres du site
+async function autoLoadSettings() {
+    try {
+        const settings = await fetchApi('/api/settings');
+        
+        if (settings && settings.settings) {
+            // Appliquer le nom de la boutique
+            if (settings.settings.shop_name) {
+                document.querySelectorAll('.shop-name, .site-title, .hero-title, h1').forEach(el => {
+                    if (el.textContent.includes('Al Gran') || 
+                        el.textContent.includes('COFFEELA55') || 
+                        el.textContent.includes('Avec Amour')) {
+                        el.textContent = settings.settings.shop_name;
+                    }
+                });
+                
+                // Mettre à jour le titre de la page
+                if (document.title.includes('Al Gran')) {
+                    document.title = document.title.replace('Al Gran', settings.settings.shop_name);
+                }
+            }
+            
+            // Appliquer l'image de fond
+            if (settings.settings.theme_background_url) {
+                let overlay = document.querySelector('.theme-background-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'theme-background-overlay';
+                    overlay.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-image: url(${settings.settings.theme_background_url});
+                        background-size: cover;
+                        background-position: center;
+                        background-attachment: fixed;
+                        opacity: 0.1;
+                        z-index: -1;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(overlay);
+                } else {
+                    overlay.style.backgroundImage = `url(${settings.settings.theme_background_url})`;
+                }
+            }
+            
+            window.shopSettings = settings.settings;
+        }
+    } catch (error) {
+        console.error('Erreur chargement paramètres:', error);
+    }
+}
+
+// Charger au démarrage
+document.addEventListener('DOMContentLoaded', autoLoadSettings);
