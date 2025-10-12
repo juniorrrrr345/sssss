@@ -616,8 +616,10 @@ async function loadSettings() {
         console.error('Error loading settings:', error);
         const shopNameEl = document.getElementById('shopName');
         const bgImageEl = document.getElementById('backgroundImage');
+        const adminTitleEl = document.getElementById('adminTitle');
         if (shopNameEl) shopNameEl.value = 'Al Gran';
         if (bgImageEl) bgImageEl.value = '';
+        if (adminTitleEl) adminTitleEl.textContent = 'Al Gran Admin';
     }
 }
 
