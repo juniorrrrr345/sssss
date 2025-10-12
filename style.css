@@ -133,13 +133,9 @@ body {
     font-family: 'Pacifico', cursive;
     font-size: 5rem;
     text-align: center;
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple), var(--primary-cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
     margin-bottom: 2rem;
-    text-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
-    opacity: 0.3;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     position: relative;
 }
 
