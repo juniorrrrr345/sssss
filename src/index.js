@@ -244,22 +244,29 @@ async function createProduct(request, env, headers) {
   
   const slug = generateSlug(data.name);
   
+  console.log('Creating product with video_url:', data.video_url);
+  
   const result = await env.DB.prepare(`
-    INSERT INTO products (name, slug, description, category_id, price, unit, badge, image_url, stock_quantity, is_active, is_featured)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (name, slug, description, category_id, farm_id, price, unit, badge, image_url, video_url, prices, stock_quantity, is_active, is_featured)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     data.name,
     slug,
     data.description || '',
     data.category_id,
+    data.farm_id || null,
     data.price,
     data.unit || '/ 3.5g',
     data.badge || '',
     data.image_url || '',
+    data.video_url || null,
+    data.prices || '[]',
     data.stock_quantity || 0,
     data.is_active !== undefined ? data.is_active : 1,
     data.is_featured || 0
   ).run();
+  
+  console.log('Product created with ID:', result.meta.last_row_id);
   
   return jsonResponse({
     success: true,

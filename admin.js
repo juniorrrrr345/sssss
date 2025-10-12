@@ -341,6 +341,7 @@ async function handleProductSubmit(e) {
         return;
     }
     
+    const videoUrl = document.getElementById('productVideo').value.trim();
     const productData = {
         name: document.getElementById('productName').value,
         category_id: parseInt(document.getElementById('productCategory').value),
@@ -350,10 +351,12 @@ async function handleProductSubmit(e) {
         unit: pricesArray[0].quantity,
         badge: document.getElementById('productBadge').value,
         image_url: document.getElementById('productImage').value,
-        video_url: document.getElementById('productVideo').value,
+        video_url: videoUrl || null,
         description: document.getElementById('productDescription').value || '',
         is_active: 1
     };
+    
+    console.log('Sending product data:', productData);
     
     try {
         let response;
