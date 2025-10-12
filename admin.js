@@ -602,18 +602,20 @@ async function loadSettings() {
                 settings = data.settings;
             }
             
-            document.getElementById('shopName').value = settings.shop_name || 'Al Gran';
-            document.getElementById('shopSubtitle').value = settings.shop_subtitle || 'Amour';
-            document.getElementById('backgroundImage').value = settings.background_image_url || '';
+            const shopNameEl = document.getElementById('shopName');
+            const bgImageEl = document.getElementById('backgroundImage');
+            
+            if (shopNameEl) shopNameEl.value = settings.shop_name || 'Al Gran';
+            if (bgImageEl) bgImageEl.value = settings.background_image_url || '';
             
             console.log('Settings loaded:', settings);
         }
     } catch (error) {
         console.error('Error loading settings:', error);
-        // Ne pas afficher d'alerte d'erreur, juste utiliser les valeurs par défaut
-        document.getElementById('shopName').value = 'Al Gran';
-        document.getElementById('shopSubtitle').value = 'Amour';
-        document.getElementById('backgroundImage').value = '';
+        const shopNameEl = document.getElementById('shopName');
+        const bgImageEl = document.getElementById('backgroundImage');
+        if (shopNameEl) shopNameEl.value = 'Al Gran';
+        if (bgImageEl) bgImageEl.value = '';
     }
 }
 
