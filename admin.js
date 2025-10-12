@@ -475,6 +475,32 @@ async function updateCategoryAction(id, data) {
     }
 }
 
+// Confirmer suppression catégorie
+function deleteCategoryConfirm(id, name) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer la catégorie "${name}" ?\n\nATTENTION : Les produits de cette catégorie ne seront pas supprimés.`)) {
+        deleteCategoryAction(id);
+    }
+}
+
+// Supprimer une catégorie
+async function deleteCategoryAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/categories/${id}`, { 
+            method: 'DELETE' 
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Catégorie supprimée avec succès !', 'success');
+            loadCategories();
+        } else {
+            showAlert('Erreur: ' + (result.message || 'Suppression impossible'), 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
 // Charger les paramètres
 async function loadSettings() {
     try {
