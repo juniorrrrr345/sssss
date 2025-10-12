@@ -625,6 +625,7 @@ async function saveSettings(e) {
     
     const shopNameEl = document.getElementById('shopName');
     const bgImageEl = document.getElementById('backgroundImage');
+    const adminPwdEl = document.getElementById('adminPassword');
     
     const settingsData = {
         shop_name: shopNameEl ? shopNameEl.value : '',
@@ -632,7 +633,7 @@ async function saveSettings(e) {
     };
     
     // Si un nouveau mot de passe est fourni
-    const newPassword = document.getElementById('adminPassword').value;
+    const newPassword = adminPwdEl ? adminPwdEl.value : '';
     if (newPassword) {
         settingsData.admin_password = newPassword;
     }
@@ -1094,6 +1095,11 @@ window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
 window.editService = editService;
+window.deleteServiceConfirm = deleteServiceConfirm;
+window.editSocialNetwork = editSocialNetwork;
+window.deleteSocialConfirm = deleteSocialConfirm;
+window.escapeHtml = escapeHtml;
+rvice;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.editSocialNetwork = editSocialNetwork;
 window.deleteSocialConfirm = deleteSocialConfirm;
