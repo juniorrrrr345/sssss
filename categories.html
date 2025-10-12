@@ -222,11 +222,15 @@
                     
                     // Appliquer l'image de fond si définie
                     if (data.settings.background_image_url && data.settings.background_image_url.trim() !== '') {
-                        document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${data.settings.background_image_url}')`;
-                        document.body.style.backgroundSize = 'cover';
-                        document.body.style.backgroundPosition = 'center';
-                        document.body.style.backgroundAttachment = 'fixed';
-                        document.body.style.backgroundRepeat = 'no-repeat';
+                        const cosmicBg = document.querySelector('.cosmic-background');
+                        if (cosmicBg) {
+                            cosmicBg.style.backgroundImage = `url('${data.settings.background_image_url}')`;
+                            cosmicBg.style.backgroundSize = 'cover';
+                            cosmicBg.style.backgroundPosition = 'center';
+                            cosmicBg.style.backgroundAttachment = 'fixed';
+                            cosmicBg.style.backgroundRepeat = 'no-repeat';
+                            cosmicBg.style.opacity = '1';
+                        }
                     }
                 }
             } catch (error) {
