@@ -361,7 +361,7 @@ body {
 }
 
 .nav-item.active {
-    color: var(--text-primary);
+    color: #ffffff;
 }
 
 .nav-item.active .nav-icon-circle i {
