@@ -475,7 +475,6 @@ async function loadSettings() {
         // Ne pas afficher d'alerte d'erreur, juste utiliser les valeurs par défaut
         document.getElementById('shopName').value = 'Al Gran';
         document.getElementById('shopSubtitle').value = 'Amour';
-        document.getElementById('shopEmail').value = '';
     }
 }
 
