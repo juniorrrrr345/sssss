@@ -1,0 +1,62 @@
+====================================
+⚠️ URGENT - CORRIGER LES ERREURS 500
+====================================
+
+PROBLÈME :
+- Erreur 500 sur DELETE /api/categories
+- Erreur 500 sur POST /api/farms
+- Les catégories et farms ne se chargent pas dans le modal produit
+
+CAUSE :
+L'API sur Cloudflare Workers n'a pas les dernières modifications.
+La fonction deleteCategory et les corrections de createFarm ne sont pas déployées.
+
+====================================
+✅ SOLUTION - EXÉCUTER CES COMMANDES :
+====================================
+
+1. Ouvrez PowerShell
+2. Allez dans le dossier :
+   cd C:\Users\PC\Documents\sssss
+
+3. Récupérez les derniers fichiers :
+   git pull origin cursor/deploy-local-web-store-from-github-901c
+
+4. **IMPORTANT** - Déployez l'API :
+   npm run deploy
+
+5. Attendez que le déploiement soit terminé (environ 30 secondes)
+
+6. Lancez le serveur local :
+   python -m http.server 8005
+
+7. Rechargez le panel admin avec Ctrl + Shift + R
+
+====================================
+🔍 VÉRIFIER QUE ÇA FONCTIONNE :
+====================================
+
+Après le déploiement, allez sur :
+http://localhost:8005/admin.html
+
+Essayez de :
+✅ Ajouter une farm → Devrait fonctionner
+✅ Supprimer une catégorie → Devrait fonctionner
+✅ Ajouter un produit → Les catégories et farms devraient apparaître
+
+Si vous voyez encore des erreurs 500 dans la console (F12),
+DITES-MOI EXACTEMENT le message d'erreur complet.
+
+====================================
+📝 RAPPEL :
+====================================
+
+À CHAQUE FOIS que je modifie src/index.js, vous DEVEZ :
+1. git pull
+2. npm run deploy ← CRUCIAL !
+3. python -m http.server 8005
+
+Sans "npm run deploy", les modifications de l'API 
+ne sont PAS appliquées sur Cloudflare Workers !
+
+====================================
