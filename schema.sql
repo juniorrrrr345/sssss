@@ -209,11 +209,11 @@ END;
 
 -- Insérer les catégories par défaut
 INSERT OR IGNORE INTO categories (name, slug, description, icon) VALUES
-('Extract', 'extract', 'Extraits premium de haute qualité', '🔥'),
-('Static-Sift', 'static-sift', 'Produits Static-Sift premium', '💎'),
-('Frozen-Sift', 'frozen-sift', 'Frozen-Sift de qualité supérieure', '❄️'),
-('Dry-Sift', 'dry-sift', 'Dry-Sift artisanal', '🌿'),
-('Weed', 'weed', 'Fleurs premium sélectionnées', '🍃');
+('Extract', 'extract', 'Extraits premium de haute qualité', ''),
+('Static-Sift', 'static-sift', 'Produits Static-Sift premium', ''),
+('Frozen-Sift', 'frozen-sift', 'Frozen-Sift de qualité supérieure', ''),
+('Dry-Sift', 'dry-sift', 'Dry-Sift artisanal', ''),
+('Weed', 'weed', 'Fleurs premium sélectionnées', '');
 
 -- Insérer les farms par défaut
 INSERT OR IGNORE INTO farms (name, slug, description, country) VALUES
