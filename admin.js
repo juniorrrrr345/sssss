@@ -98,6 +98,30 @@ function initEventListeners() {
             closeFarmModal();
         }
     });
+    
+    // Modal social
+    document.getElementById('addSocialBtn').addEventListener('click', () => openSocialModal());
+    document.getElementById('closeSocialModalBtn').addEventListener('click', closeSocialModal);
+    document.getElementById('socialForm').addEventListener('submit', handleSocialSubmit);
+    
+    // Fermer modal social en cliquant à l'extérieur
+    document.getElementById('socialModal').addEventListener('click', (e) => {
+        if (e.target.id === 'socialModal') {
+            closeSocialModal();
+        }
+    });
+    
+    // Modal category
+    document.getElementById('addCategoryBtn').addEventListener('click', () => openCategoryModal());
+    document.getElementById('closeCategoryModalBtn').addEventListener('click', closeCategoryModal);
+    document.getElementById('categoryForm').addEventListener('submit', handleCategorySubmit);
+    
+    // Fermer modal category en cliquant à l'extérieur
+    document.getElementById('categoryModal').addEventListener('click', (e) => {
+        if (e.target.id === 'categoryModal') {
+            closeCategoryModal();
+        }
+    });
 }
 
 // Gestion de la connexion
@@ -986,6 +1010,221 @@ function removeVariant(id) {
     document.getElementById(`variant-${id}`).remove();
 }
 
+// ===== GESTION DES RÉSEAUX SOCIAUX =====
+
+async function loadSocialLinks() {
+    try {
+        const response = await fetch(`${API_URL}/api/social-links`);
+        const data = await response.json();
+        
+        if (data.success) {
+            socialLinks = data.social_links;
+            displaySocialLinks(socialLinks);
+        }
+    } catch (error) {
+        console.error('Error loading social links:', error);
+        showAlert('Erreur lors du chargement des réseaux sociaux', 'error');
+    }
+}
+
+function displaySocialLinks(links) {
+    const tbody = document.getElementById('socialLinksTableBody');
+    
+    if (links.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Aucun réseau social</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = links.map(link => `
+        <tr>
+            <td style="font-size: 1.5rem;">${link.icon || '🔗'}</td>
+            <td><strong>${link.name}</strong></td>
+            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${link.url}</td>
+            <td>${link.display_order}</td>
+            <td>
+                <span class="badge ${link.is_active ? 'badge-success' : 'badge-warning'}">
+                    ${link.is_active ? 'Actif' : 'Inactif'}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="editSocialLink(${link.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteSocialLinkConfirm(${link.id}, '${link.name.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openSocialModal(socialId = null) {
+    editingSocialId = socialId;
+    
+    document.getElementById('socialForm').reset();
+    document.getElementById('socialActive').checked = true;
+    
+    if (socialId) {
+        const social = socialLinks.find(s => s.id === socialId);
+        if (social) {
+            document.getElementById('socialName').value = social.name;
+            document.getElementById('socialUrl').value = social.url;
+            document.getElementById('socialIcon').value = social.icon || '';
+            document.getElementById('socialOrder').value = social.display_order || 0;
+            document.getElementById('socialActive').checked = social.is_active === 1;
+            document.querySelector('#socialModal .modal-title').innerHTML = '<i class="fas fa-edit"></i> Modifier le Réseau Social';
+        }
+    } else {
+        document.querySelector('#socialModal .modal-title').innerHTML = '<i class="fas fa-plus-circle"></i> Ajouter un Réseau Social';
+    }
+    
+    document.getElementById('socialModal').classList.add('active');
+}
+
+function closeSocialModal() {
+    document.getElementById('socialModal').classList.remove('active');
+    editingSocialId = null;
+}
+
+async function handleSocialSubmit(e) {
+    e.preventDefault();
+    
+    const socialData = {
+        name: document.getElementById('socialName').value,
+        url: document.getElementById('socialUrl').value,
+        icon: document.getElementById('socialIcon').value,
+        display_order: parseInt(document.getElementById('socialOrder').value) || 0,
+        is_active: document.getElementById('socialActive').checked ? 1 : 0
+    };
+    
+    try {
+        let response;
+        if (editingSocialId) {
+            response = await fetch(`${API_URL}/api/social-links/${editingSocialId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(socialData)
+            });
+        } else {
+            response = await fetch(`${API_URL}/api/social-links`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(socialData)
+            });
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(editingSocialId ? 'Réseau modifié !' : 'Réseau créé !', 'success');
+            closeSocialModal();
+            loadSocialLinks();
+        } else {
+            showAlert('Erreur: ' + (data.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving social link:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
+    }
+}
+
+function editSocialLink(id) {
+    openSocialModal(id);
+}
+
+function deleteSocialLinkConfirm(id, name) {
+    if (confirm(`Supprimer "${name}" ?`)) {
+        deleteSocialLinkAction(id);
+    }
+}
+
+async function deleteSocialLinkAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/social-links/${id}`, { method: 'DELETE' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Réseau supprimé !', 'success');
+            loadSocialLinks();
+        } else {
+            showAlert('Erreur lors de la suppression', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting social link:', error);
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
+// ===== GESTION AJOUT CATÉGORIE =====
+
+function openCategoryModal(categoryId = null) {
+    editingCategoryId = categoryId;
+    
+    document.getElementById('categoryForm').reset();
+    
+    if (categoryId) {
+        const category = categories.find(c => c.id === categoryId);
+        if (category) {
+            document.getElementById('categoryName').value = category.name;
+            document.getElementById('categoryDescription').value = category.description || '';
+            document.getElementById('categoryIcon').value = category.icon || '';
+            document.getElementById('categoryImageUrl').value = category.image_url || '';
+            document.querySelector('#categoryModal .modal-title').innerHTML = '<i class="fas fa-edit"></i> Modifier la Catégorie';
+        }
+    } else {
+        document.querySelector('#categoryModal .modal-title').innerHTML = '<i class="fas fa-plus-circle"></i> Ajouter une Catégorie';
+    }
+    
+    document.getElementById('categoryModal').classList.add('active');
+}
+
+function closeCategoryModal() {
+    document.getElementById('categoryModal').classList.remove('active');
+    editingCategoryId = null;
+}
+
+async function handleCategorySubmit(e) {
+    e.preventDefault();
+    
+    const categoryData = {
+        name: document.getElementById('categoryName').value,
+        description: document.getElementById('categoryDescription').value,
+        icon: document.getElementById('categoryIcon').value,
+        image_url: document.getElementById('categoryImageUrl').value
+    };
+    
+    try {
+        let response;
+        if (editingCategoryId) {
+            response = await fetch(`${API_URL}/api/categories/${editingCategoryId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(categoryData)
+            });
+        } else {
+            response = await fetch(`${API_URL}/api/categories`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(categoryData)
+            });
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(editingCategoryId ? 'Catégorie modifiée !' : 'Catégorie créée !', 'success');
+            closeCategoryModal();
+            loadCategories();
+            loadDashboard();
+        } else {
+            showAlert('Erreur: ' + (data.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving category:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
+    }
+}
+
 // Exposer les fonctions globalement pour les boutons inline
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
@@ -993,6 +1232,8 @@ window.editCategory = editCategory;
 window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
+window.editSocialLink = editSocialLink;
+window.deleteSocialLinkConfirm = deleteSocialLinkConfirm;
 window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.saveSettings = saveSettings;

@@ -665,6 +665,96 @@ async function deleteFarm(id, env, headers) {
   return jsonResponse({ success: true, message: 'Farm deleted successfully' }, 200, headers);
 }
 
+// GET /api/social-links - Liste tous les réseaux sociaux
+async function getSocialLinks(env, headers) {
+  const { results } = await env.DB.prepare(`
+    SELECT * FROM social_links 
+    ORDER BY display_order ASC, id ASC
+  `).all();
+  
+  return jsonResponse({ success: true, social_links: results }, 200, headers);
+}
+
+// POST /api/social-links - Créer un réseau social
+async function createSocialLink(request, env, headers) {
+  const data = await request.json();
+  
+  if (!data.name || !data.url) {
+    return jsonResponse({ error: 'Name and URL are required' }, 400, headers);
+  }
+  
+  const result = await env.DB.prepare(`
+    INSERT INTO social_links (name, url, icon, display_order, is_active)
+    VALUES (?, ?, ?, ?, ?)
+  `).bind(
+    data.name,
+    data.url,
+    data.icon || '🔗',
+    data.display_order || 0,
+    data.is_active !== undefined ? data.is_active : 1
+  ).run();
+  
+  return jsonResponse({
+    success: true,
+    message: 'Social link created successfully',
+    id: result.meta.last_row_id
+  }, 201, headers);
+}
+
+// PUT /api/social-links/:id - Modifier un réseau social
+async function updateSocialLink(id, request, env, headers) {
+  const data = await request.json();
+  
+  const updates = [];
+  const bindings = [];
+  
+  if (data.name !== undefined) {
+    updates.push('name = ?');
+    bindings.push(data.name);
+  }
+  if (data.url !== undefined) {
+    updates.push('url = ?');
+    bindings.push(data.url);
+  }
+  if (data.icon !== undefined) {
+    updates.push('icon = ?');
+    bindings.push(data.icon);
+  }
+  if (data.display_order !== undefined) {
+    updates.push('display_order = ?');
+    bindings.push(data.display_order);
+  }
+  if (data.is_active !== undefined) {
+    updates.push('is_active = ?');
+    bindings.push(data.is_active);
+  }
+  
+  if (updates.length === 0) {
+    return jsonResponse({ error: 'No fields to update' }, 400, headers);
+  }
+  
+  bindings.push(id);
+  
+  await env.DB.prepare(`
+    UPDATE social_links 
+    SET ${updates.join(', ')}
+    WHERE id = ?
+  `).bind(...bindings).run();
+  
+  return jsonResponse({ success: true, message: 'Social link updated successfully' }, 200, headers);
+}
+
+// DELETE /api/social-links/:id - Supprimer un réseau social
+async function deleteSocialLink(id, env, headers) {
+  const result = await env.DB.prepare('DELETE FROM social_links WHERE id = ?').bind(id).run();
+  
+  if (result.meta.changes === 0) {
+    return jsonResponse({ error: 'Social link not found' }, 404, headers);
+  }
+  
+  return jsonResponse({ success: true, message: 'Social link deleted successfully' }, 200, headers);
+}
+
 // POST /api/upload - Upload image vers R2
 async function uploadImage(request, env, headers) {
   try {
