@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tous les Produits</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="main-title">Tous les Produits</h1>
+            
+            <div class="search-filter-bar">
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom, catégorie ou farm...">
+                </div>
+                <button class="filter-btn" id="filterBtn">
+                    <span>🔻</span> Filtres
+                </button>
+            </div>
+        </header>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Les produits seront générés dynamiquement -->
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">📦</span>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">🛒</span>
+            <span class="nav-label">Panier</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">✉️</span>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
