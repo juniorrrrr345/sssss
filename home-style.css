@@ -6,7 +6,7 @@
     --primary-blue: #3b82f6;
     --primary-cyan: #06b6d4;
     --dark-bg: #0a0e27;
-    --card-bg: transparent;
+    --card-bg: rgba(26, 20, 60, 0.85);
     --card-border: rgba(255, 255, 255, 0.2);
     --text-primary: #ffffff;
     --text-secondary: rgba(255, 255, 255, 0.85);
