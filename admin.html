@@ -793,31 +793,16 @@
 
                 <!-- Réseaux Sociaux (Page Contact) -->
                 <div class="card" style="margin-bottom: 25px;">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 class="card-title"><i class="fas fa-share-alt"></i> Réseaux Sociaux (Page Contact)</h2>
+                        <button type="button" onclick="addSocialFieldInSettings()" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
                     </div>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label><i class="fab fa-whatsapp"></i> WhatsApp (numéro avec indicatif)</label>
-                            <input type="text" id="setting_shop_whatsapp" class="form-control" placeholder="+33612345678">
-                            <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Ex: +33612345678 ou 33612345678</small>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fab fa-telegram"></i> Telegram (username ou canal)</label>
-                            <input type="text" id="setting_shop_telegram" class="form-control" placeholder="@votre_canal">
-                            <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Ex: @votre_canal ou votre_canal</small>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fab fa-instagram"></i> Instagram (username)</label>
-                            <input type="text" id="setting_shop_instagram" class="form-control" placeholder="@votre_compte">
-                            <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Ex: @votre_compte ou votre_compte</small>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-tree"></i> LinkTree (URL complète)</label>
-                            <input type="url" id="setting_shop_linktree" class="form-control" placeholder="https://linktr.ee/votre_profil">
-                        </div>
-                        <button type="button" onclick="saveSettings('social')" class="btn btn-success">
-                            <i class="fas fa-save"></i> Sauvegarder
+                        <div id="socialFieldsInSettings"></div>
+                        <button type="button" onclick="saveSocialLinksInSettings()" class="btn btn-success" style="width: 100%; margin-top: 15px;">
+                            <i class="fas fa-save"></i> Sauvegarder Tous les Réseaux
                         </button>
                     </div>
                 </div>
