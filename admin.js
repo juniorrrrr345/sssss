@@ -268,7 +268,7 @@ async function openProductModal(productId = null) {
             
             document.getElementById('productBadge').value = product.badge || '';
             document.getElementById('productImage').value = product.image_url || '';
-            document.getElementById('productVideo').value = product.video_url || '';
+            document.getElementById('productVideo').value = (product.video_url && product.video_url !== 'null') ? product.video_url : '';
             document.getElementById('productDescription').value = product.description || '';
             document.querySelector('.modal-title').textContent = 'Modifier le Produit';
         }
