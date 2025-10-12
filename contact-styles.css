@@ -1,0 +1,396 @@
+/* Styles spécifiques à la page Contact */
+
+/* Reset et base pour la page contact */
+.contact-body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: #0a0e27;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Fond cosmique animé */
+.cosmic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+/* Effet nébuleuse */
+.nebula {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, 
+        rgba(138, 43, 226, 0.1) 0%, 
+        rgba(75, 0, 130, 0.05) 25%, 
+        transparent 70%);
+    animation: rotate 120s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Étoiles animées */
+.stars, .stars2, .stars3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stars {
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, white, transparent),
+        radial-gradient(1px 1px at 50px 20px, white, transparent),
+        radial-gradient(1px 1px at 80px 10px, white, transparent),
+        radial-gradient(2px 2px at 90px 50px, white, transparent);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: zoom 20s infinite;
+    opacity: 0.8;
+}
+
+.stars2 {
+    background-image: 
+        radial-gradient(1px 1px at 10px 40px, white, transparent),
+        radial-gradient(1px 1px at 60px 80px, white, transparent),
+        radial-gradient(2px 2px at 30px 60px, white, transparent);
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    animation: zoom 30s infinite;
+    opacity: 0.6;
+}
+
+.stars3 {
+    background-image: 
+        radial-gradient(1px 1px at 25px 25px, white, transparent),
+        radial-gradient(1px 1px at 75px 75px, white, transparent);
+    background-repeat: repeat;
+    background-size: 150px 150px;
+    animation: zoom 40s infinite;
+    opacity: 0.4;
+}
+
+@keyframes zoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+}
+
+/* Bulles flottantes */
+.floating-bubbles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.bubble {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, 
+        rgba(255, 255, 255, 0.2), 
+        rgba(138, 43, 226, 0.1));
+    border-radius: 50%;
+    opacity: 0.5;
+    backdrop-filter: blur(5px);
+}
+
+.bubble:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    left: 10%;
+    top: 20%;
+    animation: float 20s ease-in-out infinite;
+}
+
+.bubble:nth-child(2) {
+    width: 120px;
+    height: 120px;
+    right: 15%;
+    top: 60%;
+    animation: float 25s ease-in-out infinite reverse;
+    animation-delay: 2s;
+}
+
+.bubble:nth-child(3) {
+    width: 60px;
+    height: 60px;
+    left: 70%;
+    top: 10%;
+    animation: float 30s ease-in-out infinite;
+    animation-delay: 4s;
+}
+
+.bubble:nth-child(4) {
+    width: 90px;
+    height: 90px;
+    left: 20%;
+    bottom: 20%;
+    animation: float 22s ease-in-out infinite reverse;
+    animation-delay: 1s;
+}
+
+.bubble:nth-child(5) {
+    width: 70px;
+    height: 70px;
+    right: 25%;
+    top: 35%;
+    animation: float 28s ease-in-out infinite;
+    animation-delay: 3s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) translateX(0) scale(1);
+    }
+    25% {
+        transform: translateY(-50px) translateX(20px) scale(1.1);
+    }
+    50% {
+        transform: translateY(30px) translateX(-20px) scale(0.9);
+    }
+    75% {
+        transform: translateY(-30px) translateX(-10px) scale(1.05);
+    }
+}
+
+/* Container principal */
+.contact-container {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    padding-bottom: 100px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Header */
+.contact-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 1s ease-out;
+}
+
+.contact-title {
+    color: #ff6ec7;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin: 20px 0;
+    text-shadow: 0 0 20px rgba(255, 110, 199, 0.5);
+}
+
+/* Message "Avec Amour" */
+.love-message {
+    text-align: center;
+    margin: 60px 0;
+    position: relative;
+    animation: fadeIn 2s ease-out;
+}
+
+.avec-amour {
+    font-size: 4rem;
+    font-weight: 100;
+    background: linear-gradient(45deg, #ff6ec7, #873eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(255, 110, 199, 0.5);
+    animation: glow 3s ease-in-out infinite alternate;
+}
+
+.amour-text {
+    font-size: 5rem;
+    font-weight: 700;
+    font-style: italic;
+    background: linear-gradient(45deg, #873eff, #00d4ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: -10px 0 0 0;
+    text-shadow: 0 0 50px rgba(135, 62, 255, 0.5);
+    animation: glow 3s ease-in-out infinite alternate;
+    animation-delay: 0.5s;
+}
+
+@keyframes glow {
+    from {
+        filter: brightness(1) drop-shadow(0 0 20px currentColor);
+    }
+    to {
+        filter: brightness(1.2) drop-shadow(0 0 40px currentColor);
+    }
+}
+
+/* Cartes de contact */
+.contact-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.contact-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    animation: slideInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.contact-card:nth-child(1) { animation-delay: 0.1s; }
+.contact-card:nth-child(2) { animation-delay: 0.2s; }
+.contact-card:nth-child(3) { animation-delay: 0.3s; }
+.contact-card:nth-child(4) { animation-delay: 0.4s; }
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 110, 199, 0.5);
+    box-shadow: 0 10px 30px rgba(255, 110, 199, 0.3);
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 110, 199, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.card-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #ff6ec7;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.card-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.card-arrow {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.contact-card:hover .card-arrow {
+    transform: translateX(5px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .avec-amour {
+        font-size: 3rem;
+    }
+    
+    .amour-text {
+        font-size: 3.5rem;
+    }
+    
+    .contact-title {
+        font-size: 1.5rem;
+    }
+    
+    .contact-card {
+        padding: 15px;
+    }
+    
+    .card-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Effet de halo autour du container */
+.contact-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle at center, 
+        rgba(255, 110, 199, 0.1) 0%, 
+        transparent 70%);
+    z-index: -1;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.3;
+    }
+}
