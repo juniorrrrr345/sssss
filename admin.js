@@ -406,16 +406,16 @@ function editCategory(id) {
     if (category) {
         // Créer un formulaire plus complet
         const newName = prompt('Nom de la catégorie:', category.name);
-        if (newName && newName !== category.name) {
-            const newDescription = prompt('Description:', category.description || '');
-            const newImageUrl = prompt('URL de l\'image (laissez vide pour garder l\'icône uniquement):', category.image_url || '');
-            
-            updateCategoryAction(id, { 
-                name: newName,
-                description: newDescription,
-                image_url: newImageUrl
-            });
-        }
+        if (!newName) return;
+        
+        const newDescription = prompt('Description:', category.description || '');
+        const newImageUrl = prompt('URL de l\'image (Imgur, Unsplash, etc.):\n\nExemple: https://i.imgur.com/xxxxx.jpg\nLaissez vide pour utiliser uniquement l\'icône', category.image_url || '');
+        
+        updateCategoryAction(id, { 
+            name: newName,
+            description: newDescription || category.description,
+            image_url: newImageUrl || ''
+        });
     }
 }
 
