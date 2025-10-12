@@ -631,12 +631,9 @@
             `;
         }
 
-        // Afficher les détails d'un produit (à implémenter)
+        // Afficher les détails d'un produit
         function showProductDetails(productId) {
-            const product = allProducts.find(p => p.id === productId);
-            if (product) {
-                alert(`${product.name}\n\nPrix: ${product.price}€ ${product.unit}\nCatégorie: ${product.category_name}\n\n${product.description || 'Pas de description'}`);
-            }
+            window.location.href = `product-detail.html?id=${productId}`;
         }
     </script>
 </body>

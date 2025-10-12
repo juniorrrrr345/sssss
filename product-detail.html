@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Produit - Al Gran</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            padding-bottom: 80px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            transform: scale(1.1);
+        }
+
+        .product-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .product-media {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
+        }
+
+        .product-video {
+            width: 100%;
+            height: 400px;
+            border-radius: 20px;
+        }
+
+        .product-info {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-category {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .price-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .price-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-option:hover {
+            border-color: #ff3ea5;
+            background: rgba(255, 62, 165, 0.1);
+            transform: translateX(5px);
+        }
+
+        .price-option.selected {
+            border-color: #ff3ea5;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
+        }
+
+        .price-quantity {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .price-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 62, 165, 0.4);
+        }
+
+        .product-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .product-title {
+                font-size: 1.8rem;
+            }
+
+            .product-image, .product-video {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Bouton retour -->
+    <div class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+    </div>
+
+    <!-- Container produit -->
+    <div class="product-container">
+        <div id="productContent">
+            <div style="text-align: center; padding: 3rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">Chargement...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation du bas -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script>
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+
+        // Récupérer l'ID du produit depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+            window.location.href = 'products.html';
+        }
+
+        // Charger le produit
+        async function loadProduct() {
+            try {
+                const response = await fetch(`${API_URL}/api/products/${productId}`);
+                const data = await response.json();
+
+                if (data.success && data.product) {
+                    displayProduct(data.product);
+                    
+                    // Appliquer l'image de fond
+                    const settingsResponse = await fetch(`${API_URL}/api/settings`);
+                    const settingsData = await settingsResponse.json();
+                    if (settingsData.success && settingsData.settings && settingsData.settings.background_image_url) {
+                        document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${settingsData.settings.background_image_url}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                        document.body.style.backgroundAttachment = 'fixed';
+                        document.body.style.backgroundRepeat = 'no-repeat';
+                    }
+                } else {
+                    displayError();
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                displayError();
+            }
+        }
+
+        // Afficher le produit
+        function displayProduct(product) {
+            document.title = `${product.name} - Al Gran`;
+            
+            const prices = product.prices ? JSON.parse(product.prices) : [{ quantity: product.unit || '1g', price: product.price }];
+            const videoUrl = product.video_url;
+            
+            const pricesHTML = prices.map((p, index) => `
+                <div class="price-option ${index === 0 ? 'selected' : ''}" data-whatsapp="${p.quantity}">
+                    <span class="price-quantity">${p.quantity}</span>
+                    <span class="price-value">${p.price}€</span>
+                </div>
+            `).join('');
+
+            const html = `
+                <div class="product-media">
+                    ${videoUrl ? 
+                        `<video class="product-video" controls autoplay muted loop>
+                            <source src="${videoUrl}" type="video/mp4">
+                        </video>` :
+                        `<img src="${product.image_url || 'https://via.placeholder.com/800x400'}" alt="${product.name}" class="product-image">`
+                    }
+                </div>
+
+                <div class="product-info">
+                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    
+                    <h1 class="product-title">${product.name}</h1>
+                    <div class="product-category">
+                        ${product.category_icon || '📦'} ${product.category_name || 'Produit'} 
+                        ${product.farm_name ? `• ${product.farm_name}` : ''}
+                    </div>
+
+                    ${product.description ? `<p class="product-description">${product.description}</p>` : ''}
+
+                    <h3 style="margin-bottom: 1rem; color: rgba(255,255,255,0.9);">Choisissez votre quantité :</h3>
+                    <div class="price-options" id="priceOptions">
+                        ${pricesHTML}
+                    </div>
+
+                    <button class="contact-button" onclick="contactWhatsApp()">
+                        <i class="fab fa-whatsapp"></i>
+                        Commander via WhatsApp
+                    </button>
+
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Catégorie</div>
+                            <div class="meta-value">${product.category_name || 'N/A'}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Farm</div>
+                            <div class="meta-value">${product.farm_name || 'Premium'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('productContent').innerHTML = html;
+
+            // Event listeners pour les options de prix
+            document.querySelectorAll('.price-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.price-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        // Contacter via WhatsApp
+        async function contactWhatsApp() {
+            const selectedOption = document.querySelector('.price-option.selected');
+            const quantity = selectedOption ? selectedOption.dataset.whatsapp : '';
+            const productName = document.querySelector('.product-title').textContent;
+            
+            // Récupérer le numéro WhatsApp depuis les réseaux sociaux
+            try {
+                const response = await fetch(`${API_URL}/api/social-networks`);
+                const data = await response.json();
+                
+                let whatsappNumber = '33612345678'; // Par défaut
+                
+                if (data.success && data.networks) {
+                    const whatsapp = data.networks.find(n => n.name.toLowerCase().includes('whatsapp'));
+                    if (whatsapp) {
+                        // Extraire le numéro de l'URL
+                        const match = whatsapp.url.match(/(\d+)/);
+                        if (match) whatsappNumber = match[1];
+                    }
+                }
+                
+                const message = `Bonjour ! Je suis intéressé par : ${productName} (${quantity})`;
+                const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la récupération du contact WhatsApp');
+            }
+        }
+
+        // Afficher une erreur
+        function displayError() {
+            document.getElementById('productContent').innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff3ea5;"></i>
+                    <p style="margin-top: 1rem; color: rgba(255,255,255,0.7);">Produit introuvable</p>
+                    <button onclick="window.location.href='products.html'" style="margin-top: 1rem; padding: 0.8rem 2rem; background: linear-gradient(135deg, #ff3ea5, #a855f7); border: none; border-radius: 15px; color: white; cursor: pointer;">
+                        Retour aux produits
+                    </button>
+                </div>
+            `;
+        }
+
+        // Charger au démarrage
+        loadProduct();
+    </script>
+</body>
+</html>
