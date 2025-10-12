@@ -1,5 +1,8 @@
--- Table pour les farms (fermes/marques)
-CREATE TABLE IF NOT EXISTS farms (
+-- Supprimer la table si elle existe
+DROP TABLE IF EXISTS farms;
+
+-- Créer la table farms
+CREATE TABLE farms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     description TEXT,
@@ -8,8 +11,8 @@ CREATE TABLE IF NOT EXISTS farms (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insérer quelques farms par défaut
-INSERT OR IGNORE INTO farms (id, name, country, display_order) VALUES
+-- Insérer les farms par défaut
+INSERT INTO farms (id, name, country, display_order) VALUES
 (1, 'WIZARD TREES', 'USA', 1),
 (2, 'ESTATICO', 'USA', 2),
 (3, 'KARMA CARTEL', 'USA', 3),
