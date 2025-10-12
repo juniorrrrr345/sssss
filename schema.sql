@@ -240,6 +240,7 @@ INSERT OR IGNORE INTO settings (key, value, description) VALUES
 ('shop_linktree', '', 'URL LinkTree'),
 ('admin_password', 'admin123', 'Mot de passe admin (à changer!)'),
 ('shop_description', 'Découvrez notre univers unique', 'Description de la boutique'),
+('theme_background_url', '', 'URL de l''image de fond du thème'),
 ('home_welcome_title', 'AVEC AMOUR', 'Titre de la page d''accueil'),
 ('home_services_text', 'Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀', 'Texte de présentation des services'),
 ('home_delivery_text', 'Livraisons/Meetup dans toute l''ile de France, le jour même, envois de France à France ou à l''international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍', 'Texte sur les livraisons'),

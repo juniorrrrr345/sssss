@@ -541,6 +541,8 @@ async function saveSettings(section) {
         fields = ['shop_whatsapp', 'shop_telegram', 'shop_instagram', 'shop_linktree'];
     } else if (section === 'home') {
         fields = ['home_welcome_title', 'home_services_text', 'home_delivery_text', 'home_delivery_zones'];
+    } else if (section === 'theme') {
+        fields = ['theme_background_url'];
     } else if (section === 'advanced') {
         fields = ['maintenance_mode'];
     }
