@@ -1057,28 +1057,54 @@ function displaySocialFields() {
         <div class="social-field-row" style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
             <div style="display: grid; grid-template-columns: 80px 1fr 2fr auto; gap: 10px; align-items: center;">
                 <input type="text" value="${link.icon || ''}" onchange="updateSocialLink(${index}, 'icon', this.value)" placeholder="📱" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; text-align: center; font-size: 1.5rem;">
-                <input type="text" value="${link.name || ''}" onchange="updateSocialLink(${index}, 'name', this.value)" placeholder="Nom" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                <input type="text" value="${link.name || ''}" onchange="updateSocialLink(${index}, 'name', this.value)" placeholder="Nom réseau" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
                 <input type="url" value="${link.url || ''}" onchange="updateSocialLink(${index}, 'url', this.value)" placeholder="https://..." style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
                 <button type="button" onclick="removeSocialLink(${index})" class="btn btn-danger" style="padding: 8px 12px;">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
-            <td>
-                <span class="badge ${link.is_active ? 'badge-success' : 'badge-warning'}">
-                    ${link.is_active ? 'Actif' : 'Inactif'}
-                </span>
-            </td>
-            <td>
-                <button class="btn btn-primary" onclick="editSocialLink(${link.id})" style="margin-right: 0.5rem;">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-danger" onclick="deleteSocialLinkConfirm(${link.id}, '${link.name.replace(/'/g, "\\'")}')">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        </tr>
     `).join('');
+}
+
+function addSocialField() {
+    currentSocialLinks.push({ icon: '', name: '', url: '' });
+    displaySocialFields();
+}
+
+function updateSocialLink(index, field, value) {
+    if (currentSocialLinks[index]) {
+        currentSocialLinks[index][field] = value;
+    }
+}
+
+function removeSocialLink(index) {
+    currentSocialLinks.splice(index, 1);
+    displaySocialFields();
+}
+
+async function saveSocialLinks() {
+    try {
+        // Sauvegarder dans settings.social_links_json
+        const response = await fetch(`${API_URL}/api/settings`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                social_links_json: JSON.stringify(currentSocialLinks)
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Réseaux sociaux sauvegardés !', 'success');
+        } else {
+            showAlert('Erreur lors de la sauvegarde', 'error');
+        }
+    } catch (error) {
+        console.error('Error saving social links:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 function openSocialModal(socialId = null) {
