@@ -4,7 +4,7 @@
  */
 
 // Configuration API
-const API_URL = 'http://localhost:8787'; // Pour dev local - Changez pour production: https://algran-api.juniorrrrr345.workers.dev
+const API_URL = 'https://algran-api.calitek-junior.workers.dev'; // API de production
 const ADMIN_PASSWORD = 'admin123'; // À changer après premier login
 
 // État global

@@ -6,6 +6,7 @@
     <title>Tous les Produits - Al Gran</title>
     <link rel="stylesheet" href="style.css">
     <script src="icons.js"></script>
+    <script src="api-connector.js"></script>
     <style>
         .container {
             max-width: 1400px;
@@ -272,8 +273,38 @@
 
     <script src="script.js"></script>
     <script>
-        // Données des produits - correspondant à l'image
-        const products = [
+        // Les produits seront chargés depuis l'API
+        let products = [];
+        let filteredProducts = [];
+
+        // Attendre que l'API charge les produits
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // L'API connector va charger les produits
+                if (window.algranAPI) {
+                    products = await window.algranAPI.loadProducts();
+                    
+                    // Adapter le format des produits de l'API au format attendu
+                    products = products.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        farm: p.farm_name || 'Farm inconnu',
+                        badge: p.category_name || '🌿 PRODUIT',
+                        price: p.prices && p.prices[0] ? parseFloat(p.prices[0].price) : 0,
+                        unit: p.prices && p.prices[0] ? `/ ${p.prices[0].qty}` : '',
+                        image: p.media_url || 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop'
+                    }));
+                    
+                    filteredProducts = [...products];
+                    displayProducts(filteredProducts);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des produits:', error);
+            }
+        });
+
+        // Ancienne liste de produits statiques (commentée)
+        /*const products = [
             {
                 id: 1,
                 name: "100K ROSIN",
@@ -364,9 +395,9 @@
                 unit: "/ 5g",
                 image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
             }
-        ];
+        ];*/
 
-        let filteredProducts = [...products];
+        // let filteredProducts = [...products]; // Déplacé dans le window.addEventListener
 
         // Créer une carte produit
         function createProductCard(product) {
