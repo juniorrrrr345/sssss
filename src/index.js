@@ -320,6 +320,18 @@ async function updateProduct(id, request, env, headers) {
     updates.push('image_url = ?');
     bindings.push(data.image_url);
   }
+  if (data.video_url !== undefined) {
+    updates.push('video_url = ?');
+    bindings.push(data.video_url);
+  }
+  if (data.prices !== undefined) {
+    updates.push('prices = ?');
+    bindings.push(data.prices);
+  }
+  if (data.farm_id !== undefined) {
+    updates.push('farm_id = ?');
+    bindings.push(data.farm_id);
+  }
   if (data.stock_quantity !== undefined) {
     updates.push('stock_quantity = ?');
     bindings.push(data.stock_quantity);
