@@ -54,6 +54,12 @@ export default {
               'PUT /api/services/:id': 'Modifie un service',
               'DELETE /api/services/:id': 'Supprime un service'
             },
+            farms: {
+              'GET /api/farms': 'Liste toutes les farms',
+              'POST /api/farms': 'Crée une nouvelle farm',
+              'PUT /api/farms/:id': 'Modifie une farm',
+              'DELETE /api/farms/:id': 'Supprime une farm'
+            },
             upload: {
               'POST /api/upload': 'Upload une image vers R2'
             }
@@ -132,6 +138,25 @@ export default {
         const id = path.split('/')[3];
         return await deleteService(id, env, corsHeaders);
       }
+      
+      // Farms
+      if (path === '/api/farms' && method === 'GET') {
+        return await getFarms(env, corsHeaders);
+      }
+      
+      if (path === '/api/farms' && method === 'POST') {
+        return await createFarm(request, env, corsHeaders);
+      }
+      
+      if (path.match(/^\/api\/farms\/\d+$/) && method === 'PUT') {
+        const id = path.split('/')[3];
+        return await updateFarm(id, request, env, corsHeaders);
+      }
+      
+      if (path.match(/^\/api\/farms\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteFarm(id, env, corsHeaders);
+      }
 
       // Upload image to R2
       if (path === '/api/upload' && method === 'POST') {
@@ -171,9 +196,10 @@ function generateSlug(text) {
 // GET /api/products - Liste tous les produits
 async function getProducts(env, headers) {
   const { results } = await env.DB.prepare(`
-    SELECT p.*, c.name as category_name, c.icon as category_icon
+    SELECT p.*, c.name as category_name, c.icon as category_icon, f.name as farm_name
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
+    LEFT JOIN farms f ON p.farm_id = f.id
     ORDER BY p.created_at DESC
   `).all();
   
@@ -208,17 +234,20 @@ async function createProduct(request, env, headers) {
   const slug = generateSlug(data.name);
   
   const result = await env.DB.prepare(`
-    INSERT INTO products (name, slug, description, category_id, price, unit, badge, image_url, stock_quantity, is_active, is_featured)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (name, slug, description, long_description, category_id, farm_id, price, unit, badge, image_url, video_url, stock_quantity, is_active, is_featured)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     data.name,
     slug,
     data.description || '',
+    data.long_description || '',
     data.category_id,
+    data.farm_id || null,
     data.price,
     data.unit || '/ 3.5g',
     data.badge || '',
     data.image_url || '',
+    data.video_url || '',
     data.stock_quantity || 0,
     data.is_active !== undefined ? data.is_active : 1,
     data.is_featured || 0
@@ -525,6 +554,99 @@ async function deleteService(id, env, headers) {
   }
   
   return jsonResponse({ success: true, message: 'Service deleted successfully' }, 200, headers);
+}
+
+// GET /api/farms - Liste toutes les farms
+async function getFarms(env, headers) {
+  const { results } = await env.DB.prepare(`
+    SELECT * FROM farms 
+    ORDER BY name ASC
+  `).all();
+  
+  return jsonResponse({ success: true, farms: results }, 200, headers);
+}
+
+// POST /api/farms - Créer une farm
+async function createFarm(request, env, headers) {
+  const data = await request.json();
+  
+  if (!data.name) {
+    return jsonResponse({ error: 'Name is required' }, 400, headers);
+  }
+  
+  const slug = generateSlug(data.name);
+  
+  const result = await env.DB.prepare(`
+    INSERT INTO farms (name, slug, description, logo_url, country, is_active)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).bind(
+    data.name,
+    slug,
+    data.description || '',
+    data.logo_url || '',
+    data.country || '',
+    data.is_active !== undefined ? data.is_active : 1
+  ).run();
+  
+  return jsonResponse({
+    success: true,
+    message: 'Farm created successfully',
+    id: result.meta.last_row_id
+  }, 201, headers);
+}
+
+// PUT /api/farms/:id - Modifier une farm
+async function updateFarm(id, request, env, headers) {
+  const data = await request.json();
+  
+  const updates = [];
+  const bindings = [];
+  
+  if (data.name !== undefined) {
+    updates.push('name = ?', 'slug = ?');
+    bindings.push(data.name, generateSlug(data.name));
+  }
+  if (data.description !== undefined) {
+    updates.push('description = ?');
+    bindings.push(data.description);
+  }
+  if (data.logo_url !== undefined) {
+    updates.push('logo_url = ?');
+    bindings.push(data.logo_url);
+  }
+  if (data.country !== undefined) {
+    updates.push('country = ?');
+    bindings.push(data.country);
+  }
+  if (data.is_active !== undefined) {
+    updates.push('is_active = ?');
+    bindings.push(data.is_active);
+  }
+  
+  if (updates.length === 0) {
+    return jsonResponse({ error: 'No fields to update' }, 400, headers);
+  }
+  
+  bindings.push(id);
+  
+  await env.DB.prepare(`
+    UPDATE farms 
+    SET ${updates.join(', ')}
+    WHERE id = ?
+  `).bind(...bindings).run();
+  
+  return jsonResponse({ success: true, message: 'Farm updated successfully' }, 200, headers);
+}
+
+// DELETE /api/farms/:id - Supprimer une farm
+async function deleteFarm(id, env, headers) {
+  const result = await env.DB.prepare('DELETE FROM farms WHERE id = ?').bind(id).run();
+  
+  if (result.meta.changes === 0) {
+    return jsonResponse({ error: 'Farm not found' }, 404, headers);
+  }
+  
+  return jsonResponse({ success: true, message: 'Farm deleted successfully' }, 200, headers);
 }
 
 // POST /api/upload - Upload image vers R2

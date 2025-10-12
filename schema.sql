@@ -15,6 +15,19 @@ CREATE TABLE IF NOT EXISTS categories (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table des farms
+CREATE TABLE IF NOT EXISTS farms (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    slug TEXT NOT NULL UNIQUE,
+    description TEXT,
+    logo_url TEXT,
+    country TEXT,
+    is_active INTEGER DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Table des produits
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,6 +36,7 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT,
     long_description TEXT,
     category_id INTEGER NOT NULL,
+    farm_id INTEGER,
     price REAL NOT NULL,
     unit TEXT DEFAULT '/ 3.5g',
     badge TEXT,
@@ -34,7 +48,8 @@ CREATE TABLE IF NOT EXISTS products (
     views_count INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (farm_id) REFERENCES farms(id) ON DELETE SET NULL
 );
 
 -- Table des variantes de prix (plusieurs prix/quantités)
@@ -123,9 +138,11 @@ CREATE TABLE IF NOT EXISTS order_items (
 
 -- Index pour améliorer les performances
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
+CREATE INDEX IF NOT EXISTS idx_products_farm ON products(farm_id);
 CREATE INDEX IF NOT EXISTS idx_products_active ON products(is_active);
 CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
+CREATE INDEX IF NOT EXISTS idx_farms_slug ON farms(slug);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
 CREATE INDEX IF NOT EXISTS idx_images_entity ON images(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_product_variants_product ON product_variants(product_id);
@@ -154,6 +171,12 @@ CREATE TRIGGER IF NOT EXISTS update_services_timestamp
 AFTER UPDATE ON services
 BEGIN
     UPDATE services SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS update_farms_timestamp 
+AFTER UPDATE ON farms
+BEGIN
+    UPDATE farms SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
 END;
 
 -- Trigger pour incrémenter/décrémenter le compteur de produits dans les catégories
@@ -191,6 +214,14 @@ INSERT OR IGNORE INTO categories (name, slug, description, icon) VALUES
 ('Frozen-Sift', 'frozen-sift', 'Frozen-Sift de qualité supérieure', '❄️'),
 ('Dry-Sift', 'dry-sift', 'Dry-Sift artisanal', '🌿'),
 ('Weed', 'weed', 'Fleurs premium sélectionnées', '🍃');
+
+-- Insérer les farms par défaut
+INSERT OR IGNORE INTO farms (name, slug, description, country) VALUES
+('100K', '100k', 'Farm premium 100K', 'USA'),
+('Wizard Trees', 'wizard-trees', 'Topshelf California Branded', 'USA'),
+('Estatico', 'estatico', 'Frozen USA', 'USA'),
+('Cosmic Farms', 'cosmic-farms', 'Premium selection', 'USA'),
+('No Farm', 'no-farm', 'Sans farm spécifique', '');
 
 -- Insérer les services par défaut
 INSERT OR IGNORE INTO services (id, title, content, icon, display_order, is_active) VALUES
