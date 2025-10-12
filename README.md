@@ -1,75 +1,65 @@
-# Page Catégories - Aimiri
+# Al Gran - Site Web de Contact
 
-## 📋 Description
+## Description
+Site web moderne avec une page de contact interactive et des effets visuels époustouflants (glassmorphism, néon, animations cosmiques).
 
-Page de catégories moderne pour explorer les différents types de produits. La page présente 5 catégories principales avec un design cosmique et élégant.
+## Fonctionnalités
+- 🎨 Design moderne avec effets glassmorphism et néon
+- 📱 Responsive design adapté aux mobiles
+- ✨ Animations fluides et interactives
+- 🌌 Arrière-plan cosmique animé avec bulles flottantes
+- 📞 Liens de contact vers WhatsApp, Telegram et Instagram
+- 🧭 Navigation intuitive en bas de page
 
-## 🎨 Catégories
+## Pages Disponibles
+1. **Accueil** (`index.html`) - Page d'accueil avec présentation
+2. **Produits** (`products.html`) - Page des produits (en développement)
+3. **Catégories** (`categories.html`) - Page des catégories (en développement)
+4. **Contact** (`contact.html`) - Page de contact avec liens sociaux
 
-1. **Extract** - Explore Extract
-2. **Static-Sift** - Explore Static-Sift
-3. **Frozen-Sift** - Explore Frozen-Sift
-4. **Dry-Sift** - Explore Dry-Sift
-5. **Weed** - Explore Weed
-
-## 📁 Structure du projet
-
+## Structure des Fichiers
 ```
 /workspace/
-├── categories.html    # Page principale
-├── styles.css        # Styles et animations
-├── images/           # Dossier pour les images des catégories
-│   ├── extract.jpg
-│   ├── static-sift.jpg
-│   ├── frozen-sift.jpg
-│   ├── dry-sift.jpg
-│   └── weed.jpg
-└── README.md         # Ce fichier
+├── index.html          # Page d'accueil
+├── contact.html        # Page de contact
+├── products.html       # Page des produits
+├── categories.html     # Page des catégories
+├── style.css           # Styles globaux
+├── script.js           # Interactions JavaScript
+└── README.md          # Documentation
 ```
 
-## 🚀 Utilisation
+## Configuration
+Pour personnaliser les liens de contact, modifiez les URLs dans `contact.html` :
+- **WhatsApp** : Remplacez `votre_numero` par votre numéro de téléphone
+- **Telegram** : Remplacez `votre_canal` par votre canal Telegram
+- **Instagram** : Remplacez `votre_compte` par votre nom d'utilisateur Instagram
 
-1. Ouvrez `categories.html` dans votre navigateur
-2. Ajoutez vos images de produits dans le dossier `/images/`
-3. Les images doivent correspondre aux noms suivants :
-   - `extract.jpg`
-   - `static-sift.jpg`
-   - `frozen-sift.jpg`
-   - `dry-sift.jpg`
-   - `weed.jpg`
+## Technologies Utilisées
+- HTML5
+- CSS3 (avec animations avancées)
+- JavaScript (vanilla)
+- Font Awesome (icônes)
+- Google Fonts (Pacifico, Poppins)
 
-## 🎭 Fonctionnalités
+## Effets Visuels
+- Glassmorphism sur les cartes
+- Effets néon sur le titre
+- Arrière-plan cosmique animé
+- Bulles flottantes animées
+- Particules scintillantes
+- Effet parallaxe au survol de la souris
+- Animations au défilement
 
-- ✨ Design cosmique avec effets de particules et animations
-- 🌈 Dégradés colorés et effets de lumière
-- 📱 Responsive (s'adapte aux mobiles et tablettes)
-- 🎯 Cartes interactives avec effets au survol
-- 🧭 Barre de navigation fixe en bas
-- 🖼️ Support pour images haute qualité
+## Lancement
+Ouvrez simplement `contact.html` (ou n'importe quelle page) dans votre navigateur web préféré.
 
-## 🎨 Palette de couleurs
+## Compatibilité
+- Chrome/Edge (recommandé)
+- Firefox
+- Safari
+- Opera
+- Navigateurs mobiles
 
-- Background principal : Dégradés de violet/indigo foncé
-- Accents : Rose, violet, bleu cyan
-- Texte : Blanc avec dégradés pour le titre
-
-## 📱 Navigation
-
-La barre de navigation en bas contient 4 sections :
-- 🏠 Accueil
-- 🔍 Explore
-- 📦 Catégories (page actuelle)
-- 📧 Contact
-
-## 🔧 Personnalisation
-
-Pour personnaliser les catégories, modifiez le fichier `categories.html` :
-- Changez les titres dans les éléments `.category-title`
-- Modifiez les descriptions dans `.category-description`
-- Ajustez les couleurs dans `styles.css`
-
-## 💡 Notes
-
-- Les effets cosmiques sont animés automatiquement
-- Les cartes réagissent au survol avec des animations fluides
-- Le design est optimisé pour les performances
+## Auteur
+Al Gran - 2025
