@@ -462,11 +462,8 @@ async function loadSettings() {
             }
             
             document.getElementById('shopName').value = settings.shop_name || 'Al Gran';
+            document.getElementById('shopSubtitle').value = settings.shop_subtitle || 'Amour';
             document.getElementById('shopEmail').value = settings.shop_email || '';
-            document.getElementById('shopWhatsapp').value = settings.shop_whatsapp || '';
-            document.getElementById('shopTelegram').value = settings.shop_telegram || '';
-            document.getElementById('shopInstagram').value = settings.shop_instagram || '';
-            document.getElementById('shopDescription').value = settings.shop_description || '';
             
             console.log('Settings loaded:', settings);
         }
