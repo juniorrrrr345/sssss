@@ -19,9 +19,9 @@
         <div class="bubble"></div>
     </div>
 
-    <!-- Logo géant AVEC en arrière-plan -->
-    <div class="giant-logo" id="mainLogo">AVEC</div>
-    <div class="logo-subtitle" id="subLogo">Amour</div>
+    <!-- Logo géant en arrière-plan -->
+    <div class="giant-logo" id="mainLogo" style="text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.9);">AVEC</div>
+    <div class="logo-subtitle" id="subLogo" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);">Amour</div>
 
     <!-- Arc-en-ciel décoratif -->
     <div class="rainbow-arc"></div>
@@ -137,14 +137,14 @@
                     // Service avec départements
                     const zones = service.content.split(',').map(z => z.trim());
                     html += `
-                        <section class="delivery-section">
-                            <h2 class="section-title">
+                        <section class="delivery-section" style="background: rgba(0, 0, 0, 0.85); padding: 2rem; border-radius: 15px; border: 2px solid rgba(255, 255, 255, 0.3); margin-bottom: 2rem;">
+                            <h2 class="section-title" style="color: #fff; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
                                 ${service.icon ? `<span style="font-size: 1.2em;">${service.icon}</span>` : '<i class="fas fa-map-marker-alt"></i>'}
                                 ${service.title}
                             </h2>
                             <div class="section-content">
                                 <div class="department-grid">
-                                    ${zones.map(zone => `<div class="department-badge">${zone}</div>`).join('')}
+                                    ${zones.map(zone => `<div class="department-badge" style="background: #000; border: 2px solid #fff; color: #fff; font-weight: 700; padding: 12px 20px; border-radius: 10px;">${zone}</div>`).join('')}
                                 </div>
                             </div>
                         </section>
@@ -152,12 +152,12 @@
                 } else {
                     // Service standard avec texte
                     html += `
-                        <section class="service-section">
-                            <h2 class="section-title">
+                        <section class="service-section" style="background: rgba(0, 0, 0, 0.85); padding: 2rem; border-radius: 15px; border: 2px solid rgba(255, 255, 255, 0.3); margin-bottom: 2rem;">
+                            <h2 class="section-title" style="color: #fff; font-weight: 700; font-size: 1.8rem; margin-bottom: 1.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
                                 ${service.icon ? `<span style="font-size: 1.2em;">${service.icon}</span>` : '<i class="fas fa-heart"></i>'}
                                 ${service.title}
                             </h2>
-                            <div class="section-content">
+                            <div class="section-content" style="color: #fff; font-size: 1.1rem; line-height: 1.8; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
                                 <p>${service.content}</p>
                             </div>
                         </section>
