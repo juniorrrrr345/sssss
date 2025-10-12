@@ -1,188 +1,183 @@
-// Données des produits basées sur l'image avec support photos et vidéos
+// Données des produits exactes comme sur l'image
 const products = [
     {
         id: 1,
-        name: "100K ROSIN",
-        category: "100K",
-        badge: "🔥 LIVE ROSIN",
+        name: "HONEY BANANA",
+        category: "BETR MADE",
+        badge: "SINGLE SOURCE 🇺🇸",
         price: 200,
-        unit: "/ 2g",
-        image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop",
+        unit: "/ 1g",
+        image: "https://images.unsplash.com/photo-1589820296156-2454bb8a6ad1?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
-            { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1589820296156-2454bb8a6ad1?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 2,
-        name: "HASH BURGER",
-        category: "ESTATICO",
-        badge: "💎 FROZEN USA us",
-        price: 120,
-        unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop",
+        name: "100K ROSIN",
+        category: "100K",
+        badge: "LIVE ROSIN",
+        price: 200,
+        unit: "/ 2g",
+        image: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 3,
-        name: "POTION",
-        category: "WIZARD TREES",
-        badge: "🌿 TOPSHELF CALIFORNIA BRANDED us",
-        price: 110,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop",
+        name: "HASH BURGER",
+        category: "ESTATICO",
+        badge: "FROZEN USA 🇺🇸",
+        price: 120,
+        unit: "/ 5g",
+        image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
-            { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 4,
-        name: "ZANGBANGER",
+        name: "POTION",
         category: "WIZARD TREES",
-        badge: "🔥 TOPSHELF CALIFORNIA BRANDED us",
+        badge: "TOPSHELF CALIFORNIA BRANDED 🇺🇸",
         price: 110,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1587583650730-2bc61dd9f28e?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1587583650730-2bc61dd9f28e?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 5,
-        name: "TOP DRY",
-        category: "MCAFARM",
-        badge: "💨 DRY us",
-        price: 50,
-        unit: "/ 3g",
-        image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop",
+        name: "ZANGBANGER",
+        category: "WIZARD TREES",
+        badge: "TOPSHELF CALIFORNIA BRANDED 🇺🇸",
+        price: 110,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1606206873764-fd15982c78d9?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1606206873764-fd15982c78d9?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 6,
-        name: "DARK MATTER",
-        category: "WIZARD TREES",
-        badge: "🌿 TOPSHELF USA us",
-        price: 110,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop",
+        name: "TOP DRY",
+        category: "MCAFARM",
+        badge: "DRY 🇺🇸",
+        price: 50,
+        unit: "/ 5g",
+        image: "https://images.unsplash.com/photo-1567606404190-8dd00b54e3d9?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1567606404190-8dd00b54e3d9?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 7,
-        name: "CONCRETE JUNGLE",
-        category: "KARMA CARTEL",
-        badge: "💎 TOPSHELF BRANDED us",
-        price: 180,
-        unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop",
+        name: "DARK MATTER",
+        category: "WIZARD TREES",
+        badge: "TOPSHELF USA 🇺🇸",
+        price: 110,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1606225457115-9b0de873c5db?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1606225457115-9b0de873c5db?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 8,
-        name: "ZKITTLEZ",
-        category: "NORTH BAY GARDEN",
-        badge: "🌈 TOPSHELF BRANDED us",
+        name: "CONCRETE JUNGLE",
+        category: "KARMA CARTEL",
+        badge: "TOPSHELF BRANDED 🇺🇸",
         price: 180,
         unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1623656575531-aec0aca0c0ff?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1623656575531-aec0aca0c0ff?w=800&h=600&fit=crop' }
         ]
     },
     {
         id: 9,
-        name: "BIG Z",
-        category: "KARMA CARTEL",
-        badge: "💜 TOPSHELF BRANDED us",
-        price: 100,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 10,
-        name: "GUSHMINTZ",
-        category: "ESTATICO",
-        badge: "❄️ STATIC USA us",
-        price: 170,
-        unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 11,
-        name: "WEDDING CAKE",
-        category: "PREMIUM",
-        badge: "💎 TOPSHELF BRANDED",
-        price: 150,
+        name: "ZKITTLEZ",
+        category: "NORTH BAY GARDEN",
+        badge: "TOPSHELF BRANDED 🇺🇸",
+        price: 180,
         unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 12,
-        name: "GELATO 41",
-        category: "EXCLUSIVE",
-        badge: "🔥 TOPSHELF USA",
-        price: 130,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 13,
-        name: "PURPLE PUNCH",
-        category: "WIZARD TREES",
-        badge: "💜 TOPSHELF CALIFORNIA",
-        price: 120,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 14,
-        name: "BLUE DREAM",
-        category: "CLASSIC",
-        badge: "💙 TOPSHELF BRANDED",
-        price: 95,
-        unit: "/ 3.5g",
         image: "https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=500&h=400&fit=crop",
         media: [
             { type: 'image', url: 'https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=800&h=600&fit=crop' }
         ]
     },
     {
-        id: 15,
-        name: "OG KUSH",
-        category: "LEGEND",
-        badge: "👑 CLASSIC USA",
+        id: 10,
+        name: "BIG Z",
+        category: "KARMA CARTEL",
+        badge: "TOPSHELF BRANDED 🇺🇸",
+        price: 100,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1629116518542-9cc3088e94ed?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1629116518542-9cc3088e94ed?w=800&h=600&fit=crop' }
+        ]
+    },
+    {
+        id: 11,
+        name: "GUSHMINTZ",
+        category: "ESTATICO",
+        badge: "STATIC USA 🇺🇸",
+        price: 170,
+        unit: "/ 5g",
+        image: "https://images.unsplash.com/photo-1606209749541-4b29dea5f065?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1606209749541-4b29dea5f065?w=800&h=600&fit=crop' }
+        ]
+    },
+    {
+        id: 12,
+        name: "PURPLE CREAM",
+        category: "ESTATICO",
+        badge: "STATIC USA 🇺🇸",
         price: 140,
         unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1609770223364-84c2ab160a23?w=500&h=400&fit=crop",
         media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=800&h=600&fit=crop' }
+            { type: 'image', url: 'https://images.unsplash.com/photo-1609770223364-84c2ab160a23?w=800&h=600&fit=crop' }
+        ]
+    },
+    {
+        id: 13,
+        name: "MARSHMALLOW X COOKIES",
+        category: "TOPSHELF CANADA 🇨🇦",
+        badge: "TOPSHELF CANADA 🇨🇦",
+        price: 150,
+        unit: "/ 7g",
+        image: "https://images.unsplash.com/photo-1592136957897-b2b6ca21b10b?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1592136957897-b2b6ca21b10b?w=800&h=600&fit=crop' }
+        ]
+    },
+    {
+        id: 14,
+        name: "LORD SLUMPERZZ",
+        category: "TOPSHELF CANADA 🇨🇦",
+        badge: "TOPSHELF CANADA 🇨🇦",
+        price: 160,
+        unit: "/ 7g",
+        image: "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=800&h=600&fit=crop' }
+        ]
+    },
+    {
+        id: 15,
+        name: "SUPERBOOF",
+        category: "TOPSHELF SPAIN",
+        badge: "TOPSHELF SPAIN",
+        price: 130,
+        unit: "/ 3.5g",
+        image: "https://images.unsplash.com/photo-1618149439530-3d9db2f00c6f?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1618149439530-3d9db2f00c6f?w=800&h=600&fit=crop' }
         ]
     }
 ];
@@ -224,13 +219,29 @@ function hideLoader() {
     document.getElementById('loadingAnimation').style.display = 'none';
 }
 
+// Fonction pour déterminer la classe du badge
+function getBadgeClass(badge) {
+    const badgeText = badge.toLowerCase();
+    if (badgeText.includes('live rosin')) return 'live-rosin';
+    if (badgeText.includes('frozen')) return 'frozen';
+    if (badgeText.includes('topshelf california')) return 'topshelf';
+    if (badgeText.includes('topshelf usa')) return 'topshelf';
+    if (badgeText.includes('topshelf branded')) return 'topshelf';
+    if (badgeText.includes('dry')) return 'dry';
+    if (badgeText.includes('static')) return 'static';
+    if (badgeText.includes('canada')) return 'canada';
+    if (badgeText.includes('spain')) return 'topshelf';
+    return '';
+}
+
 // Fonction pour créer une carte produit
 function createProductCard(product) {
+    const badgeClass = getBadgeClass(product.badge);
     return `
         <div class="product-card" data-id="${product.id}">
             <div style="position: relative;">
                 <img src="${product.image}" alt="${product.name}" class="product-image">
-                <div class="product-badge">${product.badge}</div>
+                <div class="product-badge ${badgeClass}">${product.badge}</div>
             </div>
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
