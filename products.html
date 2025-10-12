@@ -221,8 +221,57 @@
 
     <script src="script.js"></script>
     <script>
-        // Données des produits
-        const products = [
+        // Données chargées depuis l'API
+        let products = [];
+        let categories = [];
+        let farms = [];
+        
+        // Charger les données depuis l'API
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                if (response.ok) {
+                    const data = await response.json();
+                    products = data.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        category: p.category_name || 'Sans catégorie',
+                        badge: p.farm_name || '',
+                        price: p.prices && p.prices.length > 0 ? parseInt(p.prices[0].price) : 0,
+                        unit: p.prices && p.prices.length > 0 ? `/ ${p.prices[0].quantity}` : '',
+                        image: p.image_url || 'images/product-placeholder.jpg'
+                    }));
+                    filteredProducts = [...products];
+                    displayProducts(filteredProducts);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des produits:', error);
+                products = [];
+                filteredProducts = [];
+            }
+        }
+        
+        // Charger le nom de la boutique
+        async function loadShopName() {
+            try {
+                const response = await fetch('/api/config');
+                if (response.ok) {
+                    const config = await response.json();
+                    if (config && config.shop_name) {
+                        const logoElements = document.querySelectorAll('.logo-text, #shopName');
+                        logoElements.forEach(el => {
+                            if (el) el.textContent = config.shop_name;
+                        });
+                        document.title = config.shop_name + ' - Produits';
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement du nom:', error);
+            }
+        }
+
+        // Données en dur pour fallback (si l'API ne fonctionne pas)
+        const fallbackProducts = [
             {
                 id: 1,
                 name: "100K ROSIN",
@@ -360,7 +409,7 @@
             }
         ];
 
-        let filteredProducts = [...products];
+        let filteredProducts = [];
 
         // Créer une carte produit
         function createProductCard(product) {
@@ -418,18 +467,22 @@
             alert('Filtres avancés bientôt disponibles ! 🎯\n\nVous pourrez filtrer par :\n- Catégorie\n- Prix\n- Type');
         });
 
+        // Rediriger vers la page de détails du produit au clic
         document.addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
             if (card) {
-                const product = products.find(p => p.id === parseInt(card.dataset.id));
-                if (product) {
-                    alert(`🌿 ${product.name}\n\nCatégorie: ${product.category}\n${product.badge}\n\nPrix: ${product.price}€ ${product.unit}\n\nCliquez pour ajouter au panier !`);
+                const productId = card.dataset.id;
+                if (productId) {
+                    window.location.href = `product-detail.html?id=${productId}`;
                 }
             }
         });
 
-        // Affichage initial
-        displayProducts(filteredProducts);
+        // Affichage initial - charger les données depuis l'API
+        document.addEventListener('DOMContentLoaded', () => {
+            loadShopName();
+            loadProducts();
+        });
     </script>
 </body>
 </html>
