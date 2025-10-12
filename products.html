@@ -390,11 +390,9 @@
             const card = e.target.closest('.product-card');
             if (card) {
                 const productId = parseInt(card.dataset.id);
-                const product = products.find(p => p.id === productId);
-                if (product) {
-                    // Redirection vers la page de détail du produit
-                    window.location.href = `product-detail.html?id=${productId}`;
-                }
+                console.log('🖱️ Clic sur produit ID:', productId);
+                // Redirection vers la page de détail du produit
+                window.location.href = `product-detail.html?id=${productId}`;
             }
         });
 
