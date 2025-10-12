@@ -451,7 +451,11 @@
                 
                 if (data.success && data.settings) {
                     if (data.settings.shop_name) {
-                        document.getElementById('shopName').textContent = data.settings.shop_name;
+                        const shopNameEl = document.getElementById('shopName');
+                        shopNameEl.textContent = data.settings.shop_name;
+                        shopNameEl.style.color = '#ffffff';
+                        shopNameEl.style.background = 'none';
+                        shopNameEl.style.webkitTextFillColor = '#ffffff';
                         document.title = `Produits - ${data.settings.shop_name}`;
                     }
                     
