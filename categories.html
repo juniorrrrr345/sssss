@@ -221,7 +221,7 @@
                     }
                     
                     // Appliquer l'image de fond si définie
-                    if (data.settings.background_image_url) {
+                    if (data.settings.background_image_url && data.settings.background_image_url.trim() !== '') {
                         document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${data.settings.background_image_url}')`;
                         document.body.style.backgroundSize = 'cover';
                         document.body.style.backgroundPosition = 'center';

@@ -83,15 +83,13 @@
                 // Mettre à jour le nom de la boutique
                 if (settingsData.success && settingsData.settings) {
                     const shopName = settingsData.settings.shop_name || 'Al Gran';
-                    const shopSubtitle = settingsData.settings.shop_subtitle || 'Amour';
                     const backgroundImage = settingsData.settings.background_image_url;
                     
                     document.querySelector('.giant-logo').textContent = shopName;
-                    document.querySelector('.logo-subtitle').textContent = shopSubtitle;
-                    document.title = `${shopName} ${shopSubtitle} - Accueil`;
+                    document.title = `${shopName} - Accueil`;
                     
                     // Appliquer l'image de fond si définie
-                    if (backgroundImage) {
+                    if (backgroundImage && backgroundImage.trim() !== '') {
                         document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${backgroundImage}')`;
                         document.body.style.backgroundSize = 'cover';
                         document.body.style.backgroundPosition = 'center';
