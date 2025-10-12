@@ -209,13 +209,23 @@
         // Charger les catégories depuis l'API
         async function loadCategories() {
             try {
-                const [categoriesResponse, productsResponse] = await Promise.all([
+                const [categoriesResponse, productsResponse, settingsResponse] = await Promise.all([
                     fetch(`${API_URL}/api/categories`),
-                    fetch(`${API_URL}/api/products`)
+                    fetch(`${API_URL}/api/products`),
+                    fetch(`${API_URL}/api/settings`)
                 ]);
                 
                 const categoriesData = await categoriesResponse.json();
                 const productsData = await productsResponse.json();
+                const settingsData = await settingsResponse.json();
+                
+                // Appliquer l'image de fond si définie
+                if (settingsData.success && settingsData.settings && settingsData.settings.background_image_url) {
+                    document.body.style.backgroundImage = `url('${settingsData.settings.background_image_url}')`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundAttachment = 'fixed';
+                }
                 
                 if (categoriesData.success && categoriesData.categories) {
                     // Compter les produits par catégorie

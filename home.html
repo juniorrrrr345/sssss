@@ -81,10 +81,19 @@
                 if (settingsData.success && settingsData.settings) {
                     const shopName = settingsData.settings.shop_name || 'Al Gran';
                     const shopSubtitle = settingsData.settings.shop_subtitle || 'Amour';
+                    const backgroundImage = settingsData.settings.background_image_url;
                     
                     document.querySelector('.giant-logo').textContent = shopName;
                     document.querySelector('.logo-subtitle').textContent = shopSubtitle;
                     document.title = `${shopName} ${shopSubtitle} - Accueil`;
+                    
+                    // Appliquer l'image de fond si définie
+                    if (backgroundImage) {
+                        document.body.style.backgroundImage = `url('${backgroundImage}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                        document.body.style.backgroundAttachment = 'fixed';
+                    }
                 }
                 
                 // Afficher les services

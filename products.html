@@ -443,9 +443,19 @@
                 const response = await fetch(`${API_URL}/api/settings`);
                 const data = await response.json();
                 
-                if (data.success && data.settings && data.settings.shop_name) {
-                    document.getElementById('shopName').textContent = data.settings.shop_name;
-                    document.title = `Produits - ${data.settings.shop_name}`;
+                if (data.success && data.settings) {
+                    if (data.settings.shop_name) {
+                        document.getElementById('shopName').textContent = data.settings.shop_name;
+                        document.title = `Produits - ${data.settings.shop_name}`;
+                    }
+                    
+                    // Appliquer l'image de fond si définie
+                    if (data.settings.background_image_url) {
+                        document.body.style.backgroundImage = `url('${data.settings.background_image_url}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                        document.body.style.backgroundAttachment = 'fixed';
+                    }
                 }
             } catch (error) {
                 console.error('Erreur chargement nom boutique:', error);

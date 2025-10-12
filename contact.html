@@ -86,6 +86,14 @@
                     const shopName = settingsData.settings.shop_name || 'Al Gran';
                     document.querySelector('.logo-text').textContent = shopName;
                     document.title = `${shopName} - Contact`;
+                    
+                    // Appliquer l'image de fond si définie
+                    if (settingsData.settings.background_image_url) {
+                        document.body.style.backgroundImage = `url('${settingsData.settings.background_image_url}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                        document.body.style.backgroundAttachment = 'fixed';
+                    }
                 }
                 
                 // Si des réseaux sociaux personnalisés existent, les utiliser
