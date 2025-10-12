@@ -1,0 +1,115 @@
+═══════════════════════════════════════════════════════════════════
+        🚀 COMMANDES À EXÉCUTER - Nouvelle Version Complète
+═══════════════════════════════════════════════════════════════════
+
+COPIEZ-COLLEZ ces commandes dans PowerShell :
+
+═══════════════════════════════════════════════════════════════════
+                    📥 ÉTAPE 1 : Récupérer les changements
+═══════════════════════════════════════════════════════════════════
+
+cd C:\Users\PC\Documents\sssss
+git pull origin cursor/deploy-local-web-store-from-github-901c
+
+═══════════════════════════════════════════════════════════════════
+                    🗄️ ÉTAPE 2 : Créer les nouvelles tables
+═══════════════════════════════════════════════════════════════════
+
+wrangler d1 execute algran-db --file=schema-services.sql --remote
+
+wrangler d1 execute algran-db --file=schema-social-networks.sql --remote
+
+═══════════════════════════════════════════════════════════════════
+                    🚀 ÉTAPE 3 : Redéployer l'API
+═══════════════════════════════════════════════════════════════════
+
+npm run deploy
+
+═══════════════════════════════════════════════════════════════════
+                    ✅ ÉTAPE 4 : Lancer et tester
+═══════════════════════════════════════════════════════════════════
+
+python -m http.server 8005
+
+Puis ouvrez : http://localhost:8005/admin.html
+
+═══════════════════════════════════════════════════════════════════
+                    🎉 NOUVELLES FONCTIONNALITÉS
+═══════════════════════════════════════════════════════════════════
+
+Dans le Panel Admin, vous avez maintenant :
+
+✅ Dashboard
+✅ Produits
+✅ Catégories
+✅ Services         ← NOUVEAU !
+✅ Réseaux Sociaux  ← NOUVEAU !
+✅ Paramètres
+
+═══════════════════════════════════════════════════════════════════
+                    📝 TESTEZ LES SERVICES
+═══════════════════════════════════════════════════════════════════
+
+1. Panel Admin → Services → Ajouter un Service
+
+   Titre: Meetup Paris
+   Icône: 🤝
+   Contenu: Rencontrez-nous à Paris !
+   Ordre: 3
+   
+2. Sauvegarder
+
+3. Allez sur : http://localhost:8005/home.html
+
+4. Votre service "Meetup Paris" apparaît ! ✅
+
+═══════════════════════════════════════════════════════════════════
+                    🌐 TESTEZ LES RÉSEAUX SOCIAUX
+═══════════════════════════════════════════════════════════════════
+
+1. Panel Admin → Réseaux Sociaux → Ajouter
+
+   Nom: TikTok
+   Icône: 🎵
+   URL: https://tiktok.com/@algran
+   Ordre: 1
+   
+2. Sauvegarder
+
+3. Allez sur : http://localhost:8005/contact.html
+
+4. La carte TikTok apparaît et est cliquable ! ✅
+
+═══════════════════════════════════════════════════════════════════
+                    ✨ CE QUI EST SYNCHRONISÉ
+═══════════════════════════════════════════════════════════════════
+
+Nom de la boutique
+  → home.html (logo)
+  → contact.html (logo)
+  → Titre des pages
+
+Services
+  → home.html (toutes les sections)
+  → Ajoutez Meetup, Livraison, etc.
+
+Réseaux Sociaux
+  → contact.html (cartes cliquables)
+  → Ajoutez tous les réseaux que vous voulez
+
+Produits
+  → products.html (grille)
+  → categories.html (compteurs)
+
+Catégories
+  → categories.html (grille 2 colonnes + images)
+
+═══════════════════════════════════════════════════════════════════
+
+        🎊 VOTRE BOUTIQUE EST MAINTENANT 100% PERSONNALISABLE !
+
+═══════════════════════════════════════════════════════════════════
+
+Pour plus de détails : NOUVELLE_VERSION_COMPLETE.md
+
+═══════════════════════════════════════════════════════════════════
