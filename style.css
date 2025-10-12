@@ -339,7 +339,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 0.3rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: #fff;
     text-decoration: none;
     font-size: 0.75rem;
     transition: all 0.3s ease;
