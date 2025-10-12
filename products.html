@@ -3,478 +3,528 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tous les Produits - Al Gran</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Produits - Al Gran</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .container {
-            max-width: 1400px;
-            padding: 2rem 1.5rem 100px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .products-header {
+        :root {
+            --primary-pink: #FF3EA5;
+            --primary-purple: #A855F7;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 100%);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
-        .search-filter-bar {
-            display: flex;
-            gap: 15px;
-            margin: 30px auto;
-            max-width: 800px;
-            flex-wrap: wrap;
-            align-items: center;
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
+        /* Search Bar */
         .search-container {
-            flex: 1;
-            min-width: 250px;
+            max-width: 600px;
+            margin: 0 auto;
             position: relative;
         }
 
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #ff3ea5;
-            font-size: 1.1rem;
-        }
-
-        .search-input {
+        .search-bar {
             width: 100%;
-            padding: 15px 15px 15px 45px;
-            border-radius: 25px;
+            padding: 1rem 3rem 1rem 1rem;
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            border-radius: 15px;
             color: white;
             font-size: 1rem;
+            outline: none;
             transition: all 0.3s ease;
         }
 
-        .search-input:focus {
-            outline: none;
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-bar:focus {
+            background: rgba(255, 255, 255, 0.12);
             border-color: var(--primary-pink);
             box-shadow: 0 0 20px rgba(255, 62, 165, 0.3);
         }
 
-        .search-input::placeholder {
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
             color: rgba(255, 255, 255, 0.5);
         }
 
+        /* Filters */
+        .filters-container {
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
+
         .filter-btn {
-            padding: 15px 35px;
-            border-radius: 25px;
-            border: none;
-            background: linear-gradient(135deg, #ff3ea5, #ff6ec7);
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
             color: white;
-            font-weight: bold;
+            font-size: 0.9rem;
+            white-space: nowrap;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(255, 62, 165, 0.4);
         }
 
-        .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(255, 62, 165, 0.6);
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            border-color: transparent;
+            transform: scale(1.05);
         }
 
+        /* Products Grid */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 40px auto;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
+        /* Product Card */
         .product-card {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
             cursor: pointer;
+            transition: all 0.3s ease;
             position: relative;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(255, 62, 165, 0.4);
-            border-color: rgba(255, 62, 165, 0.5);
-        }
-
-        .product-image-container {
-            position: relative;
-            width: 100%;
-            height: 280px;
-            overflow: hidden;
+            transform: translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 8px 25px rgba(255, 62, 165, 0.3);
         }
 
         .product-image {
             width: 100%;
-            height: 100%;
+            height: 140px;
             object-fit: cover;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
+            position: relative;
         }
 
         .product-badge {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: rgba(0, 0, 0, 0.75);
+            top: 0.5rem;
+            left: 0.5rem;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
             font-size: 0.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .product-info {
-            padding: 20px;
-        }
-
-        .product-name {
-            font-size: 1.4rem;
             font-weight: bold;
-            margin-bottom: 12px;
             color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .product-farm {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            color: #ff3ea5;
-            font-weight: 600;
+            gap: 0.3rem;
         }
 
-        .farm-icon {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #ff3ea5;
-        }
-
-        .product-price {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ff3ea5;
-        }
-
-        .product-price .unit {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: normal;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.6);
+        .product-flag {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
             font-size: 1.2rem;
         }
 
+        .product-content {
+            padding: 1rem;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .product-farm {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-unit {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary-pink);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            grid-column: 1 / -1;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-                gap: 20px;
-            }
-
-            .product-image-container {
-                height: 220px;
-            }
-
-            .search-filter-bar {
-                flex-direction: column;
-            }
-
-            .filter-btn {
-                width: 100%;
-                justify-content: center;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="cosmic-background"></div>
-    <div class="bubbles-container">
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo-text" id="shopName">Al Gran</div>
+        </div>
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-bar" 
+                id="searchInput"
+                placeholder="Rechercher par nom, catégorie ou farm..."
+            >
+            <i class="fas fa-search search-icon"></i>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="products-header">
-            <h1 class="title">Tous les Produits</h1>
-        </div>
+    <!-- Filters -->
+    <div class="filters-container" id="filtersContainer">
+        <button class="filter-btn active" data-category="all">Tous</button>
+        <!-- Les filtres seront chargés dynamiquement -->
+    </div>
 
-        <div class="search-filter-bar">
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom, catégorie ou farm...">
-            </div>
-            <button class="filter-btn" id="filterBtn">
-                <i class="fas fa-filter"></i>
-                Filtres
-            </button>
-        </div>
-
-        <div class="products-grid" id="productsGrid">
-            <!-- Les produits seront générés ici par JavaScript -->
+    <!-- Products Grid -->
+    <div class="products-grid" id="productsGrid">
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">Chargement des produits...</p>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <i class="fas fa-home"></i>
-            </div>
+            <i class="fas fa-home nav-icon"></i>
             <span class="nav-label">Accueil</span>
         </a>
         <a href="products.html" class="nav-item active">
-            <div class="nav-icon-circle">
-                <i class="fas fa-shopping-bag"></i>
-            </div>
+            <i class="fas fa-box nav-icon"></i>
             <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <i class="fas fa-th"></i>
-            </div>
+            <i class="fas fa-th nav-icon"></i>
             <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <i class="fas fa-envelope"></i>
-            </div>
+            <i class="fas fa-envelope nav-icon"></i>
             <span class="nav-label">Contact</span>
         </a>
     </nav>
 
-    <script src="script.js"></script>
     <script>
         // Configuration API
         const API_URL = 'https://algran-api.calitek-junior.workers.dev';
-        
-        // Données des produits - seront chargées depuis l'API
-        let products = [
-            {
-                id: 1,
-                name: "100K ROSIN",
-                farm: "100K",
-                badge: "🔥 LIVE ROSIN",
-                price: 200,
-                unit: "/ 2g",
-                image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
-            },
-            {
-                id: 2,
-                name: "HASH BURGER",
-                farm: "ESTATICO",
-                badge: "❄️ FROZEN USA US",
-                price: 120,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
-            },
-            {
-                id: 3,
-                name: "POTION",
-                farm: "WIZARD TREES",
-                badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
-                price: 110,
-                unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
-            },
-            {
-                id: 4,
-                name: "ZANGBANGER",
-                farm: "WIZARD TREES",
-                badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
-                price: 110,
-                unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
-            },
-            {
-                id: 5,
-                name: "TOP DRY",
-                farm: "NOFARM",
-                badge: "💨 DRY MA",
-                price: 50,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
-            },
-            {
-                id: 6,
-                name: "DARK MATTER",
-                farm: "COSMIC FARMS",
-                badge: "🌿 TOPSHELF",
-                price: 110,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
-            },
-            {
-                id: 7,
-                name: "CONCRETE JUNGLE",
-                farm: "URBAN GROW",
-                badge: "💎 BRANDED",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
-            },
-            {
-                id: 8,
-                name: "ZKITTLEZ",
-                farm: "RAINBOW FARMS",
-                badge: "🌈 TOPSHELF",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
-            },
-            {
-                id: 9,
-                name: "BIG Z",
-                farm: "PURPLE HAZE",
-                badge: "💜 PREMIUM",
-                price: 100,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
-            },
-            {
-                id: 10,
-                name: "GUSHMINTZ",
-                farm: "MINTY FRESH",
-                badge: "❄️ STATIC",
-                price: 170,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
-            }
-        ];
 
-        let filteredProducts = [...products];
+        let allProducts = [];
+        let allCategories = [];
+        let currentFilter = 'all';
 
-        // Créer une carte produit
-        function createProductCard(product) {
-            return `
-                <div class="product-card" data-id="${product.id}">
-                    <div class="product-image-container">
-                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.background='linear-gradient(135deg, rgba(255, 62, 165, 0.3), rgba(168, 85, 247, 0.3))'">
-                        <div class="product-badge">${product.badge}</div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">${product.name}</h3>
-                        <div class="product-farm">
-                            <span class="farm-icon"></span>
-                            <span>${product.farm}</span>
-                        </div>
-                        <div class="product-price">
-                            ${product.price}€ <span class="unit">${product.unit}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Afficher les produits
-        function displayProducts(productsToDisplay) {
-            const grid = document.getElementById('productsGrid');
-            if (productsToDisplay.length === 0) {
-                grid.innerHTML = '<div class="no-results"><i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>Aucun produit trouvé</div>';
-                return;
-            }
-            grid.innerHTML = productsToDisplay.map(createProductCard).join('');
-        }
-
-        // Recherche
-        function handleSearch(term) {
-            const searchTerm = term.toLowerCase().trim();
-            if (searchTerm === '') {
-                filteredProducts = [...products];
-            } else {
-                filteredProducts = products.filter(p => 
-                    p.name.toLowerCase().includes(searchTerm) ||
-                    p.farm.toLowerCase().includes(searchTerm) ||
-                    p.badge.toLowerCase().includes(searchTerm)
-                );
-            }
-            displayProducts(filteredProducts);
-        }
-
-        // Événements
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            handleSearch(e.target.value);
+        // Charger les données au démarrage
+        document.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([
+                loadShopName(),
+                loadProducts(),
+                loadCategories()
+            ]);
+            
+            // Event listeners
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
         });
 
-        document.getElementById('filterBtn').addEventListener('click', () => {
-            alert('Filtres avancés bientôt disponibles ! 🎯\n\nVous pourrez filtrer par :\n- Catégorie\n- Prix\n- Type\n- Farm');
-        });
-
-        // Clic sur une carte produit
-        document.addEventListener('click', (e) => {
-            const card = e.target.closest('.product-card');
-            if (card) {
-                const productId = parseInt(card.dataset.id);
-                const product = products.find(p => p.id === productId);
-                if (product) {
-                    // Redirection vers la page de détail du produit
-                    window.location.href = `product-detail.html?id=${productId}`;
+        // Charger le nom de la boutique
+        async function loadShopName() {
+            try {
+                const response = await fetch(`${API_URL}/api/settings`);
+                const data = await response.json();
+                
+                if (data.success && data.settings && data.settings.shop_name) {
+                    document.getElementById('shopName').textContent = data.settings.shop_name;
+                    document.title = `Produits - ${data.settings.shop_name}`;
                 }
+            } catch (error) {
+                console.error('Erreur chargement nom boutique:', error);
             }
-        });
+        }
 
-        // Charger les produits depuis l'API
-        async function loadProductsFromAPI() {
+        // Charger les produits
+        async function loadProducts() {
             try {
                 const response = await fetch(`${API_URL}/api/products`);
                 const data = await response.json();
                 
-                if (data.success && data.products && data.products.length > 0) {
-                    // Transformer les données de l'API
-                    products = data.products.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        farm: p.category_name || 'N/A',
-                        badge: p.badge || '⭐',
-                        price: p.price,
-                        unit: p.unit || '/ 3.5g',
-                        image: p.image_url || 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop'
-                    }));
-                    
-                    filteredProducts = [...products];
-                    displayProducts(filteredProducts);
-                    console.log(`✅ ${products.length} produits chargés depuis l'API`);
+                if (data.success && data.products) {
+                    allProducts = data.products;
+                    displayProducts(allProducts);
                 } else {
-                    // Utiliser les produits statiques si l'API ne retourne rien
-                    console.warn('⚠️ Utilisation des produits statiques');
-                    displayProducts(filteredProducts);
+                    displayEmptyState('Aucun produit disponible');
                 }
             } catch (error) {
-                console.error('❌ Erreur:', error);
-                // Afficher les produits statiques en cas d'erreur
-                displayProducts(filteredProducts);
+                console.error('Erreur chargement produits:', error);
+                displayEmptyState('Erreur de chargement');
             }
         }
 
-        // Charger les produits au démarrage
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProductsFromAPI();
-        });
+        // Charger les catégories pour les filtres
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_URL}/api/categories`);
+                const data = await response.json();
+                
+                if (data.success && data.categories) {
+                    allCategories = data.categories;
+                    displayFilters(allCategories);
+                }
+            } catch (error) {
+                console.error('Erreur chargement catégories:', error);
+            }
+        }
+
+        // Afficher les filtres
+        function displayFilters(categories) {
+            const container = document.getElementById('filtersContainer');
+            
+            const filtersHTML = categories.map(cat => `
+                <button class="filter-btn" data-category="${cat.id}">
+                    ${cat.icon || ''} ${cat.name}
+                </button>
+            `).join('');
+            
+            container.innerHTML = `
+                <button class="filter-btn active" data-category="all">✨ Tous</button>
+                ${filtersHTML}
+            `;
+            
+            // Event listeners pour les filtres
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Retirer active de tous
+                    container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    // Ajouter active au cliqué
+                    btn.classList.add('active');
+                    
+                    const categoryId = btn.dataset.category;
+                    currentFilter = categoryId;
+                    filterProducts(categoryId);
+                });
+            });
+        }
+
+        // Filtrer les produits par catégorie
+        function filterProducts(categoryId) {
+            if (categoryId === 'all') {
+                displayProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => p.category_id == categoryId);
+                displayProducts(filtered);
+            }
+        }
+
+        // Recherche
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            let filtered = allProducts;
+            
+            // Filtrer par catégorie si nécessaire
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.category_id == currentFilter);
+            }
+            
+            // Recherche textuelle
+            if (searchTerm) {
+                filtered = filtered.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm) ||
+                    (p.description && p.description.toLowerCase().includes(searchTerm)) ||
+                    (p.category_name && p.category_name.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            displayProducts(filtered);
+        }
+
+        // Afficher les produits
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            
+            if (products.length === 0) {
+                displayEmptyState('Aucun produit trouvé');
+                return;
+            }
+            
+            const productsHTML = products.map(product => {
+                const imageUrl = product.image_url || '';
+                const badge = product.badge || product.category_icon || '';
+                const price = parseFloat(product.price) || 0;
+                const unit = product.unit || '';
+                
+                return `
+                    <div class="product-card" onclick="showProductDetails(${product.id})">
+                        <div class="product-image" style="${imageUrl ? `background-image: url('${imageUrl}'); background-size: cover; background-position: center;` : ''}">
+                            ${badge ? `<div class="product-badge">${badge}</div>` : ''}
+                        </div>
+                        <div class="product-content">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-farm">${product.category_name || 'PREMIUM'}</div>
+                            <div>
+                                <span class="product-price">${price}€</span>
+                                <span class="product-unit">${unit}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            grid.innerHTML = productsHTML;
+        }
+
+        // État vide
+        function displayEmptyState(message) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Afficher les détails d'un produit (à implémenter)
+        function showProductDetails(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+                alert(`${product.name}\n\nPrix: ${product.price}€ ${product.unit}\nCatégorie: ${product.category_name}\n\n${product.description || 'Pas de description'}`);
+            }
+        }
     </script>
 </body>
 </html>
