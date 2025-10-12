@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Produits</title>
+    <style>
+        body {
+            background: #0a0e27;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Chargement Produits</h1>
+    <div id="debug"></div>
+    <div id="products"></div>
+
+    <script>
+        const API_URL = 'http://localhost:8787';
+        
+        async function testProducts() {
+            const debugDiv = document.getElementById('debug');
+            const productsDiv = document.getElementById('products');
+            
+            debugDiv.innerHTML = '<p>🔄 Chargement...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+                
+                debugDiv.innerHTML = `
+                    <p>✅ API répond !</p>
+                    <p>Nombre de produits : ${data.products ? data.products.length : 0}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+                if (data.success && data.products && data.products.length > 0) {
+                    productsDiv.innerHTML = data.products.map(p => `
+                        <div class="product-card">
+                            <h2>${p.name}</h2>
+                            <p>Prix : ${p.price}€ ${p.unit}</p>
+                            <p>Catégorie : ${p.category_name}</p>
+                            <p>Farm : ${p.farm_name || 'Aucune'}</p>
+                            ${p.image_url ? `<img src="${p.image_url}" style="max-width: 200px; border-radius: 8px;">` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    productsDiv.innerHTML = '<p>❌ Aucun produit trouvé</p>';
+                }
+            } catch (error) {
+                debugDiv.innerHTML = `<p>❌ Erreur : ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+        
+        testProducts();
+    </script>
+</body>
+</html>
