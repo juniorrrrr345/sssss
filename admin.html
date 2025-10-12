@@ -662,6 +662,37 @@
                 </div>
             </section>
 
+            <!-- Farms Section -->
+            <section class="content-section" id="farms">
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 class="card-title"><i class="fas fa-seedling"></i> Gestion des Farms</h2>
+                        <button class="btn btn-success" id="addFarmBtn">
+                            <i class="fas fa-plus"></i> Ajouter une Farm
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Logo</th>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th>Pays</th>
+                                    <th>Statut</th>
+                                    <th style="width: 180px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="farmsTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 2rem;">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <!-- Services Section -->
             <section class="content-section" id="services">
                 <div class="card">
@@ -874,8 +905,59 @@
                     </div>
                 </div>
                 
+                <!-- Section Prix Multiples (Variantes) -->
+                <div style="background: rgba(168, 85, 247, 0.1); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid var(--primary-purple);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary-purple);"><i class="fas fa-layer-group"></i> Prix Multiples (Variantes)</h3>
+                    <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-bottom: 1rem;">Ajoutez plusieurs prix pour différentes quantités (ex: 2g → 20€, 5g → 50€)</p>
+                    
+                    <div id="variantsContainer"></div>
+                    
+                    <button type="button" class="btn btn-primary" onclick="addVariantField()" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Ajouter un prix
+                    </button>
+                </div>
+                
                 <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;">
                     <i class="fas fa-save"></i> Enregistrer le Produit
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Farm Modal -->
+    <div class="modal" id="farmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-seedling"></i> Ajouter une Farm</h2>
+                <button class="btn-close" id="closeFarmModalBtn">&times;</button>
+            </div>
+            <form id="farmForm">
+                <div class="form-group">
+                    <label>Nom de la farm *</label>
+                    <input type="text" id="farmName" required placeholder="ex: 100K, Wizard Trees">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="farmDescription" rows="3" placeholder="Description de la farm..."></textarea>
+                </div>
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Pays/Origine</label>
+                        <input type="text" id="farmCountry" placeholder="ex: USA, France">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo URL (optionnel)</label>
+                        <input type="url" id="farmLogo" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="farmActive" checked>
+                        <span>Farm active</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                    <i class="fas fa-save"></i> Enregistrer
                 </button>
             </form>
         </div>
@@ -920,6 +1002,6 @@
         </div>
     </div>
 
-    <script src="admin.js?v=20251012-FINAL"></script>
+    <script src="admin.js?v=20251012-FINAL3"></script>
 </body>
 </html>

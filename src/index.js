@@ -108,6 +108,11 @@ export default {
         return await updateCategory(id, request, env, corsHeaders);
       }
       
+      if (path.match(/^\/api\/categories\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteCategory(id, env, corsHeaders);
+      }
+      
       if (path === '/api/settings' && method === 'GET') {
         return await getSettings(env, corsHeaders);
       }
@@ -415,6 +420,17 @@ async function updateCategory(id, request, env, headers) {
   `).bind(...bindings).run();
   
   return jsonResponse({ success: true, message: 'Category updated successfully' }, 200, headers);
+}
+
+// DELETE /api/categories/:id - Supprimer une catégorie
+async function deleteCategory(id, env, headers) {
+  const result = await env.DB.prepare('DELETE FROM categories WHERE id = ?').bind(id).run();
+  
+  if (result.meta.changes === 0) {
+    return jsonResponse({ error: 'Category not found' }, 404, headers);
+  }
+  
+  return jsonResponse({ success: true, message: 'Category deleted successfully' }, 200, headers);
 }
 
 // GET /api/settings - Récupère tous les paramètres

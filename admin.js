@@ -12,8 +12,11 @@ let currentSection = 'dashboard';
 let products = [];
 let categories = [];
 let services = [];
+let farms = [];
 let editingProductId = null;
 let editingServiceId = null;
+let editingFarmId = null;
+let productVariants = []; // Prix multiples
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -80,6 +83,18 @@ function initEventListeners() {
             closeServiceModal();
         }
     });
+    
+    // Modal farm
+    document.getElementById('addFarmBtn').addEventListener('click', () => openFarmModal());
+    document.getElementById('closeFarmModalBtn').addEventListener('click', closeFarmModal);
+    document.getElementById('farmForm').addEventListener('submit', handleFarmSubmit);
+    
+    // Fermer modal farm en cliquant à l'extérieur
+    document.getElementById('farmModal').addEventListener('click', (e) => {
+        if (e.target.id === 'farmModal') {
+            closeFarmModal();
+        }
+    });
 }
 
 // Gestion de la connexion
@@ -123,6 +138,7 @@ function handleNavigation(item) {
         dashboard: 'Dashboard',
         products: 'Gestion des Produits',
         categories: 'Gestion des Catégories',
+        farms: 'Gestion des Farms',
         services: 'Gestion des Services',
         settings: 'Paramètres'
     };
@@ -132,6 +148,7 @@ function handleNavigation(item) {
     if (section === 'dashboard') loadDashboard();
     if (section === 'products') loadProducts();
     if (section === 'categories') loadCategories();
+    if (section === 'farms') loadFarms();
     if (section === 'services') loadServices();
     if (section === 'settings') loadSettings();
 }
@@ -220,6 +237,8 @@ async function openProductModal(productId = null) {
     
     // Réinitialiser le formulaire
     document.getElementById('productForm').reset();
+    document.getElementById('productUnit').value = '/ 3.5g';
+    document.getElementById('productStock').value = '0';
     
     if (productId) {
         // Mode édition
@@ -227,15 +246,20 @@ async function openProductModal(productId = null) {
         if (product) {
             document.getElementById('productName').value = product.name;
             document.getElementById('productCategory').value = product.category_id;
+            document.getElementById('productFarm').value = product.farm_id || '';
+            document.getElementById('productDescription').value = product.description || '';
+            document.getElementById('productLongDescription').value = product.long_description || '';
             document.getElementById('productPrice').value = product.price;
             document.getElementById('productUnit').value = product.unit;
+            document.getElementById('productStock').value = product.stock_quantity || 0;
             document.getElementById('productBadge').value = product.badge || '';
             document.getElementById('productImage').value = product.image_url || '';
-            document.querySelector('.modal-title').textContent = 'Modifier le Produit';
+            document.getElementById('productVideo').value = product.video_url || '';
+            document.querySelector('#productModal .modal-title').innerHTML = '<i class="fas fa-edit"></i> Modifier le Produit';
         }
     } else {
         // Mode création
-        document.querySelector('.modal-title').textContent = 'Ajouter un Produit';
+        document.querySelector('#productModal .modal-title').innerHTML = '<i class="fas fa-plus-circle"></i> Ajouter un Produit';
     }
     
     document.getElementById('productModal').classList.add('active');
@@ -394,8 +418,11 @@ function displayCategories(categoriesToDisplay) {
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
             <td>
-                <button class="btn btn-primary" onclick="editCategory(${cat.id})">
-                    <i class="fas fa-edit"></i> Modifier
+                <button class="btn btn-primary" onclick="editCategory(${cat.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteCategoryConfirm(${cat.id}, '${cat.name.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-trash"></i>
                 </button>
             </td>
         </tr>
@@ -750,10 +777,221 @@ async function deleteServiceAction(id) {
     }
 }
 
+// Confirmer la suppression d'une catégorie
+function deleteCategoryConfirm(id, name) {
+    if (confirm(`⚠️ ATTENTION : Supprimer la catégorie "${name}" va aussi supprimer TOUS les produits associés.\n\nÊtes-vous vraiment sûr ?`)) {
+        deleteCategoryAction(id);
+    }
+}
+
+// Supprimer une catégorie
+async function deleteCategoryAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/categories/${id}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Catégorie supprimée avec succès !', 'success');
+            loadCategories();
+            loadDashboard(); // Mettre à jour les stats
+        } else {
+            showAlert('Erreur lors de la suppression', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
+// ===== GESTION DES FARMS =====
+
+// Charger les farms
+async function loadFarms() {
+    try {
+        const response = await fetch(`${API_URL}/api/farms`);
+        const data = await response.json();
+        
+        if (data.success) {
+            farms = data.farms;
+            displayFarms(farms);
+        }
+    } catch (error) {
+        console.error('Error loading farms:', error);
+        showAlert('Erreur lors du chargement des farms', 'error');
+    }
+}
+
+// Afficher les farms
+function displayFarms(farmsToDisplay) {
+    const tbody = document.getElementById('farmsTableBody');
+    
+    if (farmsToDisplay.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Aucune farm</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = farmsToDisplay.map(farm => `
+        <tr>
+            <td>
+                ${farm.logo_url ? `<img src="${farm.logo_url}" alt="${farm.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">` : `<div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🌿</div>`}
+            </td>
+            <td><strong>${farm.name}</strong></td>
+            <td>${farm.description || ''}</td>
+            <td>${farm.country || '-'}</td>
+            <td>
+                <span class="badge ${farm.is_active ? 'badge-success' : 'badge-warning'}">
+                    ${farm.is_active ? 'Active' : 'Inactive'}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="editFarm(${farm.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteFarmConfirm(${farm.id}, '${farm.name.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Ouvrir modal farm
+function openFarmModal(farmId = null) {
+    editingFarmId = farmId;
+    
+    document.getElementById('farmForm').reset();
+    document.getElementById('farmActive').checked = true;
+    
+    if (farmId) {
+        const farm = farms.find(f => f.id === farmId);
+        if (farm) {
+            document.getElementById('farmName').value = farm.name;
+            document.getElementById('farmDescription').value = farm.description || '';
+            document.getElementById('farmCountry').value = farm.country || '';
+            document.getElementById('farmLogo').value = farm.logo_url || '';
+            document.getElementById('farmActive').checked = farm.is_active === 1;
+            document.querySelector('#farmModal .modal-title').innerHTML = '<i class="fas fa-edit"></i> Modifier la Farm';
+        }
+    } else {
+        document.querySelector('#farmModal .modal-title').innerHTML = '<i class="fas fa-plus-circle"></i> Ajouter une Farm';
+    }
+    
+    document.getElementById('farmModal').classList.add('active');
+}
+
+// Fermer modal farm
+function closeFarmModal() {
+    document.getElementById('farmModal').classList.remove('active');
+    editingFarmId = null;
+}
+
+// Soumettre formulaire farm
+async function handleFarmSubmit(e) {
+    e.preventDefault();
+    
+    const farmData = {
+        name: document.getElementById('farmName').value,
+        description: document.getElementById('farmDescription').value,
+        country: document.getElementById('farmCountry').value,
+        logo_url: document.getElementById('farmLogo').value,
+        is_active: document.getElementById('farmActive').checked ? 1 : 0
+    };
+    
+    try {
+        let response;
+        if (editingFarmId) {
+            response = await fetch(`${API_URL}/api/farms/${editingFarmId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(farmData)
+            });
+        } else {
+            response = await fetch(`${API_URL}/api/farms`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(farmData)
+            });
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(editingFarmId ? 'Farm modifiée !' : 'Farm créée !', 'success');
+            closeFarmModal();
+            loadFarms();
+            loadCategoriesForForm(); // Recharger les farms dans le formulaire produit
+        } else {
+            showAlert('Erreur: ' + (data.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving farm:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
+    }
+}
+
+function editFarm(id) {
+    openFarmModal(id);
+}
+
+function deleteFarmConfirm(id, name) {
+    if (confirm(`Supprimer la farm "${name}" ?\n\nLes produits associés ne seront pas supprimés.`)) {
+        deleteFarmAction(id);
+    }
+}
+
+async function deleteFarmAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/farms/${id}`, { method: 'DELETE' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Farm supprimée !', 'success');
+            loadFarms();
+        } else {
+            showAlert('Erreur lors de la suppression', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting farm:', error);
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
+// ===== GESTION DES VARIANTES DE PRIX =====
+
+let variantCounter = 0;
+
+function addVariantField() {
+    variantCounter++;
+    const container = document.getElementById('variantsContainer');
+    const variantHtml = `
+        <div class="variant-row" id="variant-${variantCounter}" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+            <input type="text" class="variant-quantity" placeholder="2g" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+            <input type="number" step="0.01" class="variant-price" placeholder="20" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+            <input type="number" class="variant-stock" placeholder="Stock" value="0" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+            <button type="button" onclick="removeVariant(${variantCounter})" class="btn btn-danger" style="padding: 8px 12px;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', variantHtml);
+}
+
+function removeVariant(id) {
+    document.getElementById(`variant-${id}`).remove();
+}
+
 // Exposer les fonctions globalement pour les boutons inline
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.deleteCategoryConfirm = deleteCategoryConfirm;
+window.editFarm = editFarm;
+window.deleteFarmConfirm = deleteFarmConfirm;
 window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.saveSettings = saveSettings;
+window.addVariantField = addVariantField;
+window.removeVariant = removeVariant;
