@@ -3,117 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catégories - Aimiri</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Catégories - Al Gran</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="background">
-        <div class="stars"></div>
-        <div class="cosmic-effect"></div>
+    <!-- Effet d'arrière-plan cosmique -->
+    <div class="cosmic-background"></div>
+
+    <div class="container">
+        <!-- Logo/Titre -->
+        <div class="logo-text" id="shopName" style="color: #ffffff;">Chargement...</div>
+        
+        <h1 class="title">Nos Catégories</h1>
+        <p class="subtitle">Explorez notre sélection par catégorie</p>
+
+        <!-- Grille des catégories -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront chargées dynamiquement depuis l'API -->
+            <div style="text-align: center; padding: 3rem; color: rgba(255,255,255,0.6); grid-column: 1/-1;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                <p style="margin-top: 1rem;">Chargement des catégories...</p>
+            </div>
+        </div>
     </div>
 
-    <main class="container">
-        <h1 class="main-title">Explorez Nos Catégories</h1>
-        
-        <div class="categories-grid">
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Extract">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Extract</h2>
-                    <p class="category-description">Explore Extract</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Static-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Static-Sift</h2>
-                    <p class="category-description">Explore Static-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Frozen-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Frozen-Sift</h2>
-                    <p class="category-description">Explore Frozen-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Dry-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Dry-Sift</h2>
-                    <p class="category-description">Explore Dry-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Weed">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Weed</h2>
-                    <p class="category-description">Explore Weed</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="aimiri-logo">
-            <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
-                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="logo-text">Aimiri</text>
-            </svg>
-        </div>
-    </main>
-
+    <!-- Navigation du bas -->
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+                <i class="fas fa-home"></i>
             </div>
             <span class="nav-label">Accueil</span>
         </a>
         <a href="products.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
+                <i class="fas fa-shopping-bag"></i>
             </div>
             <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item active">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
+                <i class="fas fa-th"></i>
             </div>
             <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
+                <i class="fas fa-envelope"></i>
             </div>
             <span class="nav-label">Contact</span>
         </a>
     </nav>
+
+    <style>
+        .subtitle {
+            text-align: center;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            margin-top: -20px;
+            margin-bottom: 40px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 40px auto;
+            max-width: 1200px;
+            padding: 0 20px 100px 20px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-image-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-icon-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            z-index: 1;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-content {
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            color: #ffffff !important;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .category-description {
+            color: #ffffff !important;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .category-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .category-arrow {
+            font-size: 1.5rem;
+            color: #ffffff;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-card:hover .category-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                padding-bottom: 100px;
+            }
+
+            .category-image-container {
+                height: 180px;
+            }
+
+            .category-icon-overlay {
+                font-size: 4rem;
+            }
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+
+        // Charger le nom de la boutique
+        async function loadShopName() {
+            console.log('Loading shop name...');
+            try {
+                const response = await fetch(`${API_URL}/api/settings`);
+                const data = await response.json();
+                console.log('Shop name data:', data);
+                
+                if (data.success && data.settings) {
+                    if (data.settings.shop_name) {
+                        document.getElementById('shopName').textContent = data.settings.shop_name;
+                        document.getElementById('shopName').style.color = '#ffffff';
+                        document.title = `Catégories - ${data.settings.shop_name}`;
+                    }
+                    
+                    // Appliquer l'image de fond si définie
+                    if (data.settings.background_image_url && data.settings.background_image_url.trim() !== '') {
+                        const cosmicBg = document.querySelector('.cosmic-background');
+                        if (cosmicBg) {
+                            cosmicBg.style.backgroundImage = `url('${data.settings.background_image_url}')`;
+                            cosmicBg.style.backgroundSize = 'cover';
+                            cosmicBg.style.backgroundPosition = 'center';
+                            cosmicBg.style.backgroundAttachment = 'fixed';
+                            cosmicBg.style.backgroundRepeat = 'no-repeat';
+                            cosmicBg.style.opacity = '1';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur chargement nom boutique:', error);
+                document.getElementById('shopName').textContent = 'Al Gran';
+            }
+        }
+
+        // Charger les catégories depuis l'API
+        async function loadCategories() {
+            console.log('Loading categories...');
+            try {
+                const [categoriesResponse, productsResponse, settingsResponse] = await Promise.all([
+                    fetch(`${API_URL}/api/categories`),
+                    fetch(`${API_URL}/api/products`),
+                    fetch(`${API_URL}/api/settings`)
+                ]);
+                
+                console.log('Responses received');
+                const categoriesData = await categoriesResponse.json();
+                const productsData = await productsResponse.json();
+                const settingsData = await settingsResponse.json();
+                console.log('Categories:', categoriesData);
+                console.log('Products:', productsData);
+                
+                // Appliquer l'image de fond si définie
+                if (settingsData.success && settingsData.settings && settingsData.settings.background_image_url && settingsData.settings.background_image_url.trim() !== '') {
+                    const cosmicBg = document.querySelector('.cosmic-background');
+                    if (cosmicBg) {
+                        cosmicBg.style.backgroundImage = `url('${settingsData.settings.background_image_url}')`;
+                        cosmicBg.style.backgroundSize = 'cover';
+                        cosmicBg.style.backgroundPosition = 'center';
+                        cosmicBg.style.backgroundAttachment = 'fixed';
+                        cosmicBg.style.backgroundRepeat = 'no-repeat';
+                        cosmicBg.style.opacity = '1';
+                    }
+                }
+                
+                if (categoriesData.success && categoriesData.categories) {
+                    // Compter les produits par catégorie
+                    const categoryCounts = {};
+                    if (productsData.success && productsData.products) {
+                        productsData.products.forEach(product => {
+                            const categoryId = product.category_id;
+                            categoryCounts[categoryId] = (categoryCounts[categoryId] || 0) + 1;
+                        });
+                    }
+                    
+                    // Afficher les catégories
+                    displayCategories(categoriesData.categories, categoryCounts);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des catégories:', error);
+                displayErrorMessage();
+            }
+        }
+
+        // Afficher les catégories
+        function displayCategories(categories, productCounts) {
+            const grid = document.getElementById('categoriesGrid');
+            
+            if (categories.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                        <i class="fas fa-info-circle" style="font-size: 3rem; color: rgba(255,255,255,0.3);"></i>
+                        <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">Aucune catégorie disponible</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = categories.map(category => {
+                const productCount = productCounts[category.id] || 0;
+                const imageUrl = category.image_url || '';
+                
+                return `
+                    <a href="products.html?category=${category.slug}" class="category-card" data-category="${category.slug}">
+                        <div class="category-image-container">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${category.name}" class="category-image">` : ''}
+                        </div>
+                        <div class="category-content">
+                            <h2 class="category-title">${category.name}</h2>
+                            <p class="category-description">${category.description || ''}</p>
+                            <div class="category-count">
+                                <i class="fas fa-box"></i>
+                                <span>${productCount}</span> ${productCount > 1 ? 'produits' : 'produit'}
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // Afficher un message d'erreur
+        function displayErrorMessage() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = `
+                <div style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: rgba(255,62,165,0.6);"></i>
+                    <p style="margin-top: 1rem; color: rgba(255,255,255,0.7);">Erreur de chargement des catégories</p>
+                    <p style="color: rgba(255,255,255,0.5);">Vérifiez votre connexion à l'API</p>
+                </div>
+            `;
+        }
+
+        // Charger les catégories au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadShopName();
+            loadCategories();
+        });
+    </script>
 </body>
 </html>

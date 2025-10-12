@@ -6,75 +6,32 @@
     <title>Nous Contacter - Al Gran</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+    </style>
 </head>
 <body>
     <div class="cosmic-background"></div>
-    <div class="bubbles-container">
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-        <div class="bubble"></div>
-    </div>
 
     <div class="container">
         <div class="logo-text">Al Gran</div>
         
         <h1 class="title">Nous Contacter</h1>
 
-        <div class="contact-cards">
-            <!-- LinkTree Card -->
+        <div class="contact-cards" id="contactCards">
+            <!-- Les cartes de contact seront chargées dynamiquement -->
             <div class="contact-card disabled">
                 <div class="card-icon">
-                    <i class="fas fa-tree"></i>
+                    <i class="fas fa-spinner fa-spin"></i>
                 </div>
                 <div class="card-content">
-                    <h3>LinkTree</h3>
-                    <p>Non disponible</p>
+                    <h3>Chargement...</h3>
+                    <p>Chargement des informations de contact</p>
                 </div>
             </div>
-
-            <!-- WhatsApp Card -->
-            <a href="https://wa.me/votre_numero" class="contact-card" target="_blank">
-                <div class="card-icon whatsapp">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <div class="card-content">
-                    <h3>WhatsApp</h3>
-                    <p>Contactez-nous directement sur WhatsApp</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <!-- Telegram Card -->
-            <a href="https://t.me/votre_canal" class="contact-card" target="_blank">
-                <div class="card-icon telegram">
-                    <i class="fab fa-telegram"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Canal Telegram</h3>
-                    <p>Rejoignez notre canal Telegram pour les dernières mises à jour</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <!-- Instagram Card -->
-            <a href="https://instagram.com/votre_compte" class="contact-card" target="_blank">
-                <div class="card-icon instagram">
-                    <i class="fab fa-instagram"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Instagram</h3>
-                    <p>Suivez-nous sur Instagram</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
         </div>
     </div>
 
@@ -107,5 +64,202 @@
     </nav>
 
     <script src="script.js"></script>
+    <script>
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+
+        // Charger les informations de contact depuis l'API
+        async function loadContactInfo() {
+            try {
+                // Charger à la fois les settings et les réseaux sociaux personnalisés
+                const [settingsResponse, socialResponse] = await Promise.all([
+                    fetch(`${API_URL}/api/settings`),
+                    fetch(`${API_URL}/api/social-networks`)
+                ]);
+                
+                const settingsData = await settingsResponse.json();
+                const socialData = await socialResponse.json();
+                
+                // Mettre à jour le titre avec le nom de la boutique
+                if (settingsData.success && settingsData.settings) {
+                    const shopName = settingsData.settings.shop_name || 'Al Gran';
+                    document.querySelector('.logo-text').textContent = shopName;
+                    document.title = `${shopName} - Contact`;
+                    
+                    // Appliquer l'image de fond si définie
+                    if (settingsData.settings.background_image_url && settingsData.settings.background_image_url.trim() !== '') {
+                        const cosmicBg = document.querySelector('.cosmic-background');
+                        if (cosmicBg) {
+                            cosmicBg.style.backgroundImage = `url('${settingsData.settings.background_image_url}')`;
+                            cosmicBg.style.backgroundSize = 'cover';
+                            cosmicBg.style.backgroundPosition = 'center';
+                            cosmicBg.style.backgroundAttachment = 'fixed';
+                            cosmicBg.style.backgroundRepeat = 'no-repeat';
+                            cosmicBg.style.opacity = '1';
+                        }
+                    }
+                }
+                
+                // Si des réseaux sociaux personnalisés existent, les utiliser
+                if (socialData.success && socialData.networks && socialData.networks.length > 0) {
+                    displayCustomSocialNetworks(socialData.networks);
+                } 
+                // Sinon utiliser les settings par défaut
+                else if (settingsData.success && settingsData.settings) {
+                    let settings = {};
+                    if (typeof settingsData.settings === 'object') {
+                        settings = settingsData.settings;
+                    }
+                    displayContactCards(settings);
+                } else {
+                    displayDefaultCards();
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des contacts:', error);
+                displayDefaultCards();
+            }
+        }
+
+        // Afficher les réseaux sociaux personnalisés
+        function displayCustomSocialNetworks(networks) {
+            const container = document.getElementById('contactCards');
+            
+            if (!networks || networks.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; grid-column: 1/-1;">
+                        <i class="fas fa-info-circle" style="font-size: 3rem; color: rgba(255,255,255,0.3); margin-bottom: 1rem;"></i>
+                        <p style="color: rgba(255,255,255,0.6);">Aucun réseau social configuré</p>
+                        <p style="color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Ajoutez-les depuis le panel admin
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const cards = networks.map(network => `
+                <a href="${network.url}" class="contact-card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon" style="background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));">
+                        <span style="font-size: 2rem;">${network.icon}</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>${network.name}</h3>
+                        <p>Cliquez pour accéder</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            `).join('');
+            
+            container.innerHTML = cards;
+        }
+
+        // Afficher les cartes de contact
+        function displayContactCards(settings) {
+            const container = document.getElementById('contactCards');
+            let cards = '';
+
+            // WhatsApp
+            if (settings.shop_whatsapp) {
+                const whatsappClean = settings.shop_whatsapp.replace(/\s/g, '');
+                cards += `
+                    <a href="https://wa.me/${whatsappClean}" class="contact-card" target="_blank">
+                        <div class="card-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>WhatsApp</h3>
+                            <p>Contactez-nous directement sur WhatsApp</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+
+            // Telegram
+            if (settings.shop_telegram) {
+                const telegramUsername = settings.shop_telegram.replace('@', '');
+                cards += `
+                    <a href="https://t.me/${telegramUsername}" class="contact-card" target="_blank">
+                        <div class="card-icon telegram">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Telegram</h3>
+                            <p>Rejoignez-nous sur Telegram</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+
+            // Instagram
+            if (settings.shop_instagram) {
+                const instaUsername = settings.shop_instagram.replace('@', '');
+                cards += `
+                    <a href="https://instagram.com/${instaUsername}" class="contact-card" target="_blank">
+                        <div class="card-icon instagram">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Instagram</h3>
+                            <p>Suivez-nous sur Instagram</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+
+            // Email
+            if (settings.shop_email) {
+                cards += `
+                    <a href="mailto:${settings.shop_email}" class="contact-card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Email</h3>
+                            <p>${settings.shop_email}</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+
+            // Si aucun contact configuré
+            if (!cards) {
+                cards = `
+                    <div class="contact-card disabled">
+                        <div class="card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Aucun contact configuré</h3>
+                            <p>Configurez vos réseaux sociaux dans le panel admin</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = cards;
+        }
+
+        // Afficher les cartes par défaut si erreur
+        function displayDefaultCards() {
+            displayContactCards({});
+        }
+
+        // Charger au démarrage
+        document.addEventListener('DOMContentLoaded', loadContactInfo);
+    </script>
 </body>
 </html>
