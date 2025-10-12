@@ -369,7 +369,10 @@ function displayCategories(categoriesToDisplay) {
     
     tbody.innerHTML = categoriesToDisplay.map(cat => `
         <tr>
-            <td>${cat.icon || ''} ${cat.name}</td>
+            <td>
+                ${cat.image_url ? `<img src="${cat.image_url}" alt="${cat.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">` : `<div style="width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">${cat.icon || '📦'}</div>`}
+            </td>
+            <td><strong>${cat.icon || ''} ${cat.name}</strong></td>
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
             <td>
@@ -385,11 +388,55 @@ function displayCategories(categoriesToDisplay) {
 function editCategory(id) {
     const category = categories.find(c => c.id === id);
     if (category) {
-        const newName = prompt('Nouveau nom:', category.name);
-        if (newName && newName !== category.name) {
-            updateCategoryAction(id, { name: newName });
-        }
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;';
+        
+        modal.innerHTML = `
+            <div style="background: #1a1f3a; padding: 2rem; border-radius: 15px; max-width: 500px; width: 90%;">
+                <h3 style="margin-bottom: 1.5rem;">Modifier la Catégorie</h3>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Nom</label>
+                    <input type="text" id="editCatName" value="${category.name}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Description</label>
+                    <textarea id="editCatDesc" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; min-height: 80px;">${category.description || ''}</textarea>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Icône (emoji)</label>
+                    <input type="text" id="editCatIcon" value="${category.icon || ''}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;" placeholder="ex: 🔥">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">URL de l'image (optionnel)</label>
+                    <input type="url" id="editCatImage" value="${category.image_url || ''}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;" placeholder="https://imgur.com/...">
+                    <small style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Vous pouvez utiliser Imgur, Cloudinary, etc.</small>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+                    <button onclick="saveCategoryEdit(${id})" class="btn btn-success" style="flex: 1;">
+                        <i class="fas fa-save"></i> Sauvegarder
+                    </button>
+                    <button onclick="this.closest('div[style*=fixed]').remove()" class="btn btn-secondary" style="flex: 1;">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
     }
+}
+
+// Sauvegarder les modifications de catégorie
+window.saveCategoryEdit = async function(id) {
+    const data = {
+        name: document.getElementById('editCatName').value,
+        description: document.getElementById('editCatDesc').value,
+        icon: document.getElementById('editCatIcon').value,
+        image_url: document.getElementById('editCatImage').value
+    };
+    
+    await updateCategoryAction(id, data);
+    document.querySelector('div[style*="position: fixed"]').remove();
 }
 
 // Mettre à jour une catégorie
