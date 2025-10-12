@@ -22,6 +22,43 @@ export default {
     }
 
     try {
+      // Route racine - Documentation de l'API
+      if (path === '/' && method === 'GET') {
+        return jsonResponse({
+          success: true,
+          name: 'Al Gran API',
+          version: '1.0.0',
+          endpoints: {
+            products: {
+              'GET /api/products': 'Liste tous les produits',
+              'GET /api/products/:id': 'Récupère un produit spécifique',
+              'POST /api/products': 'Crée un nouveau produit',
+              'PUT /api/products/:id': 'Modifie un produit',
+              'DELETE /api/products/:id': 'Supprime un produit'
+            },
+            categories: {
+              'GET /api/categories': 'Liste toutes les catégories',
+              'POST /api/categories': 'Crée une nouvelle catégorie',
+              'PUT /api/categories/:id': 'Modifie une catégorie'
+            },
+            settings: {
+              'GET /api/settings': 'Récupère les paramètres',
+              'PUT /api/settings': 'Met à jour les paramètres'
+            },
+            stats: {
+              'GET /api/stats': 'Statistiques de la boutique'
+            },
+            upload: {
+              'POST /api/upload': 'Upload une image vers R2'
+            }
+          },
+          database: {
+            status: 'connected',
+            type: 'Cloudflare D1'
+          }
+        }, 200, corsHeaders);
+      }
+      
       // Routes
       if (path === '/api/products' && method === 'GET') {
         return await getProducts(env, corsHeaders);
