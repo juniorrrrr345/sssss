@@ -188,6 +188,41 @@ const products = [
 ];
 
 let filteredProducts = [...products];
+let loaderAnimation = null;
+let emptyStateAnimation = null;
+
+// Initialiser les animations Lottie
+function initLottieAnimations() {
+    // Animation de chargement (Spinner cosmique)
+    loaderAnimation = lottie.loadAnimation({
+        container: document.getElementById('lottieLoader'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://lottie.host/8ec4eb98-c3e4-4d2f-a5b6-32aa99da7d9a/rX1jjNzPit.json'
+    });
+
+    // Animation état vide (Boîte vide avec recherche)
+    emptyStateAnimation = lottie.loadAnimation({
+        container: document.getElementById('lottieEmpty'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://lottie.host/0c3be5a0-6109-45ff-89ec-8a7db1e3f7d7/CtGm8bZvxU.json'
+    });
+}
+
+// Afficher le loader
+function showLoader() {
+    document.getElementById('loadingAnimation').style.display = 'block';
+    document.getElementById('productsGrid').style.display = 'none';
+    document.getElementById('emptyStateAnimation').style.display = 'none';
+}
+
+// Masquer le loader
+function hideLoader() {
+    document.getElementById('loadingAnimation').style.display = 'none';
+}
 
 // Fonction pour créer une carte produit
 function createProductCard(product) {
@@ -214,10 +249,18 @@ function createProductCard(product) {
 // Fonction pour afficher les produits
 function displayProducts(productsToDisplay) {
     const productsGrid = document.getElementById('productsGrid');
+    const emptyState = document.getElementById('emptyStateAnimation');
+    
+    hideLoader();
+    
     if (productsToDisplay.length === 0) {
-        productsGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px; font-size: 1.2rem;">Aucun produit trouvé 😔</p>';
+        productsGrid.style.display = 'none';
+        emptyState.style.display = 'block';
         return;
     }
+    
+    productsGrid.style.display = 'grid';
+    emptyState.style.display = 'none';
     productsGrid.innerHTML = productsToDisplay.map(createProductCard).join('');
 }
 
@@ -290,15 +333,16 @@ function showProductDetails(product) {
     window.location.href = `product-detail.html?id=${product.id}`;
 }
 
-// Animation de chargement
+// Initialisation au chargement de la page
 window.addEventListener('load', () => {
+    initLottieAnimations();
+    
+    // Simuler un chargement pour montrer l'animation
+    showLoader();
     setTimeout(() => {
         displayProducts(filteredProducts);
-    }, 100);
+    }, 1500);
 });
-
-// Affichage initial des produits
-displayProducts(filteredProducts);
 
 // Effet de parallaxe sur le scroll
 let ticking = false;

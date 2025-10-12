@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admin - Al Gran</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -428,13 +429,29 @@
         /* Alert */
         .alert {
             padding: 1rem 1.5rem;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 1rem;
             display: none;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.4s ease-out;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .alert.active {
-            display: block;
+            display: flex;
         }
 
         .alert-success {
@@ -447,6 +464,12 @@
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid var(--error);
             color: var(--error);
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid var(--warning);
+            color: var(--warning);
         }
 
         /* Responsive */

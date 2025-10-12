@@ -412,21 +412,47 @@ async function loadSettings() {
     }
 }
 
-// Afficher une alerte
+// Afficher une alerte avec animation Lottie
 function showAlert(message, type = 'success') {
     const container = document.getElementById('alertContainer');
     const alert = document.createElement('div');
     alert.className = `alert alert-${type} active`;
-    alert.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-        ${message}
-    `;
     
+    // Créer un conteneur pour l'animation Lottie
+    const lottieContainer = document.createElement('div');
+    lottieContainer.style.width = '40px';
+    lottieContainer.style.height = '40px';
+    lottieContainer.style.marginRight = '15px';
+    lottieContainer.style.flexShrink = '0';
+    
+    // Message
+    const messageSpan = document.createElement('span');
+    messageSpan.textContent = message;
+    messageSpan.style.flex = '1';
+    
+    alert.appendChild(lottieContainer);
+    alert.appendChild(messageSpan);
     container.appendChild(alert);
     
+    // Charger l'animation Lottie appropriée
+    const lottieUrls = {
+        success: 'https://lottie.host/e9729a7c-8c92-4ab1-9ba8-093b6732e203/iOLLrbWYAc.json',
+        error: 'https://lottie.host/c1c7f68b-fa9e-4e3c-85e5-2bb7d23b6b1c/P0Bz7iQzGY.json',
+        warning: 'https://lottie.host/f9bc6d36-8a2f-4b8a-8e42-c45e7eb4ce31/sLRfjVZkN1.json'
+    };
+    
+    lottie.loadAnimation({
+        container: lottieContainer,
+        renderer: 'svg',
+        loop: type !== 'success', // Success joue une seule fois
+        autoplay: true,
+        path: lottieUrls[type] || lottieUrls.success
+    });
+    
     setTimeout(() => {
-        alert.remove();
-    }, 5000);
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 300);
+    }, 4000);
 }
 
 // Exposer les fonctions globalement pour les boutons inline

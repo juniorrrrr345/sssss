@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tous les Produits</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -22,8 +23,21 @@
             </div>
         </header>
 
+        <!-- Loader Lottie -->
+        <div id="loadingAnimation" style="display: none; text-align: center; padding: 60px 0;">
+            <div id="lottieLoader" style="width: 200px; height: 200px; margin: 0 auto;"></div>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-top: 20px; font-size: 1.1rem;">Chargement des produits...</p>
+        </div>
+
         <div class="products-grid" id="productsGrid">
             <!-- Les produits seront générés dynamiquement -->
+        </div>
+
+        <!-- Animation État Vide -->
+        <div id="emptyStateAnimation" style="display: none; text-align: center; padding: 60px 20px;">
+            <div id="lottieEmpty" style="width: 300px; height: 300px; margin: 0 auto;"></div>
+            <h3 style="color: rgba(255, 255, 255, 0.9); margin-top: 20px; font-size: 1.5rem;">Aucun produit trouvé</h3>
+            <p style="color: rgba(255, 255, 255, 0.6); margin-top: 10px;">Essayez une autre recherche</p>
         </div>
     </div>
 

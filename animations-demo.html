@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Animations Lottie - Al Gran</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1729 100%);
+            color: white;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ff3ea5;
+        }
+
+        .card p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .animation-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 62, 165, 0.4);
+        }
+
+        .alert-demo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .demo-alert {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .demo-alert-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .usage-code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #a855f7;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin: 60px 0 30px;
+            text-align: center;
+            color: #a855f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Animations Lottie</h1>
+        <p class="subtitle">Démo de toutes les animations intégrées sur Al Gran</p>
+
+        <div class="section-title">📦 Animations de Chargement</div>
+        <div class="grid">
+            <div class="card">
+                <h3>Loader Principal</h3>
+                <div class="animation-container" id="loader1"></div>
+                <p>Utilisé lors du chargement des produits</p>
+                <div class="usage-code">
+                    // Page: index.html<br>
+                    showLoader();
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>État Vide</h3>
+                <div class="animation-container" id="empty1"></div>
+                <p>Affiché quand aucun produit n'est trouvé</p>
+                <div class="usage-code">
+                    // Recherche sans résultat<br>
+                    productsToDisplay.length === 0
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Hero Animation</h3>
+                <div class="animation-container" id="hero1"></div>
+                <p>Animation d'accueil sur la page d'accueil</p>
+                <div class="usage-code">
+                    // Page: home.html<br>
+                    #heroAnimation
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">✨ Notifications Admin</div>
+        <div class="grid">
+            <div class="card">
+                <h3>Succès ✅</h3>
+                <div class="animation-container" id="success1"></div>
+                <p>Action réussie (création, modification)</p>
+                <button class="btn" onclick="testAlert('success')">Tester</button>
+                <div class="usage-code">
+                    showAlert('Message', 'success');
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Erreur ❌</h3>
+                <div class="animation-container" id="error1"></div>
+                <p>Une erreur s'est produite</p>
+                <button class="btn" onclick="testAlert('error')">Tester</button>
+                <div class="usage-code">
+                    showAlert('Message', 'error');
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Avertissement ⚠️</h3>
+                <div class="animation-container" id="warning1"></div>
+                <p>Attention requise</p>
+                <button class="btn" onclick="testAlert('warning')">Tester</button>
+                <div class="usage-code">
+                    showAlert('Message', 'warning');
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">🎯 Contrôles</div>
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="btn" onclick="playAll()">▶️ Lire Toutes</button>
+            <button class="btn" onclick="pauseAll()">⏸️ Pause Toutes</button>
+            <button class="btn" onclick="stopAll()">⏹️ Arrêter Toutes</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 60px; padding: 40px; background: rgba(255, 255, 255, 0.05); border-radius: 20px;">
+            <h2 style="color: #ff3ea5; margin-bottom: 15px;">📚 Documentation Complète</h2>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
+                Consultez le fichier <strong>ANIMATIONS_LOTTIE.md</strong> pour plus de détails
+            </p>
+            <a href="https://lottiefiles.com/featured-free-animations" target="_blank" class="btn">
+                🔍 Trouver Plus d'Animations
+            </a>
+        </div>
+    </div>
+
+    <!-- Conteneur pour les alertes de test -->
+    <div class="alert-demo" id="alertDemo"></div>
+
+    <script>
+        // Stocker toutes les animations
+        const animations = [];
+
+        // Charger toutes les animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Loader
+            animations.push(lottie.loadAnimation({
+                container: document.getElementById('loader1'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/8ec4eb98-c3e4-4d2f-a5b6-32aa99da7d9a/rX1jjNzPit.json'
+            }));
+
+            // État vide
+            animations.push(lottie.loadAnimation({
+                container: document.getElementById('empty1'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/0c3be5a0-6109-45ff-89ec-8a7db1e3f7d7/CtGm8bZvxU.json'
+            }));
+
+            // Hero
+            animations.push(lottie.loadAnimation({
+                container: document.getElementById('hero1'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/b7f9d8e8-0a0c-4d52-a5e0-3a4d9c8f7b6a/VZ3gIHxd2M.json'
+            }));
+
+            // Succès
+            animations.push(lottie.loadAnimation({
+                container: document.getElementById('success1'),
+                renderer: 'svg',
+                loop: false,
+                autoplay: true,
+                path: 'https://lottie.host/e9729a7c-8c92-4ab1-9ba8-093b6732e203/iOLLrbWYAc.json'
+            }));
+
+            // Erreur
+            animations.push(lottie.loadAnimation({
+                container: document.getElementById('error1'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/c1c7f68b-fa9e-4e3c-85e5-2bb7d23b6b1c/P0Bz7iQzGY.json'
+            }));
+
+            // Avertissement
+            animations.push(lottie.loadAnimation({
+                container: document.getElementById('warning1'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/f9bc6d36-8a2f-4b8a-8e42-c45e7eb4ce31/sLRfjVZkN1.json'
+            }));
+        });
+
+        // Contrôles
+        function playAll() {
+            animations.forEach(anim => anim.play());
+        }
+
+        function pauseAll() {
+            animations.forEach(anim => anim.pause());
+        }
+
+        function stopAll() {
+            animations.forEach(anim => anim.stop());
+        }
+
+        // Tester les alertes
+        function testAlert(type) {
+            const messages = {
+                success: 'Produit créé avec succès ! ✨',
+                error: 'Erreur lors de la sauvegarde ❌',
+                warning: 'Attention : vérifiez les données ⚠️'
+            };
+
+            const colors = {
+                success: 'rgba(16, 185, 129, 0.3)',
+                error: 'rgba(239, 68, 68, 0.3)',
+                warning: 'rgba(245, 158, 11, 0.3)'
+            };
+
+            const lottieUrls = {
+                success: 'https://lottie.host/e9729a7c-8c92-4ab1-9ba8-093b6732e203/iOLLrbWYAc.json',
+                error: 'https://lottie.host/c1c7f68b-fa9e-4e3c-85e5-2bb7d23b6b1c/P0Bz7iQzGY.json',
+                warning: 'https://lottie.host/f9bc6d36-8a2f-4b8a-8e42-c45e7eb4ce31/sLRfjVZkN1.json'
+            };
+
+            const container = document.getElementById('alertDemo');
+            const alert = document.createElement('div');
+            alert.className = 'demo-alert';
+            alert.style.background = colors[type];
+
+            const lottieDiv = document.createElement('div');
+            lottieDiv.className = 'demo-alert-icon';
+
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = messages[type];
+            messageDiv.style.flex = '1';
+
+            alert.appendChild(lottieDiv);
+            alert.appendChild(messageDiv);
+            container.appendChild(alert);
+
+            lottie.loadAnimation({
+                container: lottieDiv,
+                renderer: 'svg',
+                loop: type !== 'success',
+                autoplay: true,
+                path: lottieUrls[type]
+            });
+
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

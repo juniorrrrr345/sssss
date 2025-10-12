@@ -6,6 +6,7 @@
     <title>AVEC AMOUR - Accueil</title>
     <link rel="stylesheet" href="home-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
     <!-- Effet d'arrière-plan cosmique -->
@@ -24,6 +25,9 @@
 
     <!-- Arc-en-ciel décoratif -->
     <div class="rainbow-arc"></div>
+
+    <!-- Animation Lottie Hero -->
+    <div id="heroAnimation" style="position: fixed; top: 10%; right: 5%; width: 300px; height: 300px; z-index: 1; pointer-events: none; opacity: 0.6;"></div>
 
     <!-- Contenu principal -->
     <div class="container">
@@ -87,5 +91,18 @@
             <span class="nav-label">Contact</span>
         </a>
     </nav>
+
+    <script>
+        // Initialiser l'animation Lottie hero
+        document.addEventListener('DOMContentLoaded', () => {
+            lottie.loadAnimation({
+                container: document.getElementById('heroAnimation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/b7f9d8e8-0a0c-4d52-a5e0-3a4d9c8f7b6a/VZ3gIHxd2M.json' // Animation cosmique/shopping
+            });
+        });
+    </script>
 </body>
 </html>
