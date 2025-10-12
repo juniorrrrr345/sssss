@@ -619,6 +619,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">Gestion des Catégories</h2>
+                        <button class="btn btn-success" onclick="createNewCategory()">
+                            <i class="fas fa-plus"></i> Ajouter une Catégorie
+                        </button>
                     </div>
                     <div class="table-container">
                         <table>
@@ -631,11 +634,11 @@
                                 </tr>
                             </thead>
                             <tbody id="categoriesTableBody">
-                                <tr><td>Extract</td><td>Extraits premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Static-Sift</td><td>Static-Sift premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Frozen-Sift</td><td>Frozen-Sift qualité</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Dry-Sift</td><td>Dry-Sift artisanal</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Weed</td><td>Fleurs premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 2rem;">
+                                        <i class="fas fa-spinner fa-spin"></i> Chargement...
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
