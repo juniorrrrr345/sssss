@@ -524,18 +524,18 @@
         function populateCategoryFilter(categories) {
             const select = document.getElementById('categoryFilter');
             const options = categories.map(cat => 
-                `<option value="${cat.id}">${cat.name}</option>`
+                `<option value="${cat.id}">${cat.icon || '📦'} ${cat.name}</option>`
             ).join('');
-            select.innerHTML = `<option value="all">Toutes les catégories</option>${options}`;
+            select.innerHTML = `<option value="all">📦 Toutes les catégories</option>${options}`;
         }
 
         // Remplir le select des farms
         function populateFarmFilter(farms) {
             const select = document.getElementById('farmFilter');
             const options = farms.map(farm => 
-                `<option value="${farm.id}">🌿 ${farm.name}</option>`
+                `<option value="${farm.id}">${farm.name}</option>`
             ).join('');
-            select.innerHTML = `<option value="all">🌿 Tous les farms</option>${options}`;
+            select.innerHTML = `<option value="all">Toutes les farms</option>${options}`;
         }
 
         // Filtrer par catégorie
