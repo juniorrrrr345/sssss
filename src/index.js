@@ -673,40 +673,45 @@ async function createFarm(request, env, headers) {
 
 // PUT /api/farms/:id
 async function updateFarm(id, request, env, headers) {
-  const data = await request.json();
-  const slug = data.name ? generateSlug(data.name) : null;
-  
-  let updates = [];
-  let bindings = [];
-  
-  if (data.name) {
-    updates.push('name = ?');
-    bindings.push(data.name);
-    updates.push('slug = ?');
-    bindings.push(slug);
+  try {
+    const data = await request.json();
+    const slug = data.name ? generateSlug(data.name) : null;
+    
+    let updates = [];
+    let bindings = [];
+    
+    if (data.name) {
+      updates.push('name = ?');
+      bindings.push(data.name);
+      updates.push('slug = ?');
+      bindings.push(slug);
+    }
+    if (data.description !== undefined) {
+      updates.push('description = ?');
+      bindings.push(data.description);
+    }
+    if (data.country !== undefined) {
+      updates.push('country = ?');
+      bindings.push(data.country);
+    }
+    if (data.display_order !== undefined) {
+      updates.push('display_order = ?');
+      bindings.push(data.display_order);
+    }
+    
+    bindings.push(id);
+    
+    await env.DB.prepare(`
+      UPDATE farms 
+      SET ${updates.join(', ')}
+      WHERE id = ?
+    `).bind(...bindings).run();
+    
+    return jsonResponse({ success: true }, 200, headers);
+  } catch (error) {
+    console.error('Update farm error:', error);
+    return jsonResponse({ success: false, message: error.message }, 500, headers);
   }
-  if (data.description !== undefined) {
-    updates.push('description = ?');
-    bindings.push(data.description);
-  }
-  if (data.country !== undefined) {
-    updates.push('country = ?');
-    bindings.push(data.country);
-  }
-  if (data.display_order !== undefined) {
-    updates.push('display_order = ?');
-    bindings.push(data.display_order);
-  }
-  
-  bindings.push(id);
-  
-  await env.DB.prepare(`
-    UPDATE farms 
-    SET ${updates.join(', ')}
-    WHERE id = ?
-  `).bind(...bindings).run();
-  
-  return jsonResponse({ success: true }, 200, headers);
 }
 
 // DELETE /api/farms/:id
