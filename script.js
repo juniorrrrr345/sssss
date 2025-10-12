@@ -1,4 +1,4 @@
-// Données des produits basées sur l'image
+// Données des produits basées sur l'image avec support photos et vidéos
 const products = [
     {
         id: 1,
@@ -7,7 +7,12 @@ const products = [
         badge: "🔥 LIVE ROSIN",
         price: 200,
         unit: "/ 2g",
-        image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
+            { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+            { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 2,
@@ -16,7 +21,11 @@ const products = [
         badge: "💎 FROZEN USA us",
         price: 120,
         unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
+            { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 3,
@@ -25,7 +34,12 @@ const products = [
         badge: "🌿 TOPSHELF CALIFORNIA BRANDED us",
         price: 110,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
+            { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
+            { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 4,
@@ -34,7 +48,10 @@ const products = [
         badge: "🔥 TOPSHELF CALIFORNIA BRANDED us",
         price: 110,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 5,
@@ -43,7 +60,10 @@ const products = [
         badge: "💨 DRY us",
         price: 50,
         unit: "/ 3g",
-        image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 6,
@@ -52,7 +72,10 @@ const products = [
         badge: "🌿 TOPSHELF USA us",
         price: 110,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 7,
@@ -61,7 +84,10 @@ const products = [
         badge: "💎 TOPSHELF BRANDED us",
         price: 180,
         unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 8,
@@ -70,7 +96,10 @@ const products = [
         badge: "🌈 TOPSHELF BRANDED us",
         price: 180,
         unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 9,
@@ -79,7 +108,10 @@ const products = [
         badge: "💜 TOPSHELF BRANDED us",
         price: 100,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 10,
@@ -88,7 +120,10 @@ const products = [
         badge: "❄️ STATIC USA us",
         price: 170,
         unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 11,
@@ -97,7 +132,10 @@ const products = [
         badge: "💎 TOPSHELF BRANDED",
         price: 150,
         unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 12,
@@ -106,7 +144,10 @@ const products = [
         badge: "🔥 TOPSHELF USA",
         price: 130,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 13,
@@ -115,7 +156,10 @@ const products = [
         badge: "💜 TOPSHELF CALIFORNIA",
         price: 120,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 14,
@@ -124,7 +168,10 @@ const products = [
         badge: "💙 TOPSHELF BRANDED",
         price: 95,
         unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=800&h=600&fit=crop' }
+        ]
     },
     {
         id: 15,
@@ -133,7 +180,10 @@ const products = [
         badge: "👑 CLASSIC USA",
         price: 140,
         unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop"
+        image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop",
+        media: [
+            { type: 'image', url: 'https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=800&h=600&fit=crop' }
+        ]
     }
 ];
 
@@ -214,11 +264,8 @@ document.addEventListener('click', (e) => {
 
 // Fonction pour afficher les détails du produit
 function showProductDetails(product) {
-    alert(`🌿 ${product.name}\n\n` +
-          `Catégorie: ${product.category}\n` +
-          `${product.badge}\n\n` +
-          `Prix: ${product.price}€ ${product.unit}\n\n` +
-          `Cliquez pour ajouter au panier !`);
+    // Rediriger vers la page de détails du produit
+    window.location.href = `product-detail.html?id=${product.id}`;
 }
 
 // Animation de chargement
