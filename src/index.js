@@ -685,6 +685,11 @@ async function updateFarm(id, request, env, headers) {
 
 // DELETE /api/farms/:id
 async function deleteFarm(id, env, headers) {
-  await env.DB.prepare('DELETE FROM farms WHERE id = ?').bind(id).run();
-  return jsonResponse({ success: true }, 200, headers);
+  try {
+    await env.DB.prepare('DELETE FROM farms WHERE id = ?').bind(id).run();
+    return jsonResponse({ success: true, message: 'Farm deleted successfully' }, 200, headers);
+  } catch (error) {
+    console.error('Delete farm error:', error);
+    return jsonResponse({ success: false, message: error.message }, 500, headers);
+  }
 }

@@ -1091,7 +1091,3 @@ window.deleteServiceConfirm = deleteServiceConfirm;
 window.editSocialNetwork = editSocialNetwork;
 window.deleteSocialConfirm = deleteSocialConfirm;
 window.escapeHtml = escapeHtml;
-ceConfirm;
-window.editSocialNetwork = editSocialNetwork;
-window.deleteSocialConfirm = deleteSocialConfirm;
-window.escapeHtml = escapeHtml;
