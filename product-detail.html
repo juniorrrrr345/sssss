@@ -421,21 +421,34 @@
                 
                 currentProduct = data.product;
                 
+                console.log('Produit chargé:', currentProduct); // Debug
+                
                 // Parser les données JSON si nécessaire
-                if (typeof currentProduct.prices === 'string') {
+                if (currentProduct.prices_json && typeof currentProduct.prices_json === 'string') {
                     try {
-                        currentProduct.prices = JSON.parse(currentProduct.prices);
+                        currentProduct.prices = JSON.parse(currentProduct.prices_json);
                     } catch (e) {
+                        console.error('Erreur parsing prices_json:', e);
                         currentProduct.prices = [];
                     }
+                } else if (currentProduct.prices) {
+                    // Déjà parsé par l'API
+                    currentProduct.prices = currentProduct.prices;
+                } else {
+                    currentProduct.prices = [];
                 }
                 
-                if (typeof currentProduct.media === 'string') {
+                if (currentProduct.media_json && typeof currentProduct.media_json === 'string') {
                     try {
-                        currentProduct.media = JSON.parse(currentProduct.media);
+                        currentProduct.media = JSON.parse(currentProduct.media_json);
                     } catch (e) {
+                        console.error('Erreur parsing media_json:', e);
                         currentProduct.media = [];
                     }
+                } else if (currentProduct.media) {
+                    currentProduct.media = currentProduct.media;
+                } else {
+                    currentProduct.media = [];
                 }
                 
                 // Si pas de médias, utiliser l'image principale
@@ -452,17 +465,31 @@
 
                 // Mettre à jour les informations du produit
                 document.getElementById('productTitle').textContent = currentProduct.name;
-                document.getElementById('productBadge').innerHTML = `<i class="fas fa-star"></i> ${currentProduct.badge || currentProduct.category_icon || ''}`;
+                
+                // Badge avec vérification
+                const badgeText = currentProduct.badge || (currentProduct.category_icon ? currentProduct.category_icon + ' ' + currentProduct.category_name : '🌿 Premium');
+                document.getElementById('productBadge').innerHTML = `<i class="fas fa-star"></i> ${badgeText}`;
+                
+                // Farm avec vérification
+                const farmText = currentProduct.farm && currentProduct.farm.trim() !== '' ? currentProduct.farm : 'Non spécifié';
                 document.getElementById('productFarm').innerHTML = `
                     <i class="fas fa-leaf"></i>
-                    Farm: ${currentProduct.farm || 'N/A'}
+                    Farm: ${farmText}
                 `;
+                
+                // Vendor avec vérification
+                const vendorText = currentProduct.vendor && currentProduct.vendor.trim() !== '' ? currentProduct.vendor : 'Al Gran';
                 document.getElementById('productVendor').innerHTML = `
                     <div class="vendor-icon">
                         <i class="fas fa-user"></i>
                     </div>
-                    <span class="vendor-name">${currentProduct.vendor || 'Al Gran'}</span>
+                    <span class="vendor-name">${vendorText}</span>
                 `;
+                
+                console.log('Badge:', badgeText);
+                console.log('Farm:', farmText);
+                console.log('Vendor:', vendorText);
+                console.log('Prices:', currentProduct.prices);
 
                 // Générer le carousel de médias
                 generateMediaCarousel();
@@ -534,14 +561,32 @@
             const quantityContainer = document.getElementById('quantityOptions');
             quantityContainer.innerHTML = '';
 
+            console.log('Génération des quantités, prices:', currentProduct.prices);
+            
             // Utiliser les prix multiples si disponibles, sinon afficher le prix par défaut
-            const quantities = currentProduct.prices && currentProduct.prices.length > 0 
-                ? currentProduct.prices 
-                : [{ weight: currentProduct.unit || '3.5G', price: `${currentProduct.price}€` }];
+            let quantities = [];
+            
+            if (currentProduct.prices && Array.isArray(currentProduct.prices) && currentProduct.prices.length > 0) {
+                quantities = currentProduct.prices;
+                console.log('Utilisation des prix multiples:', quantities);
+            } else {
+                // Prix par défaut
+                const unitText = currentProduct.unit ? currentProduct.unit.replace('/', '').trim() : '3.5G';
+                quantities = [{ 
+                    weight: unitText, 
+                    price: `${currentProduct.price}€` 
+                }];
+                console.log('Utilisation du prix par défaut:', quantities);
+            }
 
             quantities.forEach((qty, index) => {
                 const option = document.createElement('div');
                 option.className = 'quantity-option';
+                if (index === 0) {
+                    option.classList.add('selected');
+                    selectedQuantity = qty.weight;
+                    selectedPrice = qty.price;
+                }
                 option.innerHTML = `
                     <div class="quantity-weight">${qty.weight}</div>
                     <div class="quantity-price">${qty.price}</div>
@@ -551,6 +596,8 @@
                 };
                 quantityContainer.appendChild(option);
             });
+            
+            console.log('Quantités générées:', quantities.length);
         }
 
         // Fonction pour afficher un slide
