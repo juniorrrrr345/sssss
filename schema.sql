@@ -21,11 +21,13 @@ CREATE TABLE IF NOT EXISTS products (
     name TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     description TEXT,
+    long_description TEXT,
     category_id INTEGER NOT NULL,
     price REAL NOT NULL,
     unit TEXT DEFAULT '/ 3.5g',
     badge TEXT,
     image_url TEXT,
+    video_url TEXT,
     stock_quantity INTEGER DEFAULT 0,
     is_active INTEGER DEFAULT 1,
     is_featured INTEGER DEFAULT 0,
@@ -33,6 +35,29 @@ CREATE TABLE IF NOT EXISTS products (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
+-- Table des variantes de prix (plusieurs prix/quantités)
+CREATE TABLE IF NOT EXISTS product_variants (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    quantity TEXT NOT NULL,
+    unit TEXT NOT NULL,
+    price REAL NOT NULL,
+    stock INTEGER DEFAULT 0,
+    display_order INTEGER DEFAULT 0,
+    is_active INTEGER DEFAULT 1,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- Table de galerie photos (plusieurs photos par produit)
+CREATE TABLE IF NOT EXISTS product_gallery (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    image_url TEXT NOT NULL,
+    display_order INTEGER DEFAULT 0,
+    is_main INTEGER DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 -- Table des paramètres de la boutique
@@ -103,6 +128,8 @@ CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
 CREATE INDEX IF NOT EXISTS idx_images_entity ON images(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_product_variants_product ON product_variants(product_id);
+CREATE INDEX IF NOT EXISTS idx_product_gallery_product ON product_gallery(product_id);
 
 -- Trigger pour mettre à jour updated_at automatiquement
 CREATE TRIGGER IF NOT EXISTS update_products_timestamp 
