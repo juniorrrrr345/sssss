@@ -645,15 +645,32 @@
                     <form id="settingsForm">
                         <div class="form-group">
                             <label>Nom de la boutique</label>
-                            <input type="text" value="Al Gran" class="form-control">
+                            <input type="text" id="shopName" class="form-control" placeholder="Al Gran">
                         </div>
                         <div class="form-group">
                             <label>Email de contact</label>
-                            <input type="email" class="form-control">
+                            <input type="email" id="shopEmail" class="form-control" placeholder="contact@algran.com">
                         </div>
                         <div class="form-group">
-                            <label>WhatsApp</label>
-                            <input type="text" class="form-control">
+                            <label>Numéro WhatsApp</label>
+                            <input type="text" id="shopWhatsapp" class="form-control" placeholder="+33612345678">
+                        </div>
+                        <div class="form-group">
+                            <label>Telegram</label>
+                            <input type="text" id="shopTelegram" class="form-control" placeholder="@algran">
+                        </div>
+                        <div class="form-group">
+                            <label>Instagram</label>
+                            <input type="text" id="shopInstagram" class="form-control" placeholder="@algran">
+                        </div>
+                        <div class="form-group">
+                            <label>Description de la boutique</label>
+                            <textarea id="shopDescription" class="form-control" rows="3" placeholder="Décrivez votre boutique..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Mot de passe admin</label>
+                            <input type="password" id="adminPassword" class="form-control" placeholder="Laissez vide pour ne pas changer">
+                            <small style="color: rgba(255,255,255,0.6);">⚠️ Changez le mot de passe par défaut !</small>
                         </div>
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save"></i> Sauvegarder

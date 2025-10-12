@@ -65,6 +65,9 @@ function initEventListeners() {
     document.getElementById('closeModalBtn').addEventListener('click', closeProductModal);
     document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
     
+    // Formulaire paramètres
+    document.getElementById('settingsForm').addEventListener('submit', saveSettings);
+    
     // Fermer modal en cliquant à l'extérieur
     document.getElementById('productModal').addEventListener('click', (e) => {
         if (e.target.id === 'productModal') {
@@ -426,12 +429,73 @@ async function loadSettings() {
         const response = await fetch(`${API_URL}/api/settings`);
         const data = await response.json();
         
-        if (data.success) {
+        if (data.success && data.settings) {
             // Remplir le formulaire avec les valeurs actuelles
-            console.log('Settings loaded:', data.settings);
+            const settings = {};
+            data.settings.forEach(setting => {
+                settings[setting.key] = setting.value;
+            });
+            
+            document.getElementById('shopName').value = settings.shop_name || 'Al Gran';
+            document.getElementById('shopEmail').value = settings.shop_email || '';
+            document.getElementById('shopWhatsapp').value = settings.shop_whatsapp || '';
+            document.getElementById('shopTelegram').value = settings.shop_telegram || '';
+            document.getElementById('shopInstagram').value = settings.shop_instagram || '';
+            document.getElementById('shopDescription').value = settings.shop_description || '';
+            
+            console.log('Settings loaded:', settings);
         }
     } catch (error) {
         console.error('Error loading settings:', error);
+        showAlert('Erreur lors du chargement des paramètres', 'error');
+    }
+}
+
+// Sauvegarder les paramètres
+async function saveSettings(e) {
+    e.preventDefault();
+    
+    const settingsData = {
+        shop_name: document.getElementById('shopName').value,
+        shop_email: document.getElementById('shopEmail').value,
+        shop_whatsapp: document.getElementById('shopWhatsapp').value,
+        shop_telegram: document.getElementById('shopTelegram').value,
+        shop_instagram: document.getElementById('shopInstagram').value,
+        shop_description: document.getElementById('shopDescription').value
+    };
+    
+    // Si un nouveau mot de passe est fourni
+    const newPassword = document.getElementById('adminPassword').value;
+    if (newPassword) {
+        settingsData.admin_password = newPassword;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/api/settings`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settingsData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('✅ Paramètres sauvegardés avec succès !', 'success');
+            document.getElementById('adminPassword').value = ''; // Vider le champ mot de passe
+            
+            // Si le mot de passe a été changé, déconnecter l'utilisateur
+            if (newPassword) {
+                showAlert('⚠️ Mot de passe changé ! Vous allez être déconnecté...', 'warning');
+                setTimeout(() => {
+                    handleLogout();
+                }, 2000);
+            }
+        } else {
+            showAlert('❌ Erreur: ' + (data.error || 'Erreur inconnue'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showAlert('❌ Erreur lors de la sauvegarde', 'error');
     }
 }
 
