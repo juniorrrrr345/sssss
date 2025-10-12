@@ -72,23 +72,32 @@
         // Charger les informations de contact depuis l'API
         async function loadContactInfo() {
             try {
-                const response = await fetch(`${API_URL}/api/settings`);
-                const data = await response.json();
+                // Charger à la fois les settings et les réseaux sociaux personnalisés
+                const [settingsResponse, socialResponse] = await Promise.all([
+                    fetch(`${API_URL}/api/settings`),
+                    fetch(`${API_URL}/api/social-networks`)
+                ]);
                 
-                if (data.success && data.settings) {
+                const settingsData = await settingsResponse.json();
+                const socialData = await socialResponse.json();
+                
+                // Mettre à jour le titre avec le nom de la boutique
+                if (settingsData.success && settingsData.settings) {
+                    const shopName = settingsData.settings.shop_name || 'Al Gran';
+                    document.querySelector('.logo-text').textContent = shopName;
+                    document.title = `${shopName} - Contact`;
+                }
+                
+                // Si des réseaux sociaux personnalisés existent, les utiliser
+                if (socialData.success && socialData.networks && socialData.networks.length > 0) {
+                    displayCustomSocialNetworks(socialData.networks);
+                } 
+                // Sinon utiliser les settings par défaut
+                else if (settingsData.success && settingsData.settings) {
                     let settings = {};
-                    
-                    // Si data.settings est un tableau
-                    if (Array.isArray(data.settings)) {
-                        data.settings.forEach(setting => {
-                            settings[setting.key] = setting.value;
-                        });
-                    } 
-                    // Si data.settings est déjà un objet
-                    else if (typeof data.settings === 'object') {
-                        settings = data.settings;
+                    if (typeof settingsData.settings === 'object') {
+                        settings = settingsData.settings;
                     }
-                    
                     displayContactCards(settings);
                 } else {
                     displayDefaultCards();
@@ -97,6 +106,28 @@
                 console.error('Erreur lors du chargement des contacts:', error);
                 displayDefaultCards();
             }
+        }
+
+        // Afficher les réseaux sociaux personnalisés
+        function displayCustomSocialNetworks(networks) {
+            const container = document.getElementById('contactCards');
+            
+            const cards = networks.map(network => `
+                <a href="${network.url}" class="contact-card" target="_blank">
+                    <div class="card-icon" style="background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));">
+                        <span style="font-size: 2rem;">${network.icon}</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>${network.name}</h3>
+                        <p>Cliquez pour accéder</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            `).join('');
+            
+            container.innerHTML = cards || displayDefaultCards();
         }
 
         // Afficher les cartes de contact

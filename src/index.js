@@ -113,6 +113,44 @@ export default {
         return await uploadImage(request, env, corsHeaders);
       }
 
+      // Social Networks Routes
+      if (path === '/api/social-networks' && method === 'GET') {
+        return await getSocialNetworks(env, corsHeaders);
+      }
+
+      if (path === '/api/social-networks' && method === 'POST') {
+        return await createSocialNetwork(request, env, corsHeaders);
+      }
+
+      if (path.match(/^\/api\/social-networks\/\d+$/) && method === 'PUT') {
+        const id = path.split('/')[3];
+        return await updateSocialNetwork(id, request, env, corsHeaders);
+      }
+
+      if (path.match(/^\/api\/social-networks\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteSocialNetwork(id, env, corsHeaders);
+      }
+
+      // Services Routes
+      if (path === '/api/services' && method === 'GET') {
+        return await getServices(env, corsHeaders);
+      }
+
+      if (path === '/api/services' && method === 'POST') {
+        return await createService(request, env, corsHeaders);
+      }
+
+      if (path.match(/^\/api\/services\/\d+$/) && method === 'PUT') {
+        const id = path.split('/')[3];
+        return await updateService(id, request, env, corsHeaders);
+      }
+
+      if (path.match(/^\/api\/services\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteService(id, env, corsHeaders);
+      }
+
       return jsonResponse({ error: 'Route not found' }, 404, corsHeaders);
       
     } catch (error) {
@@ -452,4 +490,102 @@ async function uploadImage(request, env, headers) {
     console.error('Upload error:', error);
     return jsonResponse({ error: 'Upload failed: ' + error.message }, 500, headers);
   }
+}
+
+// ==================== SOCIAL NETWORKS ====================
+
+// GET /api/social-networks
+async function getSocialNetworks(env, headers) {
+  try {
+    const { results } = await env.DB.prepare(`
+      SELECT * FROM social_networks 
+      WHERE is_active = 1 
+      ORDER BY display_order ASC
+    `).all();
+    
+    return jsonResponse({ success: true, networks: results }, 200, headers);
+  } catch (error) {
+    return jsonResponse({ success: true, networks: [] }, 200, headers);
+  }
+}
+
+// POST /api/social-networks
+async function createSocialNetwork(request, env, headers) {
+  const data = await request.json();
+  
+  const { results } = await env.DB.prepare(`
+    INSERT INTO social_networks (name, icon, url, display_order)
+    VALUES (?, ?, ?, ?)
+    RETURNING *
+  `).bind(data.name, data.icon, data.url, data.display_order || 0).all();
+  
+  return jsonResponse({ success: true, network: results[0] }, 201, headers);
+}
+
+// PUT /api/social-networks/:id
+async function updateSocialNetwork(id, request, env, headers) {
+  const data = await request.json();
+  
+  await env.DB.prepare(`
+    UPDATE social_networks 
+    SET name = ?, icon = ?, url = ?, display_order = ?
+    WHERE id = ?
+  `).bind(data.name, data.icon, data.url, data.display_order || 0, id).run();
+  
+  return jsonResponse({ success: true }, 200, headers);
+}
+
+// DELETE /api/social-networks/:id
+async function deleteSocialNetwork(id, env, headers) {
+  await env.DB.prepare('DELETE FROM social_networks WHERE id = ?').bind(id).run();
+  return jsonResponse({ success: true }, 200, headers);
+}
+
+// ==================== SERVICES ====================
+
+// GET /api/services
+async function getServices(env, headers) {
+  try {
+    const { results } = await env.DB.prepare(`
+      SELECT * FROM services 
+      WHERE is_active = 1 
+      ORDER BY display_order ASC
+    `).all();
+    
+    return jsonResponse({ success: true, services: results }, 200, headers);
+  } catch (error) {
+    return jsonResponse({ success: true, services: [] }, 200, headers);
+  }
+}
+
+// POST /api/services
+async function createService(request, env, headers) {
+  const data = await request.json();
+  
+  const { results } = await env.DB.prepare(`
+    INSERT INTO services (title, icon, content, display_order)
+    VALUES (?, ?, ?, ?)
+    RETURNING *
+  `).bind(data.title, data.icon, data.content, data.display_order || 0).all();
+  
+  return jsonResponse({ success: true, service: results[0] }, 201, headers);
+}
+
+// PUT /api/services/:id
+async function updateService(id, request, env, headers) {
+  const data = await request.json();
+  
+  await env.DB.prepare(`
+    UPDATE services 
+    SET title = ?, icon = ?, content = ?, display_order = ?
+    WHERE id = ?
+  `).bind(data.title, data.icon, data.content, data.display_order || 0, id).run();
+  
+  return jsonResponse({ success: true }, 200, headers);
+}
+
+// DELETE /api/services/:id
+async function deleteService(id, env, headers) {
+  await env.DB.prepare('DELETE FROM services WHERE id = ?').bind(id).run();
+  return jsonResponse({ success: true }, 200, headers);
 }

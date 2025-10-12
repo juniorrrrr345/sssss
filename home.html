@@ -26,37 +26,12 @@
     <div class="rainbow-arc"></div>
 
     <!-- Contenu principal -->
-    <div class="container">
-        <!-- Section Nos Services -->
-        <section class="service-section">
-            <h2 class="section-title">
-                <i class="fas fa-heart"></i>
-                Nos Services
-            </h2>
-            <div class="section-content" id="serviceContent">
-                <p>Chargement des informations...</p>
-            </div>
-        </section>
-
-        <!-- Section Zone de Livraison -->
-        <section class="delivery-section">
-            <h2 class="section-title">
-                <i class="fas fa-map-marker-alt"></i>
-                Zone de Livraison
-            </h2>
-            <div class="section-content">
-                <div class="department-grid">
-                    <div class="department-badge">75</div>
-                    <div class="department-badge">77</div>
-                    <div class="department-badge">78</div>
-                    <div class="department-badge">91</div>
-                    <div class="department-badge">92</div>
-                    <div class="department-badge">93</div>
-                    <div class="department-badge">94</div>
-                    <div class="department-badge">95</div>
-                </div>
-            </div>
-        </section>
+    <div class="container" id="servicesContainer">
+        <!-- Les services seront chargés dynamiquement ici -->
+        <div style="text-align: center; padding: 3rem; color: rgba(255,255,255,0.6);">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+            <p style="margin-top: 1rem;">Chargement des services...</p>
+        </div>
     </div>
 
     <!-- Bas de page / Navigation -->
@@ -94,40 +69,87 @@
         // Charger les informations de la boutique
         async function loadShopInfo() {
             try {
-                const response = await fetch(`${API_URL}/api/settings`);
-                const data = await response.json();
+                const [settingsResponse, servicesResponse] = await Promise.all([
+                    fetch(`${API_URL}/api/settings`),
+                    fetch(`${API_URL}/api/services`)
+                ]);
                 
-                if (data.success && data.settings) {
-                    const settings = data.settings;
-                    
-                    // Mettre à jour le nom de la boutique dans le logo
-                    const shopName = settings.shop_name || 'AVEC AMOUR';
-                    document.querySelector('.giant-logo').textContent = shopName.split(' ')[0] || 'AVEC';
-                    document.querySelector('.logo-subtitle').textContent = shopName.split(' ')[1] || 'Amour';
-                    
-                    // Mettre à jour la description
-                    const description = settings.shop_description || 
-                        'Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀';
-                    
-                    document.getElementById('serviceContent').innerHTML = `
-                        <p>Bienvenue sur ${shopName} ! ${description}</p>
-                        <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
-                    `;
+                const settingsData = await settingsResponse.json();
+                const servicesData = await servicesResponse.json();
+                
+                // Mettre à jour le nom de la boutique
+                if (settingsData.success && settingsData.settings) {
+                    const shopName = settingsData.settings.shop_name || 'AVEC AMOUR';
+                    const words = shopName.split(' ');
+                    document.querySelector('.giant-logo').textContent = words[0] || 'AVEC';
+                    document.querySelector('.logo-subtitle').textContent = words.slice(1).join(' ') || 'Amour';
+                    document.title = `${shopName} - Accueil`;
+                }
+                
+                // Afficher les services
+                if (servicesData.success && servicesData.services && servicesData.services.length > 0) {
+                    displayServices(servicesData.services);
                 } else {
-                    // Valeurs par défaut
-                    document.getElementById('serviceContent').innerHTML = `
-                        <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
-                        <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
-                    `;
+                    displayDefaultServices();
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                // Valeurs par défaut en cas d'erreur
-                document.getElementById('serviceContent').innerHTML = `
-                    <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
-                    <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
-                `;
+                displayDefaultServices();
             }
+        }
+
+        // Afficher les services
+        function displayServices(services) {
+            const container = document.getElementById('servicesContainer');
+            
+            const servicesHTML = services.map(service => `
+                <section class="service-section">
+                    <h2 class="section-title">
+                        <span style="font-size: 1.5rem;">${service.icon}</span>
+                        ${service.title}
+                    </h2>
+                    <div class="section-content">
+                        ${service.content}
+                    </div>
+                </section>
+            `).join('');
+            
+            container.innerHTML = servicesHTML;
+        }
+
+        // Afficher les services par défaut
+        function displayDefaultServices() {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = `
+                <section class="service-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-heart"></i>
+                        Nos Services
+                    </h2>
+                    <div class="section-content">
+                        <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
+                        <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+                    </div>
+                </section>
+                <section class="delivery-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Zone de Livraison
+                    </h2>
+                    <div class="section-content">
+                        <div class="department-grid">
+                            <div class="department-badge">75</div>
+                            <div class="department-badge">77</div>
+                            <div class="department-badge">78</div>
+                            <div class="department-badge">91</div>
+                            <div class="department-badge">92</div>
+                            <div class="department-badge">93</div>
+                            <div class="department-badge">94</div>
+                            <div class="department-badge">95</div>
+                        </div>
+                    </div>
+                </section>
+            `;
         }
 
         // Charger au démarrage

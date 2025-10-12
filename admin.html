@@ -506,6 +506,12 @@
                 <li class="nav-item" data-section="categories">
                     <i class="fas fa-th"></i> Catégories
                 </li>
+                <li class="nav-item" data-section="services">
+                    <i class="fas fa-concierge-bell"></i> Services
+                </li>
+                <li class="nav-item" data-section="social">
+                    <i class="fas fa-share-alt"></i> Réseaux Sociaux
+                </li>
                 <li class="nav-item" data-section="settings">
                     <i class="fas fa-cog"></i> Paramètres
                 </li>
@@ -630,6 +636,70 @@
                                 <tr><td>Frozen-Sift</td><td>Frozen-Sift qualité</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
                                 <tr><td>Dry-Sift</td><td>Dry-Sift artisanal</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
                                 <tr><td>Weed</td><td>Fleurs premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section class="content-section" id="services">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Gestion des Services</h2>
+                        <button class="btn btn-success" id="addServiceBtn">
+                            <i class="fas fa-plus"></i> Ajouter un Service
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Titre</th>
+                                    <th>Icône</th>
+                                    <th>Contenu</th>
+                                    <th>Ordre</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 2rem;">
+                                        <i class="fas fa-spinner fa-spin"></i> Chargement...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Networks Section -->
+            <section class="content-section" id="social">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Gestion des Réseaux Sociaux</h2>
+                        <button class="btn btn-success" id="addSocialBtn">
+                            <i class="fas fa-plus"></i> Ajouter un Réseau Social
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Icône</th>
+                                    <th>URL</th>
+                                    <th>Ordre</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="socialTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 2rem;">
+                                        <i class="fas fa-spinner fa-spin"></i> Chargement...
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

@@ -68,6 +68,10 @@ function initEventListeners() {
     // Formulaire paramètres
     document.getElementById('settingsForm').addEventListener('submit', saveSettings);
     
+    // Boutons Services et Social
+    document.getElementById('addServiceBtn').addEventListener('click', () => openServiceModal());
+    document.getElementById('addSocialBtn').addEventListener('click', () => openSocialModal());
+    
     // Fermer modal en cliquant à l'extérieur
     document.getElementById('productModal').addEventListener('click', (e) => {
         if (e.target.id === 'productModal') {
@@ -117,6 +121,8 @@ function handleNavigation(item) {
         dashboard: 'Dashboard',
         products: 'Gestion des Produits',
         categories: 'Gestion des Catégories',
+        services: 'Gestion des Services',
+        social: 'Réseaux Sociaux',
         settings: 'Paramètres'
     };
     document.getElementById('pageTitle').textContent = titles[section];
@@ -541,7 +547,273 @@ function showAlert(message, type = 'success') {
     }, 5000);
 }
 
+// ==================== SERVICES ====================
+
+let services = [];
+
+// Charger les services
+async function loadServices() {
+    try {
+        const response = await fetch(`${API_URL}/api/services`);
+        const data = await response.json();
+        
+        if (data.success) {
+            services = data.services || [];
+            displayServices(services);
+        }
+    } catch (error) {
+        console.error('Error loading services:', error);
+        showAlert('Erreur lors du chargement des services', 'error');
+    }
+}
+
+// Afficher les services
+function displayServices(servicesToDisplay) {
+    const tbody = document.getElementById('servicesTableBody');
+    
+    if (servicesToDisplay.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Aucun service</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = servicesToDisplay.map(service => `
+        <tr>
+            <td>${service.title}</td>
+            <td style="font-size: 1.5rem;">${service.icon}</td>
+            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${service.content.substring(0, 80)}...</td>
+            <td>${service.display_order}</td>
+            <td>
+                <button class="btn btn-primary" onclick="editService(${service.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteServiceConfirm(${service.id}, '${service.title}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Ouvrir modal service
+function openServiceModal(serviceId = null) {
+    const title = serviceId ? prompt('Titre du service:', services.find(s => s.id === serviceId)?.title || '') : prompt('Titre du service:', '');
+    if (!title) return;
+    
+    const icon = prompt('Icône (emoji):', serviceId ? services.find(s => s.id === serviceId)?.icon : '📝');
+    if (!icon) return;
+    
+    const content = prompt('Contenu du service:', serviceId ? services.find(s => s.id === serviceId)?.content : '');
+    if (!content) return;
+    
+    const order = prompt('Ordre d\'affichage (nombre):', serviceId ? services.find(s => s.id === serviceId)?.display_order : services.length + 1);
+    
+    const serviceData = { title, icon, content, display_order: parseInt(order) || 0 };
+    
+    if (serviceId) {
+        updateServiceAction(serviceId, serviceData);
+    } else {
+        createServiceAction(serviceData);
+    }
+}
+
+// Créer un service
+async function createServiceAction(data) {
+    try {
+        const response = await fetch(`${API_URL}/api/services`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Service créé avec succès !', 'success');
+            loadServices();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la création', 'error');
+    }
+}
+
+// Modifier un service
+function editService(id) {
+    openServiceModal(id);
+}
+
+// Mettre à jour un service
+async function updateServiceAction(id, data) {
+    try {
+        const response = await fetch(`${API_URL}/api/services/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Service modifié avec succès !', 'success');
+            loadServices();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la mise à jour', 'error');
+    }
+}
+
+// Confirmer suppression service
+function deleteServiceConfirm(id, title) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer "${title}" ?`)) {
+        deleteServiceAction(id);
+    }
+}
+
+// Supprimer un service
+async function deleteServiceAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/services/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Service supprimé avec succès !', 'success');
+            loadServices();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
+// ==================== RÉSEAUX SOCIAUX ====================
+
+let socialNetworks = [];
+
+// Charger les réseaux sociaux
+async function loadSocialNetworks() {
+    try {
+        const response = await fetch(`${API_URL}/api/social-networks`);
+        const data = await response.json();
+        
+        if (data.success) {
+            socialNetworks = data.networks || [];
+            displaySocialNetworks(socialNetworks);
+        }
+    } catch (error) {
+        console.error('Error loading social networks:', error);
+        showAlert('Erreur lors du chargement des réseaux sociaux', 'error');
+    }
+}
+
+// Afficher les réseaux sociaux
+function displaySocialNetworks(networksToDisplay) {
+    const tbody = document.getElementById('socialTableBody');
+    
+    if (networksToDisplay.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Aucun réseau social configuré</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = networksToDisplay.map(network => `
+        <tr>
+            <td>${network.name}</td>
+            <td style="font-size: 1.5rem;">${network.icon}</td>
+            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${network.url}</td>
+            <td>${network.display_order}</td>
+            <td>
+                <button class="btn btn-primary" onclick="editSocialNetwork(${network.id})" style="margin-right: 0.5rem;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger" onclick="deleteSocialConfirm(${network.id}, '${network.name}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Ouvrir modal réseau social
+function openSocialModal(networkId = null) {
+    const name = networkId ? prompt('Nom du réseau:', socialNetworks.find(s => s.id === networkId)?.name || '') : prompt('Nom du réseau (ex: WhatsApp, Instagram):', '');
+    if (!name) return;
+    
+    const icon = prompt('Icône (emoji ou classe Font Awesome):', networkId ? socialNetworks.find(s => s.id === networkId)?.icon : '📱');
+    if (!icon) return;
+    
+    const url = prompt('URL complète:', networkId ? socialNetworks.find(s => s.id === networkId)?.url : '');
+    if (!url) return;
+    
+    const order = prompt('Ordre d\'affichage:', networkId ? socialNetworks.find(s => s.id === networkId)?.display_order : socialNetworks.length + 1);
+    
+    const networkData = { name, icon, url, display_order: parseInt(order) || 0 };
+    
+    if (networkId) {
+        updateSocialNetworkAction(networkId, networkData);
+    } else {
+        createSocialNetworkAction(networkData);
+    }
+}
+
+// Créer un réseau social
+async function createSocialNetworkAction(data) {
+    try {
+        const response = await fetch(`${API_URL}/api/social-networks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Réseau social ajouté avec succès !', 'success');
+            loadSocialNetworks();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la création', 'error');
+    }
+}
+
+// Modifier un réseau social
+function editSocialNetwork(id) {
+    openSocialModal(id);
+}
+
+// Mettre à jour un réseau social
+async function updateSocialNetworkAction(id, data) {
+    try {
+        const response = await fetch(`${API_URL}/api/social-networks/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Réseau social modifié avec succès !', 'success');
+            loadSocialNetworks();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la mise à jour', 'error');
+    }
+}
+
+// Confirmer suppression réseau social
+function deleteSocialConfirm(id, name) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer "${name}" ?`)) {
+        deleteSocialNetworkAction(id);
+    }
+}
+
+// Supprimer un réseau social
+async function deleteSocialNetworkAction(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/social-networks/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Réseau social supprimé avec succès !', 'success');
+            loadSocialNetworks();
+        }
+    } catch (error) {
+        showAlert('Erreur lors de la suppression', 'error');
+    }
+}
+
 // Exposer les fonctions globalement pour les boutons inline
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.editService = editService;
+window.deleteServiceConfirm = deleteServiceConfirm;
+window.editSocialNetwork = editSocialNetwork;
+window.deleteSocialConfirm = deleteSocialConfirm;
