@@ -262,13 +262,13 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(10, 14, 39, 0.95);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-around;
-            padding: 0.5rem 0;
-            z-index: 1000;
+            padding: 0.8rem 0;
+            z-index: 100;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
         }
 
@@ -277,10 +277,12 @@
             flex-direction: column;
             align-items: center;
             gap: 0.3rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
             padding: 0.5rem 1rem;
+            position: relative;
         }
 
         .nav-icon-circle {
@@ -291,19 +293,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 2px solid transparent;
         }
 
         .nav-item.active .nav-icon-circle {
-            background: linear-gradient(135deg, #ff3ea5, #a855f7);
+            background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 20px rgba(255, 62, 165, 0.5);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
         }
 
         .nav-item.active {
-            color: white;
+            color: #ffffff;
         }
 
         .nav-item.active .nav-icon-circle i {
@@ -311,13 +313,19 @@
         }
 
         .nav-item:not(.active):hover .nav-icon-circle {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 62, 165, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
         }
 
         .nav-item:not(.active):hover {
-            color: white;
+            color: #ffffff;
+        }
+        
+        .nav-label {
+            font-weight: 500;
+            margin-top: 0.2rem;
+            color: inherit;
         }
 
         .nav-label {
