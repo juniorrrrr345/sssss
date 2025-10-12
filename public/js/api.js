@@ -1,5 +1,5 @@
 // API Client pour communiquer avec le Worker Cloudflare
-const API_BASE = '/api';
+const API_BASE = 'https://algran-api.calitek-junior.workers.dev/api';
 
 class API {
     constructor() {
