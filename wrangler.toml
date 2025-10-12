@@ -1,11 +1,7 @@
 name = "boutique-avec-amour"
-main = "functions/api/[[route]].js"
 compatibility_date = "2024-01-01"
 account_id = "7979421604bd07b3bd34d3ed96222512"
-
-# Configuration du site statique
-[site]
-bucket = "./public"
+pages_build_output_dir = "public"
 
 # Binding D1 Database
 [[d1_databases]]
