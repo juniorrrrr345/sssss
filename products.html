@@ -270,8 +270,11 @@
 
     <script src="script.js"></script>
     <script>
-        // Données des produits - correspondant à l'image
-        const products = [
+        // Configuration API
+        const API_URL = 'https://algran-api.calitek-junior.workers.dev';
+        
+        // Données des produits - seront chargées depuis l'API
+        let products = [
             {
                 id: 1,
                 name: "100K ROSIN",
@@ -435,8 +438,43 @@
             }
         });
 
-        // Affichage initial
-        displayProducts(filteredProducts);
+        // Charger les produits depuis l'API
+        async function loadProductsFromAPI() {
+            try {
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+                
+                if (data.success && data.products && data.products.length > 0) {
+                    // Transformer les données de l'API
+                    products = data.products.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        farm: p.category_name || 'N/A',
+                        badge: p.badge || '⭐',
+                        price: p.price,
+                        unit: p.unit || '/ 3.5g',
+                        image: p.image_url || 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop'
+                    }));
+                    
+                    filteredProducts = [...products];
+                    displayProducts(filteredProducts);
+                    console.log(`✅ ${products.length} produits chargés depuis l'API`);
+                } else {
+                    // Utiliser les produits statiques si l'API ne retourne rien
+                    console.warn('⚠️ Utilisation des produits statiques');
+                    displayProducts(filteredProducts);
+                }
+            } catch (error) {
+                console.error('❌ Erreur:', error);
+                // Afficher les produits statiques en cas d'erreur
+                displayProducts(filteredProducts);
+            }
+        }
+
+        // Charger les produits au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProductsFromAPI();
+        });
     </script>
 </body>
 </html>
