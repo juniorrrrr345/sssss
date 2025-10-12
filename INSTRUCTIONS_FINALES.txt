@@ -1,0 +1,79 @@
+🎯 INSTRUCTIONS FINALES - DERNIÈRES ÉTAPES
+==========================================
+
+✅ BONNE NOUVELLE : La colonne video_url existe déjà !
+   L'erreur "duplicate column name" est NORMALE et signifie que la colonne est déjà là.
+
+❌ PROBLÈME RESTANT : Erreurs dans le panel admin (cache du navigateur)
+
+==========================================
+📋 SUIVEZ CES ÉTAPES EXACTEMENT :
+==========================================
+
+1️⃣ GIT PULL (récupérer les dernières corrections)
+   
+   cd C:\Users\PC\Documents\sssss
+   git pull origin cursor/deploy-local-web-store-from-github-901c
+
+2️⃣ DÉPLOYER L'API
+   
+   npm run deploy
+
+3️⃣ VIDER LE CACHE DU NAVIGATEUR COMPLÈTEMENT
+   
+   Option A - Vider le cache (RECOMMANDÉ) :
+   - Appuyez sur Ctrl + Shift + Delete
+   - Cochez "Images et fichiers en cache"
+   - Cochez "Cookies et données de site"
+   - Cliquez sur "Effacer les données"
+   
+   Option B - Mode incognito :
+   - Ctrl + Shift + N (Chrome)
+   - Ctrl + Shift + P (Firefox)
+   - Allez sur http://localhost:8005/admin.html
+
+4️⃣ REDÉMARRER LE SERVEUR
+   
+   python -m http.server 8005
+
+5️⃣ RECHARGER LA PAGE
+   
+   Allez sur http://localhost:8005/admin.html
+   Appuyez sur Ctrl + Shift + R plusieurs fois
+
+==========================================
+🔍 VÉRIFIER SI farm_id EXISTE DANS LA BDD
+==========================================
+
+Si vous voulez vérifier si la colonne farm_id existe, exécutez :
+
+wrangler d1 execute algran-db --remote --command="PRAGMA table_info(products);"
+
+Vous devriez voir :
+- farm_id
+- video_url  
+- prices
+
+Si farm_id N'EXISTE PAS, exécutez cette commande UNE SEULE FOIS :
+
+wrangler d1 execute algran-db --remote --command="ALTER TABLE products ADD COLUMN farm_id INTEGER;"
+
+==========================================
+✅ APRÈS CES ÉTAPES :
+==========================================
+
+✅ Plus d'erreurs dans la console
+✅ Vous pouvez modifier les produits
+✅ Les vidéos s'enregistrent
+✅ Les farms s'enregistrent
+✅ Le panel admin fonctionne parfaitement
+
+==========================================
+⚠️ SI ÇA NE MARCHE TOUJOURS PAS :
+==========================================
+
+Envoyez-moi :
+1. Le résultat de : wrangler d1 execute algran-db --remote --command="PRAGMA table_info(products);"
+2. Une capture d'écran des erreurs dans la console (F12)
+
+==========================================
