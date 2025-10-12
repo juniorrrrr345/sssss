@@ -1014,27 +1014,41 @@ function removeVariant(id) {
     document.getElementById(`variant-${id}`).remove();
 }
 
-// ===== GESTION DES RÉSEAUX SOCIAUX =====
+// ===== GESTION DES RÉSEAUX SOCIAUX (via Settings JSON) =====
 
-async function loadSocialLinks() {
+let currentSocialLinks = [];
+
+async function loadSocialSettings() {
     try {
-        const response = await fetch(`${API_URL}/api/social-links`);
+        const response = await fetch(`${API_URL}/api/settings`);
         const data = await response.json();
         
-        if (data.success) {
-            socialLinks = data.social_links;
-            displaySocialLinks(socialLinks);
+        if (data.success && data.settings) {
+            // Charger les réseaux depuis settings.social_links_json
+            if (data.settings.social_links_json) {
+                try {
+                    currentSocialLinks = JSON.parse(data.settings.social_links_json);
+                } catch (e) {
+                    currentSocialLinks = [];
+                }
+            } else {
+                currentSocialLinks = [];
+            }
+            displaySocialFields();
         }
     } catch (error) {
-        console.error('Error loading social links:', error);
-        showAlert('Erreur lors du chargement des réseaux sociaux', 'error');
+        console.error('Error loading social settings:', error);
+        currentSocialLinks = [];
+        displaySocialFields();
     }
 }
 
-function displaySocialLinks(links) {
-    const tbody = document.getElementById('socialLinksTableBody');
+function displaySocialFields() {
+    const container = document.getElementById('socialFieldsContainer');
     
-    if (links.length === 0) {
+    if (!container) return;
+    
+    if (currentSocialLinks.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Aucun réseau social</td></tr>';
         return;
     }
