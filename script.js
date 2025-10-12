@@ -1,361 +1,215 @@
-// Données des produits basées sur l'image avec support photos et vidéos
-const products = [
-    {
-        id: 1,
-        name: "100K ROSIN",
-        category: "100K",
-        badge: "🔥 LIVE ROSIN",
-        price: 200,
-        unit: "/ 2g",
-        image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&h=600&fit=crop' },
-            { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 2,
-        name: "HASH BURGER",
-        category: "ESTATICO",
-        badge: "💎 FROZEN USA us",
-        price: 120,
-        unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=800&h=600&fit=crop' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 3,
-        name: "POTION",
-        category: "WIZARD TREES",
-        badge: "🌿 TOPSHELF CALIFORNIA BRANDED us",
-        price: 110,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=800&h=600&fit=crop' },
-            { type: 'video', url: 'https://www.w3schools.com/html/movie.mp4' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 4,
-        name: "ZANGBANGER",
-        category: "WIZARD TREES",
-        badge: "🔥 TOPSHELF CALIFORNIA BRANDED us",
-        price: 110,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 5,
-        name: "TOP DRY",
-        category: "MCAFARM",
-        badge: "💨 DRY us",
-        price: 50,
-        unit: "/ 3g",
-        image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 6,
-        name: "DARK MATTER",
-        category: "WIZARD TREES",
-        badge: "🌿 TOPSHELF USA us",
-        price: 110,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 7,
-        name: "CONCRETE JUNGLE",
-        category: "KARMA CARTEL",
-        badge: "💎 TOPSHELF BRANDED us",
-        price: 180,
-        unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 8,
-        name: "ZKITTLEZ",
-        category: "NORTH BAY GARDEN",
-        badge: "🌈 TOPSHELF BRANDED us",
-        price: 180,
-        unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 9,
-        name: "BIG Z",
-        category: "KARMA CARTEL",
-        badge: "💜 TOPSHELF BRANDED us",
-        price: 100,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 10,
-        name: "GUSHMINTZ",
-        category: "ESTATICO",
-        badge: "❄️ STATIC USA us",
-        price: 170,
-        unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 11,
-        name: "WEDDING CAKE",
-        category: "PREMIUM",
-        badge: "💎 TOPSHELF BRANDED",
-        price: 150,
-        unit: "/ 7g",
-        image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 12,
-        name: "GELATO 41",
-        category: "EXCLUSIVE",
-        badge: "🔥 TOPSHELF USA",
-        price: 130,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 13,
-        name: "PURPLE PUNCH",
-        category: "WIZARD TREES",
-        badge: "💜 TOPSHELF CALIFORNIA",
-        price: 120,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 14,
-        name: "BLUE DREAM",
-        category: "CLASSIC",
-        badge: "💙 TOPSHELF BRANDED",
-        price: 95,
-        unit: "/ 3.5g",
-        image: "https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=800&h=600&fit=crop' }
-        ]
-    },
-    {
-        id: 15,
-        name: "OG KUSH",
-        category: "LEGEND",
-        badge: "👑 CLASSIC USA",
-        price: 140,
-        unit: "/ 5g",
-        image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop",
-        media: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=800&h=600&fit=crop' }
-        ]
-    }
-];
-
-let filteredProducts = [...products];
-let loaderAnimation = null;
-let emptyStateAnimation = null;
-
-// Initialiser les animations Lottie
-function initLottieAnimations() {
-    // Animation de chargement (Spinner cosmique)
-    loaderAnimation = lottie.loadAnimation({
-        container: document.getElementById('lottieLoader'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'https://lottie.host/8ec4eb98-c3e4-4d2f-a5b6-32aa99da7d9a/rX1jjNzPit.json'
+// Animation d'apparition des cartes au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.product-card');
+    
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
     });
-
-    // Animation état vide (Boîte vide avec recherche)
-    emptyStateAnimation = lottie.loadAnimation({
-        container: document.getElementById('lottieEmpty'),
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'https://lottie.host/0c3be5a0-6109-45ff-89ec-8a7db1e3f7d7/CtGm8bZvxU.json'
-    });
-}
-
-// Afficher le loader
-function showLoader() {
-    document.getElementById('loadingAnimation').style.display = 'block';
-    document.getElementById('productsGrid').style.display = 'none';
-    document.getElementById('emptyStateAnimation').style.display = 'none';
-}
-
-// Masquer le loader
-function hideLoader() {
-    document.getElementById('loadingAnimation').style.display = 'none';
-}
-
-// Fonction pour créer une carte produit
-function createProductCard(product) {
-    return `
-        <div class="product-card" data-id="${product.id}">
-            <div style="position: relative;">
-                <img src="${product.image}" alt="${product.name}" class="product-image">
-                <div class="product-badge">${product.badge}</div>
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <div class="product-category">
-                    <span class="category-icon"></span>
-                    <span>${product.category}</span>
-                </div>
-                <div class="product-price">
-                    ${product.price}€ <span class="unit">${product.unit}</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Fonction pour afficher les produits
-function displayProducts(productsToDisplay) {
-    const productsGrid = document.getElementById('productsGrid');
-    const emptyState = document.getElementById('emptyStateAnimation');
     
-    hideLoader();
+    // Animation du titre principal
+    const mainTitle = document.querySelector('.main-title');
+    mainTitle.style.opacity = '0';
+    mainTitle.style.transform = 'translateY(-30px)';
     
-    if (productsToDisplay.length === 0) {
-        productsGrid.style.display = 'none';
-        emptyState.style.display = 'block';
-        return;
-    }
-    
-    productsGrid.style.display = 'grid';
-    emptyState.style.display = 'none';
-    productsGrid.innerHTML = productsToDisplay.map(createProductCard).join('');
-}
-
-// Fonction de recherche
-function handleSearch(searchTerm) {
-    const term = searchTerm.toLowerCase().trim();
-    
-    if (term === '') {
-        filteredProducts = [...products];
-    } else {
-        filteredProducts = products.filter(product => 
-            product.name.toLowerCase().includes(term) ||
-            product.category.toLowerCase().includes(term) ||
-            product.badge.toLowerCase().includes(term)
-        );
-    }
-    
-    displayProducts(filteredProducts);
-}
-
-// Gestionnaire d'événements pour la recherche
-const searchInput = document.getElementById('searchInput');
-searchInput.addEventListener('input', (e) => {
-    handleSearch(e.target.value);
-});
-
-// Gestionnaire d'événements pour le bouton filtres
-const filterBtn = document.getElementById('filterBtn');
-const filterModal = document.getElementById('filterModal');
-const closeModal = document.getElementById('closeModal');
-const btnOk = document.getElementById('btnOk');
-
-// Ouvrir le modal
-filterBtn.addEventListener('click', () => {
-    filterModal.classList.add('active');
-});
-
-// Fermer le modal avec le bouton X
-closeModal.addEventListener('click', () => {
-    filterModal.classList.remove('active');
-});
-
-// Fermer le modal avec le bouton OK
-btnOk.addEventListener('click', () => {
-    filterModal.classList.remove('active');
-});
-
-// Fermer le modal en cliquant en dehors
-filterModal.addEventListener('click', (e) => {
-    if (e.target === filterModal) {
-        filterModal.classList.remove('active');
-    }
-});
-
-// Gestionnaire de clic sur les cartes produits
-document.addEventListener('click', (e) => {
-    const card = e.target.closest('.product-card');
-    if (card) {
-        const productId = parseInt(card.dataset.id);
-        const product = products.find(p => p.id === productId);
-        if (product) {
-            showProductDetails(product);
-        }
-    }
-});
-
-// Fonction pour afficher les détails du produit
-function showProductDetails(product) {
-    // Rediriger vers la page de détails du produit
-    window.location.href = `product-detail.html?id=${product.id}`;
-}
-
-// Initialisation au chargement de la page
-window.addEventListener('load', () => {
-    initLottieAnimations();
-    
-    // Simuler un chargement pour montrer l'animation
-    showLoader();
     setTimeout(() => {
-        displayProducts(filteredProducts);
-    }, 1500);
+        mainTitle.style.transition = 'opacity 1s ease, transform 1s ease';
+        mainTitle.style.opacity = '1';
+        mainTitle.style.transform = 'translateY(0)';
+    }, 200);
+    
+    // Animation des titres néon
+    const menuTitle = document.querySelector('.menu-title');
+    const humourTitle = document.querySelector('.humour-title');
+    
+    if (menuTitle && humourTitle) {
+        menuTitle.style.opacity = '0';
+        humourTitle.style.opacity = '0';
+        
+        setTimeout(() => {
+            menuTitle.style.transition = 'opacity 1s ease';
+            menuTitle.style.opacity = '1';
+        }, 800);
+        
+        setTimeout(() => {
+            humourTitle.style.transition = 'opacity 1s ease';
+            humourTitle.style.opacity = '1';
+        }, 1200);
+    }
 });
 
-// Effet de parallaxe sur le scroll
-let ticking = false;
-window.addEventListener('scroll', () => {
-    if (!ticking) {
-        window.requestAnimationFrame(() => {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.main-title');
-            if (parallax) {
-                parallax.style.transform = `translateY(${scrolled * 0.3}px)`;
-            }
-            ticking = false;
-        });
-        ticking = true;
-    }
+// Effet parallaxe sur le fond cosmique
+document.addEventListener('mousemove', function(e) {
+    const stars = document.querySelector('.stars');
+    const stars2 = document.querySelector('.stars2');
+    const stars3 = document.querySelector('.stars3');
+    
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+    
+    stars.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+    stars2.style.transform = `translate(${x * -20}px, ${y * -20}px)`;
+    stars3.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+});
+
+// Gestion de la navigation
+const navItems = document.querySelectorAll('.nav-item');
+
+navItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Retirer la classe active de tous les éléments
+        navItems.forEach(nav => nav.classList.remove('active'));
+        
+        // Ajouter la classe active à l'élément cliqué
+        this.classList.add('active');
+        
+        // Animation de clic
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            this.style.transform = 'scale(1)';
+        }, 100);
+    });
+});
+
+// Animation au survol des cartes produits
+const productCards = document.querySelectorAll('.product-card');
+
+productCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        // Créer un effet de lueur
+        const glow = document.createElement('div');
+        glow.className = 'card-glow';
+        glow.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(131, 56, 236, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        `;
+        this.appendChild(glow);
+        
+        setTimeout(() => {
+            glow.style.opacity = '1';
+        }, 10);
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        const glow = this.querySelector('.card-glow');
+        if (glow) {
+            glow.style.opacity = '0';
+            setTimeout(() => {
+                glow.remove();
+            }, 300);
+        }
+    });
+    
+    // Animation de clic sur les cartes
+    card.addEventListener('click', function() {
+        this.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 150);
+        
+        // Effet d'onde
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+        `;
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.style.width = '300px';
+            ripple.style.height = '300px';
+            ripple.style.opacity = '0';
+        }, 10);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
+});
+
+// Créer des particules flottantes
+function createParticle() {
+    const particle = document.createElement('div');
+    particle.style.cssText = `
+        position: fixed;
+        pointer-events: none;
+        width: 4px;
+        height: 4px;
+        background: radial-gradient(circle, rgba(131, 56, 236, 0.8) 0%, transparent 70%);
+        border-radius: 50%;
+        left: ${Math.random() * window.innerWidth}px;
+        top: ${window.innerHeight + 10}px;
+        opacity: 0;
+    `;
+    document.body.appendChild(particle);
+    
+    // Animation de la particule
+    let opacity = 0;
+    let y = window.innerHeight + 10;
+    let x = parseFloat(particle.style.left);
+    let speedY = -(Math.random() * 2 + 1);
+    let speedX = (Math.random() - 0.5) * 2;
+    
+    const animateParticle = () => {
+        y += speedY;
+        x += speedX;
+        opacity = Math.min(opacity + 0.02, 0.8);
+        
+        if (y < window.innerHeight * 0.3) {
+            opacity -= 0.02;
+        }
+        
+        particle.style.top = y + 'px';
+        particle.style.left = x + 'px';
+        particle.style.opacity = opacity;
+        
+        if (y < -10 || opacity <= 0) {
+            particle.remove();
+        } else {
+            requestAnimationFrame(animateParticle);
+        }
+    };
+    
+    requestAnimationFrame(animateParticle);
+}
+
+// Créer des particules périodiquement
+setInterval(createParticle, 300);
+
+// Animation de défilement fluide
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
 });
