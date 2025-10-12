@@ -587,6 +587,7 @@
                 const badge = product.badge || product.category_icon || '';
                 const price = parseFloat(product.price) || 0;
                 const unit = product.unit || '';
+                const farmName = product.farm_name || product.category_name || 'PREMIUM';
                 
                 return `
                     <div class="product-card" onclick="showProductDetails(${product.id})">
@@ -595,7 +596,7 @@
                         </div>
                         <div class="product-content">
                             <div class="product-name">${product.name}</div>
-                            <div class="product-farm">${product.category_name || 'PREMIUM'}</div>
+                            <div class="product-farm">${farmName}</div>
                             <div>
                                 <span class="product-price">${price}€</span>
                                 <span class="product-unit">${unit}</span>
