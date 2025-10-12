@@ -403,6 +403,11 @@ async function loadCategories() {
 function displayCategories(categoriesToDisplay) {
     const tbody = document.getElementById('categoriesTableBody');
     
+    if (categoriesToDisplay.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">Aucune catégorie</td></tr>';
+        return;
+    }
+    
     tbody.innerHTML = categoriesToDisplay.map(cat => `
         <tr>
             <td>
@@ -413,14 +418,21 @@ function displayCategories(categoriesToDisplay) {
             <td>${cat.product_count || 0}</td>
             <td>
                 <button class="btn btn-primary" onclick="editCategory(${cat.id})" style="margin-right: 0.5rem;">
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit"></i> Modifier
                 </button>
-                <button class="btn btn-danger" onclick="deleteCategoryConfirm(${cat.id}, '${cat.name}')">
-                    <i class="fas fa-trash"></i>
+                <button class="btn btn-danger" onclick="deleteCategoryConfirm(${cat.id}, '${escapeHtml(cat.name)}')">
+                    <i class="fas fa-trash"></i> Supprimer
                 </button>
             </td>
         </tr>
     `).join('');
+}
+
+// Fonction utilitaire pour échapper les caractères HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Éditer une catégorie
@@ -600,10 +612,10 @@ function displayFarms(farmsToDisplay) {
             <td>${farm.display_order || 0}</td>
             <td>
                 <button class="btn btn-primary" onclick="editFarm(${farm.id})" style="margin-right: 0.5rem;">
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit"></i> Modifier
                 </button>
-                <button class="btn btn-danger" onclick="deleteFarmConfirm(${farm.id}, '${farm.name}')">
-                    <i class="fas fa-trash"></i>
+                <button class="btn btn-danger" onclick="deleteFarmConfirm(${farm.id}, '${escapeHtml(farm.name)}')">
+                    <i class="fas fa-trash"></i> Supprimer
                 </button>
             </td>
         </tr>
@@ -962,6 +974,7 @@ async function deleteSocialNetworkAction(id) {
 // Exposer les fonctions globalement pour les boutons inline
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
+window.createNewCategory = createNewCategory;
 window.editCategory = editCategory;
 window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
@@ -970,3 +983,4 @@ window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.editSocialNetwork = editSocialNetwork;
 window.deleteSocialConfirm = deleteSocialConfirm;
+window.escapeHtml = escapeHtml;
