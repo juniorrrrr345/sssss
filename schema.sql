@@ -233,12 +233,7 @@ INSERT OR IGNORE INTO services (id, title, content, icon, display_order, is_acti
 INSERT OR IGNORE INTO settings (key, value, description) VALUES
 ('shop_name', 'Al Gran', 'Nom de la boutique'),
 ('order_link', '', 'Lien externe pour commander'),
-('shop_email', '', 'Email de contact'),
-('shop_phone', '', 'Numéro de téléphone'),
-('shop_whatsapp', '', 'Numéro WhatsApp'),
-('shop_telegram', '', 'Username Telegram'),
-('shop_instagram', '', 'Username Instagram'),
-('shop_linktree', '', 'URL LinkTree'),
+('social_links_json', '[]', 'Réseaux sociaux en JSON'),
 ('admin_password', 'admin123', 'Mot de passe admin (à changer!)'),
 ('shop_description', 'Découvrez notre univers unique', 'Description de la boutique'),
 ('theme_background_url', '', 'URL de l''image de fond du thème'),

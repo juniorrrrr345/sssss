@@ -706,29 +706,16 @@
             <section class="content-section" id="social">
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 class="card-title"><i class="fas fa-share-alt"></i> Gestion des Réseaux Sociaux</h2>
-                        <button class="btn btn-success" id="addSocialBtn">
+                        <h2 class="card-title"><i class="fas fa-share-alt"></i> Gestion des Réseaux Sociaux (Page Contact)</h2>
+                        <button class="btn btn-success" onclick="addSocialField()">
                             <i class="fas fa-plus"></i> Ajouter un Réseau
                         </button>
                     </div>
                     <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Icône</th>
-                                    <th>Nom</th>
-                                    <th>URL</th>
-                                    <th>Ordre</th>
-                                    <th>Statut</th>
-                                    <th style="width: 180px;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="socialLinksTableBody">
-                                <tr>
-                                    <td colspan="6" style="text-align: center; padding: 2rem;">Chargement...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div id="socialFieldsContainer"></div>
+                        <button type="button" onclick="saveSocialLinks()" class="btn btn-success" style="margin-top: 15px;">
+                            <i class="fas fa-save"></i> Sauvegarder Tous les Réseaux
+                        </button>
                     </div>
                 </div>
             </section>

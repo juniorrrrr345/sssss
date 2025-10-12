@@ -79,7 +79,37 @@
             const container = document.getElementById('contactCards');
             let html = '';
             
-            // LinkTree
+            // Charger depuis social_links_json
+            let socialLinks = [];
+            if (settings.social_links_json) {
+                try {
+                    socialLinks = JSON.parse(settings.social_links_json);
+                } catch (e) {
+                    console.error('Erreur parsing social_links_json');
+                }
+            }
+            
+            // Générer les cards depuis socialLinks
+            socialLinks.forEach(link => {
+                if (link.url && link.url.trim() !== '') {
+                    html += `
+                        <a href="${link.url}" class="contact-card" target="_blank">
+                            <div class="card-icon">
+                                <span style="font-size: 2rem;">${link.icon || '🔗'}</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>${link.name || 'Réseau Social'}</h3>
+                                <p>Cliquez pour visiter</p>
+                            </div>
+                            <div class="card-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+                    `;
+                }
+            });
+            
+            // ANCIENS CHAMPS (compatibilité) - LinkTree
             if (settings.shop_linktree && settings.shop_linktree.trim() !== '') {
                 html += `
                     <a href="${settings.shop_linktree}" class="contact-card" target="_blank">

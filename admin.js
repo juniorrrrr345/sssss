@@ -177,7 +177,7 @@ function handleNavigation(item) {
     if (section === 'products') loadProducts();
     if (section === 'categories') loadCategories();
     if (section === 'farms') loadFarms();
-    if (section === 'social') loadSocialLinks();
+    if (section === 'social') loadSocialSettings();
     if (section === 'services') loadServices();
     if (section === 'settings') loadSettings();
 }
@@ -1234,8 +1234,10 @@ window.editCategory = editCategory;
 window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
-window.editSocialLink = editSocialLink;
-window.deleteSocialLinkConfirm = deleteSocialLinkConfirm;
+window.addSocialField = addSocialField;
+window.updateSocialLink = updateSocialLink;
+window.removeSocialLink = removeSocialLink;
+window.saveSocialLinks = saveSocialLinks;
 window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.saveSettings = saveSettings;
