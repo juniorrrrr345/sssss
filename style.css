@@ -243,7 +243,7 @@ body {
 }
 
 .card-icon i {
-    color: var(--primary-pink);
+    color: #ffffff;
 }
 
 .card-icon.whatsapp {
@@ -363,7 +363,7 @@ body {
 }
 
 .nav-item.active .nav-icon-circle {
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    background: rgba(255, 255, 255, 0.2);
     border-color: rgba(0, 0, 0, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
@@ -450,7 +450,7 @@ body {
 
 .quick-link i {
     font-size: 1.5rem;
-    color: var(--primary-pink);
+    color: #ffffff;
 }
 
 .quick-link:hover {

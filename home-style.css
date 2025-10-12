@@ -207,7 +207,7 @@ body {
 }
 
 .section-title i {
-    color: var(--primary-pink);
+    color: #ffffff;
     font-size: 1.2rem;
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
 }
@@ -313,7 +313,7 @@ body {
 }
 
 .nav-item.active .nav-icon-circle {
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+    background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }

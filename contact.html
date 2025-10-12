@@ -139,7 +139,7 @@
             
             const cards = networks.map(network => `
                 <a href="${network.url}" class="contact-card" target="_blank" rel="noopener noreferrer">
-                    <div class="card-icon" style="background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));">
+                    <div class="card-icon" style="background: rgba(255, 255, 255, 0.2);">
                         <span style="font-size: 2rem;">${network.icon}</span>
                     </div>
                     <div class="card-content">
@@ -221,7 +221,7 @@
             if (settings.shop_email) {
                 cards += `
                     <a href="mailto:${settings.shop_email}" class="contact-card">
-                        <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="card-icon" style="background: rgba(255, 255, 255, 0.2);">
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div class="card-content">
