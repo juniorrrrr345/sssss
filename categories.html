@@ -15,55 +15,10 @@
     <main class="container">
         <h1 class="main-title">Explorez Nos Catégories</h1>
         
-        <div class="categories-grid">
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Extract">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Extract</h2>
-                    <p class="category-description">Explore Extract</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Static-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Static-Sift</h2>
-                    <p class="category-description">Explore Static-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Frozen-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Frozen-Sift</h2>
-                    <p class="category-description">Explore Frozen-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Dry-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Dry-Sift</h2>
-                    <p class="category-description">Explore Dry-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Weed">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Weed</h2>
-                    <p class="category-description">Explore Weed</p>
-                </div>
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront chargées dynamiquement depuis l'API -->
+            <div class="col-span-full flex justify-center items-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
             </div>
         </div>
 
@@ -115,5 +70,9 @@
             <span class="nav-label">Contact</span>
         </a>
     </nav>
+
+    <!-- Scripts de l'application -->
+    <script src="api-client.js"></script>
+    <script src="categories-script.js"></script>
 </body>
 </html>
