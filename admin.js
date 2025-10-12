@@ -293,7 +293,7 @@ async function loadCategoriesForForm() {
             categories = data.categories;
             const select = document.getElementById('productCategory');
             select.innerHTML = categories.map(cat => 
-                `<option value="${cat.id}">${cat.icon || ''} ${cat.name}</option>`
+                `<option value="${cat.id}">${cat.name}</option>`
             ).join('');
         }
     } catch (error) {
@@ -430,7 +430,7 @@ function displayCategories(categoriesToDisplay) {
         <tr>
             <td>
                 ${cat.image_url ? `<img src="${cat.image_url}" alt="${cat.name}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; margin-right: 10px; vertical-align: middle;">` : ''}
-                ${cat.icon || ''} ${cat.name}
+                <strong>${cat.name}</strong>
             </td>
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
@@ -495,17 +495,16 @@ async function createCategoryAction(data) {
 function editCategory(id) {
     const category = categories.find(c => c.id === id);
     if (category) {
-        // Créer un formulaire plus complet
         const newName = prompt('Nom de la catégorie:', category.name);
         if (!newName) return;
         
         const newDescription = prompt('Description:', category.description || '');
-        const newImageUrl = prompt('URL de l\'image (Imgur, Unsplash, etc.):\n\nExemple: https://i.imgur.com/xxxxx.jpg\nLaissez vide pour utiliser uniquement l\'icône', category.image_url || '');
+        const newImageUrl = prompt('URL de l\'image (optionnel):\n\nExemple: https://i.imgur.com/xxxxx.jpg', category.image_url || '');
         
         updateCategoryAction(id, { 
             name: newName,
-            description: newDescription || category.description,
-            image_url: newImageUrl || ''
+            description: newDescription,
+            image_url: newImageUrl
         });
     }
 }
