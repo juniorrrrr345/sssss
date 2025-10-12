@@ -15,7 +15,7 @@ bucket_name = "boutique-images"
 
 # Variables d'environnement
 [vars]
-ADMIN_PASSWORD = "votre_nouveau_mot_de_passe"
+ADMIN_PASSWORD = "admin123"
 R2_PUBLIC_URL = "https://pub-b38679a01a274648827751df94818418.r2.dev"
 
 # CORS Configuration

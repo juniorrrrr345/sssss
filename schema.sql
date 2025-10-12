@@ -238,7 +238,7 @@ INSERT OR IGNORE INTO settings (key, value, description) VALUES
 ('shop_telegram', '', 'Username Telegram'),
 ('shop_instagram', '', 'Username Instagram'),
 ('shop_linktree', '', 'URL LinkTree'),
-('admin_password', 'votre_nouveau_mot_de_passe', 'Mot de passe admin (à changer!)'),
+('admin_password', 'admin123', 'Mot de passe admin (à changer!)'),
 ('shop_description', 'Découvrez notre univers unique', 'Description de la boutique'),
 ('home_welcome_title', 'AVEC AMOUR', 'Titre de la page d''accueil'),
 ('home_services_text', 'Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀', 'Texte de présentation des services'),

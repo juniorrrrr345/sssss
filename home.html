@@ -99,18 +99,19 @@
 
         // Mettre à jour le titre
         function updateTitle(settings) {
-            if (settings.home_welcome_title) {
-                const words = settings.home_welcome_title.split(' ');
-                const mainLogo = document.getElementById('mainLogo');
-                const subLogo = document.getElementById('subLogo');
-                
-                if (words.length >= 2) {
-                    mainLogo.textContent = words[0];
-                    subLogo.textContent = words.slice(1).join(' ');
-                } else {
-                    mainLogo.textContent = settings.home_welcome_title;
-                    subLogo.textContent = '';
-                }
+            const mainLogo = document.getElementById('mainLogo');
+            const subLogo = document.getElementById('subLogo');
+            
+            // Priorité : shop_name, sinon home_welcome_title
+            const titleToUse = settings.shop_name || settings.home_welcome_title || 'AVEC AMOUR';
+            const words = titleToUse.split(' ');
+            
+            if (words.length >= 2) {
+                mainLogo.textContent = words[0];
+                subLogo.textContent = words.slice(1).join(' ');
+            } else {
+                mainLogo.textContent = titleToUse;
+                subLogo.textContent = '';
             }
         }
 

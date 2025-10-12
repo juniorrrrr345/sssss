@@ -5,7 +5,7 @@
 
 // Configuration API
 const API_URL = 'http://localhost:8787'; // Pour dev local - Changez pour production: https://algran-api.VOTRE-SUBDOMAIN.workers.dev
-const ADMIN_PASSWORD = 'votre_nouveau_mot_de_passe'; // À changer après premier login
+const ADMIN_PASSWORD = 'admin123'; // Mot de passe par défaut
 
 // État global
 let currentSection = 'dashboard';
