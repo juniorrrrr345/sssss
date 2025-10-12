@@ -1,99 +1,78 @@
-# Boutique "Avec Amour" - Site E-commerce avec Cloudflare
+# Boutique Al Gran
 
-Site e-commerce complet avec panel d'administration, utilisant Cloudflare Workers, D1 (base de données) et R2 (stockage).
+Boutique e-commerce moderne avec panel d'administration, utilisant Cloudflare Workers pour l'API.
 
-## 🚀 Installation et Déploiement
+## 🌐 Pages principales
 
-### 1. Prérequis
-- Compte Cloudflare
-- Wrangler CLI installé : `npm install -g wrangler`
+- **Accueil** : `home.html`
+- **Produits** : `products.html`
+- **Catégories** : `categories.html`
+- **Contact** : `contact.html`
+- **Admin** : `admin.html`
 
-### 2. Configuration de la base de données D1
+## 🚀 Installation rapide
 
+1. **Cloner le projet**
 ```bash
-# Créer la base de données
-wrangler d1 create boutique-db
-
-# Noter l'ID de la base de données et le mettre à jour dans wrangler.toml
-# Remplacer YOUR_DATABASE_ID par l'ID obtenu
-
-# Initialiser le schéma
-wrangler d1 execute boutique-db --local --file=./schema.sql
-wrangler d1 execute boutique-db --remote --file=./schema.sql
+git clone https://github.com/juniorrrrr345/sssss.git
+cd sssss
 ```
 
-### 3. Configuration du bucket R2
-
+2. **Lancer en local**
 ```bash
-# Créer le bucket R2
-wrangler r2 bucket create boutique-images
-
-# Activer l'accès public au bucket dans le dashboard Cloudflare
-# Noter l'URL publique (https://pub-xxxx.r2.dev)
+python -m http.server 8000
 ```
 
-### 4. Variables d'environnement
+3. **Accéder au site**
+- Site : http://localhost:8000/home.html
+- Admin : http://localhost:8000/admin.html
 
-Dans le dashboard Cloudflare, configurer ces variables :
+## 🔧 Configuration API
 
-- `ADMIN_PASSWORD` : Mot de passe pour accéder au panel admin
-- `CLOUDFLARE_R2_PUBLIC_URL` : URL publique du bucket R2
+L'API est déjà déployée sur : `https://algran-api.calitek-junior.workers.dev`
 
-### 5. Déploiement
+Pour modifier l'URL de l'API, éditer :
+- `api-connector.js` : Pour les pages publiques
+- `admin.js` : Pour le panel admin
 
-```bash
-# Déployer le site
-wrangler pages deploy public
-
-# Ou pour le développement local
-wrangler pages dev public
-```
-
-## 📱 Utilisation
-
-### Site public
-- Page d'accueil : Liste tous les produits
-- Recherche et filtres par catégorie
-- Page de détail produit
-- Bouton "Commander" configurable
-
-### Panel Admin (/admin.html)
-- Gestion des produits (CRUD complet)
-- Gestion des catégories et farms
-- Configuration des réseaux sociaux
-- Paramètres du site :
-  - Nom de la boutique
-  - Image de fond
-  - URL de commande
-
-## 🎨 Personnalisation
-
-Tout est personnalisable depuis le panel admin :
-- Nom de la boutique
-- Image de fond
-- Produits et prix
-- Catégories et farms
-- Liens réseaux sociaux
-- URL de commande (WhatsApp, formulaire, etc.)
-
-## 🔒 Sécurité
-
-- Panel admin protégé par mot de passe
-- Authentification via header Authorization
-- Pas de clés API dans le code source
-
-## 📝 Structure du projet
+## 📁 Structure du projet
 
 ```
-/public           # Fichiers frontend
-  ├── index.html  # Page boutique
-  ├── product.html # Page produit
-  ├── admin.html  # Panel admin
-  ├── style.css   # Styles
-  └── js/         # Scripts JS
-/functions        # Worker Cloudflare
-  └── api/
-      └── [[route]].js # Routes API
-/schema.sql       # Schéma base de données
-/wrangler.toml    # Configuration Cloudflare
+├── home.html          # Page d'accueil
+├── products.html      # Liste des produits
+├── categories.html    # Catégories
+├── contact.html       # Contact
+├── admin.html         # Panel admin
+├── style.css          # Styles principaux
+├── home-style.css     # Styles page d'accueil
+├── admin.js           # Script admin
+├── script.js          # Scripts généraux
+├── api-connector.js   # Connexion API
+├── icons.js           # Icônes SVG
+└── wrangler.toml      # Config Cloudflare
 ```
+
+## 🎨 Thème
+
+Le site utilise un thème noir et blanc moderne avec :
+- Design épuré et professionnel
+- Navigation responsive
+- Animations fluides
+- Mode sombre par défaut
+
+## 🔐 Admin
+
+Mot de passe par défaut : `admin123`
+
+Fonctionnalités :
+- Gestion des produits
+- Gestion des catégories
+- Paramètres du site
+- Statistiques
+
+## 📱 Responsive
+
+Le site est entièrement responsive et fonctionne sur :
+- 📱 Mobile
+- 📱 Tablette
+- 💻 Desktop
