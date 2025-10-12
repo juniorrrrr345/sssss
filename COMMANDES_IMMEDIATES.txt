@@ -1,0 +1,26 @@
+==============================================
+📥 COMMANDES À EXÉCUTER MAINTENANT
+==============================================
+
+cd C:\Users\PC\Documents\sssss
+
+git pull origin cursor/deploy-local-web-store-from-github-901c
+
+npm run deploy
+
+python -m http.server 8005
+
+==============================================
+Puis rechargez http://localhost:8005/admin.html
+avec Ctrl + Shift + R
+==============================================
+
+✅ Toutes les fonctions sont maintenant présentes :
+- createNewCategory ✅
+- loadFarmsForForm ✅  
+- deleteCategoryConfirm ✅
+- handleProductSubmit avec prix multiples ✅
+
+✅ Menu Farms dans la sidebar ✅
+
+Tout est corrigé !
