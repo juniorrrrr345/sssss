@@ -99,17 +99,7 @@ function initEventListeners() {
         }
     });
     
-    // Modal social
-    document.getElementById('addSocialBtn').addEventListener('click', () => openSocialModal());
-    document.getElementById('closeSocialModalBtn').addEventListener('click', closeSocialModal);
-    document.getElementById('socialForm').addEventListener('submit', handleSocialSubmit);
-    
-    // Fermer modal social en cliquant à l'extérieur
-    document.getElementById('socialModal').addEventListener('click', (e) => {
-        if (e.target.id === 'socialModal') {
-            closeSocialModal();
-        }
-    });
+    // Plus de modal social - utilise des champs dynamiques maintenant
     
     // Modal category
     document.getElementById('addCategoryBtn').addEventListener('click', () => openCategoryModal());
