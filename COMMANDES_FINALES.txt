@@ -1,0 +1,52 @@
+═══════════════════════════════════════════════════════════════════
+            🚀 COMMANDES FINALES - AL GRAN
+═══════════════════════════════════════════════════════════════════
+
+COPIEZ-COLLEZ ces commandes dans PowerShell DANS CET ORDRE :
+
+═══════════════════════════════════════════════════════════════════
+                    📥 1. RÉCUPÉRER LES FICHIERS
+═══════════════════════════════════════════════════════════════════
+
+cd C:\Users\PC\Documents\sssss
+git pull origin cursor/deploy-local-web-store-from-github-901c
+
+═══════════════════════════════════════════════════════════════════
+                    🗄️ 2. CRÉER LES 3 TABLES
+═══════════════════════════════════════════════════════════════════
+
+wrangler d1 execute algran-db --file=schema-services.sql --remote
+
+wrangler d1 execute algran-db --file=schema-social-networks.sql --remote
+
+wrangler d1 execute algran-db --file=schema-farms.sql --remote
+
+═══════════════════════════════════════════════════════════════════
+                    🚀 3. REDÉPLOYER L'API
+═══════════════════════════════════════════════════════════════════
+
+npm run deploy
+
+═══════════════════════════════════════════════════════════════════
+                    ✅ 4. LANCER LE SERVEUR
+═══════════════════════════════════════════════════════════════════
+
+python -m http.server 8005
+
+Puis ouvrez : http://localhost:8005/admin.html
+
+═══════════════════════════════════════════════════════════════════
+                    ✨ C'EST FINI !
+═══════════════════════════════════════════════════════════════════
+
+Votre panel admin fonctionne maintenant avec :
+✅ Services
+✅ Réseaux Sociaux
+✅ Farms
+✅ Produits
+✅ Catégories
+✅ Paramètres
+
+Plus de "Chargement..." infini ! 🎉
+
+═══════════════════════════════════════════════════════════════════
