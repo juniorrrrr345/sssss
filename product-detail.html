@@ -303,8 +303,9 @@
             const html = `
                 <div class="product-media">
                     ${videoUrl ? 
-                        `<video class="product-video" controls autoplay muted loop>
+                        `<video class="product-video" controls autoplay muted loop playsinline>
                             <source src="${videoUrl}" type="video/mp4">
+                            Votre navigateur ne supporte pas les vidéos.
                         </video>` :
                         `<img src="${product.image_url || 'https://via.placeholder.com/800x400'}" alt="${product.name}" class="product-image">`
                     }
