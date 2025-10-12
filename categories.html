@@ -3,117 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catégories - Aimiri</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>AVEC AMOUR - Catégories</title>
+    <link rel="stylesheet" href="home-style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script src="icons.js"></script>
+    <style>
+        /* Styles spécifiques pour la page catégories */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255, 62, 165, 0.5);
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 30px rgba(255, 62, 165, 0.5)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(255, 62, 165, 0.8)); }
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .category-card:hover::before {
+            animation: shimmer 0.5s ease;
+            opacity: 1;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(45deg) translateY(-100%); }
+            100% { transform: rotate(45deg) translateY(100%); }
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 62, 165, 0.4);
+            border-color: var(--primary-pink);
+        }
+
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 62, 165, 0.6));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .category-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-count {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .category-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            transition: opacity 0.3s ease;
+            border-radius: 25px;
+        }
+
+        .category-card:hover .category-gradient {
+            opacity: 0.2;
+        }
+
+        /* Stats section */
+        .stats-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(255, 62, 165, 0.5));
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        /* Loader */
+        .loader-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 62, 165, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-pink);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-card {
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+        .category-card:nth-child(4) { animation-delay: 0.4s; }
+        .category-card:nth-child(5) { animation-delay: 0.5s; }
+        .category-card:nth-child(6) { animation-delay: 0.6s; }
+        .category-card:nth-child(7) { animation-delay: 0.7s; }
+        .category-card:nth-child(8) { animation-delay: 0.8s; }
+
+        /* Container ajustements */
+        .container {
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 20px;
+            }
+
+            .category-icon {
+                font-size: 3rem;
+            }
+
+            .category-name {
+                font-size: 1.4rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="background">
-        <div class="stars"></div>
-        <div class="cosmic-effect"></div>
+    <!-- Effet d'arrière-plan cosmique -->
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
     </div>
 
-    <main class="container">
-        <h1 class="main-title">Explorez Nos Catégories</h1>
-        
-        <div class="categories-grid">
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Extract">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Extract</h2>
-                    <p class="category-description">Explore Extract</p>
-                </div>
-            </div>
+    <!-- Animation Lottie décorative -->
+    <div id="decorAnimation" style="position: fixed; top: 10%; right: 5%; width: 250px; height: 250px; z-index: 1; pointer-events: none; opacity: 0.4;"></div>
 
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Static-Sift">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Static-Sift</h2>
-                    <p class="category-description">Explore Static-Sift</p>
-                </div>
-            </div>
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Nos Catégories</h1>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 1.1rem;">Explorez notre collection par type</p>
+        </div>
 
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Frozen-Sift">
+        <!-- Section statistiques -->
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Catégories</div>
                 </div>
-                <div class="category-info">
-                    <h2 class="category-title">Frozen-Sift</h2>
-                    <p class="category-description">Explore Frozen-Sift</p>
+                <div class="stat-item">
+                    <div class="stat-number">80+</div>
+                    <div class="stat-label">Produits</div>
                 </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Dry-Sift">
+                <div class="stat-item">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Livraison</div>
                 </div>
-                <div class="category-info">
-                    <h2 class="category-title">Dry-Sift</h2>
-                    <p class="category-description">Explore Dry-Sift</p>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-image">
-                    <img src="images/product-placeholder.jpg" alt="Weed">
-                </div>
-                <div class="category-info">
-                    <h2 class="category-title">Weed</h2>
-                    <p class="category-description">Explore Weed</p>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Qualité</div>
                 </div>
             </div>
         </div>
 
-        <div class="aimiri-logo">
-            <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
-                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="logo-text">Aimiri</text>
-            </svg>
+        <div id="loadingContainer" class="loader-container" style="display: none;">
+            <div class="loader"></div>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-top: 20px;">Chargement des catégories...</p>
         </div>
-    </main>
 
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront générées ici par JavaScript -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" width="1em" height="1em"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
             </div>
             <span class="nav-label">Accueil</span>
         </a>
         <a href="products.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em"><path d="M160 112c0-35.3 28.7-64 64-64s64 28.7 64 64v48H160V112zm-48 48H48c-26.5 0-48 21.5-48 48V416c0 53 43 96 96 96H352c53 0 96-43 96-96V208c0-26.5-21.5-48-48-48H336V112C336 50.1 285.9 0 224 0S112 50.1 112 112v48zm24 48a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm152 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/></svg>
             </div>
             <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item active">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em"><path d="M448 96V224H288V96H448zm0 192V416H288V288H448zM224 224H64V96H224V224zM64 288H224V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg>
             </div>
             <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
             <div class="nav-icon-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
             </div>
             <span class="nav-label">Contact</span>
         </a>
     </nav>
+
+    <script>
+        // Données des catégories
+        const categories = [
+            { 
+                id: 'rosin', 
+                name: 'Live Rosin', 
+                icon: '🔥', 
+                count: 12, 
+                gradient: 'linear-gradient(135deg, #ff6b6b, #ff3838)',
+                description: 'Extraction premium à froid'
+            },
+            { 
+                id: 'frozen', 
+                name: 'Frozen', 
+                icon: '❄️', 
+                count: 8, 
+                gradient: 'linear-gradient(135deg, #4ecdc4, #2d9cdb)',
+                description: 'Produits congelés haute qualité'
+            },
+            { 
+                id: 'topshelf', 
+                name: 'Topshelf', 
+                icon: '🌿', 
+                count: 25, 
+                gradient: 'linear-gradient(135deg, #56ab2f, #a8e063)',
+                description: 'Sélection haut de gamme'
+            },
+            { 
+                id: 'dry', 
+                name: 'Dry', 
+                icon: '💨', 
+                count: 6, 
+                gradient: 'linear-gradient(135deg, #667eea, #764ba2)',
+                description: 'Dry sift traditionnel'
+            },
+            { 
+                id: 'branded', 
+                name: 'Branded', 
+                icon: '💎', 
+                count: 10, 
+                gradient: 'linear-gradient(135deg, #f093fb, #f5576c)',
+                description: 'Marques exclusives'
+            },
+            { 
+                id: 'premium', 
+                name: 'Premium', 
+                icon: '💜', 
+                count: 9, 
+                gradient: 'linear-gradient(135deg, #fa709a, #fee140)',
+                description: 'Collection premium'
+            },
+            { 
+                id: 'indoor', 
+                name: 'Indoor', 
+                icon: '🏠', 
+                count: 11, 
+                gradient: 'linear-gradient(135deg, #30cfd0, #330867)',
+                description: 'Culture intérieure contrôlée'
+            },
+            { 
+                id: 'outdoor', 
+                name: 'Outdoor', 
+                icon: '🌳', 
+                count: 7, 
+                gradient: 'linear-gradient(135deg, #a8edea, #fed6e3)',
+                description: 'Culture extérieure naturelle'
+            }
+        ];
+
+        // Créer une carte de catégorie
+        function createCategoryCard(category) {
+            return `
+                <div class="category-card" data-id="${category.id}">
+                    <div class="category-gradient" style="background: ${category.gradient}"></div>
+                    <div class="category-icon">${category.icon}</div>
+                    <h3 class="category-name">${category.name}</h3>
+                    <p class="category-count">${category.count} produits</p>
+                    <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-top: 0.5rem;">${category.description}</p>
+                </div>
+            `;
+        }
+
+        // Afficher les catégories
+        function displayCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            const loader = document.getElementById('loadingContainer');
+            
+            // Afficher le loader
+            loader.style.display = 'block';
+            grid.style.display = 'none';
+            
+            // Simuler un léger délai pour l'effet de chargement
+            setTimeout(() => {
+                loader.style.display = 'none';
+                grid.style.display = 'grid';
+                grid.innerHTML = categories.map(createCategoryCard).join('');
+            }, 500);
+        }
+
+        // Gestion des clics sur les catégories
+        document.addEventListener('click', (e) => {
+            const categoryCard = e.target.closest('.category-card');
+            if (categoryCard) {
+                const categoryId = categoryCard.dataset.id;
+                // Animation de clic
+                categoryCard.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    // Rediriger vers la page produits avec le filtre de catégorie
+                    window.location.href = `products.html?category=${categoryId}`;
+                }, 150);
+            }
+        });
+
+        // Effet de parallaxe sur les bulles
+        document.addEventListener('mousemove', (e) => {
+            const bubbles = document.querySelectorAll('.bubble');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            bubbles.forEach((bubble, index) => {
+                const speed = (index + 1) * 10;
+                bubble.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+
+        // Initialiser les animations Lottie
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animation décorative
+            lottie.loadAnimation({
+                container: document.getElementById('decorAnimation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/a7f9d8e8-6c9a-4d2f-b5e0-3a4d9c8f7b6a/categories-animation.json'
+            });
+            
+            // Affichage initial des catégories
+            displayCategories();
+        });
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer les cartes quand elles sont créées
+        setTimeout(() => {
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        }, 600);
+    </script>
 </body>
 </html>
