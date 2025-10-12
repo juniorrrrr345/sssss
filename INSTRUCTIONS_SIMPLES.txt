@@ -1,0 +1,57 @@
+═══════════════════════════════════════════════════════════════════
+        🚀 INSTRUCTIONS SIMPLES - Finir la configuration
+═══════════════════════════════════════════════════════════════════
+
+Votre database_id est déjà configuré ! ✅
+Il reste juste 4 commandes à exécuter sur votre PC :
+
+═══════════════════════════════════════════════════════════════════
+                    📋 COMMANDES À EXÉCUTER
+═══════════════════════════════════════════════════════════════════
+
+Ouvrez PowerShell et copiez-collez :
+
+┌───────────────────────────────────────────────────────────────┐
+│  cd C:\Users\PC\Documents\sssss                               │
+│  git fetch origin                                             │
+│  git merge origin/cursor/deploy-local-web-store-from-github-901c │
+│  npm install                                                  │
+│  wrangler d1 execute algran-db --file=schema.sql --remote    │
+│  npm run deploy                                               │
+└───────────────────────────────────────────────────────────────┘
+
+⚠️ IMPORTANT : Après "npm run deploy", vous verrez une URL comme :
+   https://algran-api-xxx.workers.dev
+   
+   COPIEZ CETTE URL ! 📋
+
+═══════════════════════════════════════════════════════════════════
+                    🔧 CONFIGURER L'URL
+═══════════════════════════════════════════════════════════════════
+
+1. Ouvrez le fichier : admin.js
+
+2. Ligne 9, remplacez :
+   const API_URL = 'http://localhost:8787';
+   
+   Par (avec VOTRE URL) :
+   const API_URL = 'https://algran-api-xxx.workers.dev';
+
+3. Sauvegardez (Ctrl + S)
+
+═══════════════════════════════════════════════════════════════════
+                    🎉 TESTER
+═══════════════════════════════════════════════════════════════════
+
+python -m http.server 8000
+
+Puis ouvrez : http://localhost:8000/admin.html
+Mot de passe : admin123
+
+Plus d'erreurs ! Tout fonctionne ! ✅
+
+═══════════════════════════════════════════════════════════════════
+
+Pour plus de détails : DEPLOIEMENT_RAPIDE.md
+
+═══════════════════════════════════════════════════════════════════
