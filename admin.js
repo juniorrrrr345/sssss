@@ -311,7 +311,7 @@ async function loadFarmsForForm() {
             const select = document.getElementById('productFarm');
             select.innerHTML = '<option value="">Aucune</option>' + 
                 data.farms.map(farm => 
-                    `<option value="${farm.id}">🌿 ${farm.name}</option>`
+                    `<option value="${farm.id}">${farm.name}</option>`
                 ).join('');
         }
     } catch (error) {
