@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produit - Avec Amour</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <h1 class="shop-title">Avec Amour</h1>
+        <a href="index.html" class="back-button">← Retour</a>
+    </header>
+
+    <main class="product-detail">
+        <div id="productContainer" class="product-container">
+            <!-- Le produit sera chargé dynamiquement ici -->
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Récupérer l'ID du produit depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        async function loadProduct() {
+            try {
+                const product = await api.getProduct(productId);
+                const container = document.getElementById('productContainer');
+                
+                if (!product) {
+                    container.innerHTML = '<p class="error">Produit non trouvé</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="product-media">
+                        ${product.media_type === 'video' 
+                            ? `<iframe src="${product.media_url}" frameborder="0" allowfullscreen></iframe>`
+                            : `<img src="${product.media_url}" alt="${product.name}">`
+                        }
+                    </div>
+                    <div class="product-info">
+                        <h2>${product.name}</h2>
+                        <p class="product-description">${product.description || ''}</p>
+                        <div class="product-meta">
+                            <span class="category">📁 ${product.category_name || 'Non catégorisé'}</span>
+                            <span class="farm">🌱 ${product.farm_name || 'Farm inconnu'}</span>
+                        </div>
+                        <div class="prices-list">
+                            <h3>Prix disponibles :</h3>
+                            ${product.prices.map(price => `
+                                <div class="price-item">
+                                    <span class="quantity">${price.qty}</span>
+                                    <span class="price">${price.price}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button id="orderButton" class="order-button">Commander</button>
+                    </div>
+                `;
+
+                // Gérer le clic sur le bouton commander
+                document.getElementById('orderButton').addEventListener('click', async () => {
+                    const settings = await api.getSettings();
+                    if (settings.command_url) {
+                        window.open(settings.command_url, '_blank');
+                    } else {
+                        alert('URL de commande non configurée');
+                    }
+                });
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                container.innerHTML = '<p class="error">Erreur lors du chargement du produit</p>';
+            }
+        }
+
+        // Charger le produit au chargement de la page
+        loadProduct();
+        
+        // Charger les paramètres du site
+        api.loadSiteSettings();
+    </script>
+</body>
+</html>
