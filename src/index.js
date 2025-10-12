@@ -633,16 +633,21 @@ async function getFarms(env, headers) {
 
 // POST /api/farms
 async function createFarm(request, env, headers) {
-  const data = await request.json();
-  const slug = generateSlug(data.name);
-  
-  const { results } = await env.DB.prepare(`
-    INSERT INTO farms (name, slug, description, country, display_order)
-    VALUES (?, ?, ?, ?, ?)
-    RETURNING *
-  `).bind(data.name, slug, data.description || '', data.country || '', data.display_order || 0).all();
-  
-  return jsonResponse({ success: true, farm: results[0] }, 201, headers);
+  try {
+    const data = await request.json();
+    const slug = generateSlug(data.name);
+    
+    const { results } = await env.DB.prepare(`
+      INSERT INTO farms (name, slug, description, country, display_order)
+      VALUES (?, ?, ?, ?, ?)
+      RETURNING *
+    `).bind(data.name, slug, data.description || '', data.country || '', data.display_order || 0).all();
+    
+    return jsonResponse({ success: true, farm: results[0] }, 201, headers);
+  } catch (error) {
+    console.error('Error creating farm:', error);
+    return jsonResponse({ success: false, error: error.message }, 500, headers);
+  }
 }
 
 // PUT /api/farms/:id

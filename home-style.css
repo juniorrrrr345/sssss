@@ -20,8 +20,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #000000;
-    color: #ffffff;
+    background: #000000 !important;
+    color: #ffffff !important;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
@@ -147,12 +147,9 @@ body {
     transform: translateX(-50%);
     font-family: 'Pacifico', cursive;
     font-size: 3rem;
-    background: linear-gradient(135deg, #ff3ea5, #ff6ec7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff !important;
     z-index: 2;
-    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 /* Rainbow Arc */
@@ -210,7 +207,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    color: var(--text-primary);
+    color: #ffffff !important;
 }
 
 .section-title i {
