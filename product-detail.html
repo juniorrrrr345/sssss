@@ -312,12 +312,10 @@
                         <source src="${videoUrl}" type="video/mp4">
                         Votre navigateur ne supporte pas les vidéos.
                     </video>
-                </div>` : ''}
-                
-                ${product.image_url && product.image_url.trim() ? `
+                </div>` : (product.image_url && product.image_url.trim() ? `
                 <div class="product-media">
                     <img src="${product.image_url}" alt="${product.name}" class="product-image">
-                </div>` : ''}
+                </div>` : '')}
 
                 <div class="product-info">
                     ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
