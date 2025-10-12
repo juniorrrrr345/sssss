@@ -202,27 +202,38 @@
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Accueil</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
         </a>
-        <a href="products.html" class="nav-item active">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Produits</span>
+        <a href="products-complete.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <i class="fas fa-th"></i>
-            <span>Catégories</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
-            <i class="fas fa-envelope"></i>
-            <span>Contact</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
         </a>
     </nav>
 
     <script src="script.js"></script>
     <script>
-        // Données des produits
-        const products = [
+        // Configuration API - Changez cette URL après déploiement
+        const API_URL = 'http://localhost:8787';
+        
+        // Données des produits (seront chargées depuis l'API)
+        let products = [
             {
                 id: 1,
                 name: "100K ROSIN",
@@ -428,8 +439,53 @@
             }
         });
 
-        // Affichage initial
-        displayProducts(filteredProducts);
+        // Charger les produits depuis l'API
+        async function loadProductsFromAPI() {
+            try {
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+                
+                if (data.success && data.products && data.products.length > 0) {
+                    // Transformer les données de l'API pour correspondre au format attendu
+                    products = data.products.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        category: p.category_name || 'Non catégorisé',
+                        badge: p.badge || '⭐',
+                        price: p.price,
+                        unit: p.unit || '/ 3.5g',
+                        image: p.image_url || 'images/product-placeholder.jpg'
+                    }));
+                    
+                    filteredProducts = [...products];
+                    displayProducts(filteredProducts);
+                    console.log(`✅ ${products.length} produits chargés depuis l'API`);
+                } else {
+                    // Si l'API ne retourne rien, utiliser les données statiques
+                    console.warn('⚠️ Utilisation des produits statiques (API non disponible)');
+                    displayProducts(filteredProducts);
+                }
+            } catch (error) {
+                console.error('❌ Erreur lors du chargement des produits:', error);
+                console.warn('⚠️ Utilisation des produits statiques (API non disponible)');
+                // Afficher quand même les produits statiques
+                displayProducts(filteredProducts);
+            }
+        }
+
+        // Charger les produits au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProductsFromAPI();
+            
+            // Gérer le filtre par catégorie depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryFilter = urlParams.get('category');
+            if (categoryFilter) {
+                setTimeout(() => {
+                    handleSearch(categoryFilter);
+                }, 500);
+            }
+        });
     </script>
 </body>
 </html>
