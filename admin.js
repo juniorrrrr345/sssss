@@ -137,7 +137,6 @@ function handleNavigation(item) {
     if (section === 'services') loadServices();
     if (section === 'social') loadSocialNetworks();
     if (section === 'settings') loadSettings();
-    if (section === 'settings') loadSettings();
 }
 
 // Charger le dashboard
