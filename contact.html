@@ -23,59 +23,9 @@
         
         <h1 class="title" style="color: #fff; font-weight: 900; text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);">Nous Contacter</h1>
 
-        <div class="contact-cards">
-            <!-- LinkTree Card -->
-            <div class="contact-card disabled">
-                <div class="card-icon">
-                    <i class="fas fa-tree"></i>
-                </div>
-                <div class="card-content">
-                    <h3>LinkTree</h3>
-                    <p>Non disponible</p>
-                </div>
-            </div>
-
-            <!-- WhatsApp Card -->
-            <a href="https://wa.me/votre_numero" class="contact-card" target="_blank">
-                <div class="card-icon whatsapp">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <div class="card-content">
-                    <h3>WhatsApp</h3>
-                    <p>Contactez-nous directement sur WhatsApp</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <!-- Telegram Card -->
-            <a href="https://t.me/votre_canal" class="contact-card" target="_blank">
-                <div class="card-icon telegram">
-                    <i class="fab fa-telegram"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Canal Telegram</h3>
-                    <p>Rejoignez notre canal Telegram pour les dernières mises à jour</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-
-            <!-- Instagram Card -->
-            <a href="https://instagram.com/votre_compte" class="contact-card" target="_blank">
-                <div class="card-icon instagram">
-                    <i class="fab fa-instagram"></i>
-                </div>
-                <div class="card-content">
-                    <h3>Instagram</h3>
-                    <p>Suivez-nous sur Instagram</p>
-                </div>
-                <div class="card-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
+        <div class="contact-cards" id="contactCards">
+            <!-- Les cartes seront générées dynamiquement -->
+            <p style="text-align: center; padding: 2rem; color: #fff;">Chargement...</p>
         </div>
     </div>
 
@@ -124,52 +74,92 @@
             }
         }
 
-        // Mettre à jour les liens de contact
+        // Générer les cartes de contact dynamiquement
         function updateContactLinks(settings) {
-            // WhatsApp
-            const whatsappCard = document.querySelector('a[href*="wa.me"]');
-            if (whatsappCard && settings.shop_whatsapp) {
-                const whatsappNumber = settings.shop_whatsapp.replace(/\D/g, ''); // Nettoyer le numéro
-                whatsappCard.href = `https://wa.me/${whatsappNumber}`;
-                whatsappCard.classList.remove('disabled');
-            } else if (whatsappCard) {
-                whatsappCard.classList.add('disabled');
-                whatsappCard.removeAttribute('href');
-            }
-
-            // Telegram
-            const telegramCard = document.querySelector('a[href*="t.me"]');
-            if (telegramCard && settings.shop_telegram) {
-                const telegramUsername = settings.shop_telegram.replace('@', '');
-                telegramCard.href = `https://t.me/${telegramUsername}`;
-                telegramCard.classList.remove('disabled');
-            } else if (telegramCard) {
-                telegramCard.classList.add('disabled');
-                telegramCard.removeAttribute('href');
-            }
-
-            // Instagram
-            const instagramCard = document.querySelector('a[href*="instagram.com"]');
-            if (instagramCard && settings.shop_instagram) {
-                const instagramUsername = settings.shop_instagram.replace('@', '');
-                instagramCard.href = `https://instagram.com/${instagramUsername}`;
-                instagramCard.classList.remove('disabled');
-            } else if (instagramCard) {
-                instagramCard.classList.add('disabled');
-                instagramCard.removeAttribute('href');
-            }
-
+            const container = document.getElementById('contactCards');
+            let html = '';
+            
             // LinkTree
-            const linktreeCard = document.querySelector('.contact-card.disabled');
-            if (linktreeCard && settings.shop_linktree) {
-                linktreeCard.classList.remove('disabled');
-                const newLink = document.createElement('a');
-                newLink.href = settings.shop_linktree;
-                newLink.className = 'contact-card';
-                newLink.target = '_blank';
-                newLink.innerHTML = linktreeCard.innerHTML;
-                linktreeCard.parentNode.replaceChild(newLink, linktreeCard);
+            if (settings.shop_linktree && settings.shop_linktree.trim() !== '') {
+                html += `
+                    <a href="${settings.shop_linktree}" class="contact-card" target="_blank">
+                        <div class="card-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>LinkTree</h3>
+                            <p>Tous nos liens en un seul endroit</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
             }
+            
+            // WhatsApp
+            if (settings.shop_whatsapp && settings.shop_whatsapp.trim() !== '') {
+                const whatsappNumber = settings.shop_whatsapp.replace(/\D/g, '');
+                html += `
+                    <a href="https://wa.me/${whatsappNumber}" class="contact-card" target="_blank">
+                        <div class="card-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>WhatsApp</h3>
+                            <p>Contactez-nous directement sur WhatsApp</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // Telegram
+            if (settings.shop_telegram && settings.shop_telegram.trim() !== '') {
+                const telegramUsername = settings.shop_telegram.replace('@', '');
+                html += `
+                    <a href="https://t.me/${telegramUsername}" class="contact-card" target="_blank">
+                        <div class="card-icon telegram">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Canal Telegram</h3>
+                            <p>Rejoignez notre canal Telegram</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // Instagram
+            if (settings.shop_instagram && settings.shop_instagram.trim() !== '') {
+                const instagramUsername = settings.shop_instagram.replace('@', '');
+                html += `
+                    <a href="https://instagram.com/${instagramUsername}" class="contact-card" target="_blank">
+                        <div class="card-icon instagram">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Instagram</h3>
+                            <p>Suivez-nous sur Instagram</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // Si aucun réseau configuré
+            if (html === '') {
+                html = '<p style="text-align: center; padding: 3rem; color: #fff; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,1);">Aucun réseau social configuré.<br>Allez dans Admin → Paramètres → Réseaux Sociaux</p>';
+            }
+            
+            container.innerHTML = html;
         }
 
         // Charger au démarrage

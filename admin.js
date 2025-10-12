@@ -566,6 +566,8 @@ async function saveSettings(section) {
     let fields = [];
     if (section === 'general') {
         fields = ['shop_name'];
+    } else if (section === 'social') {
+        fields = ['shop_whatsapp', 'shop_telegram', 'shop_instagram', 'shop_linktree'];
     } else if (section === 'orderlink') {
         fields = ['order_link'];
     } else if (section === 'theme') {
