@@ -98,14 +98,30 @@
         // Charger les données depuis l'API
         async function loadHomeData() {
             try {
-                // Charger le nom de la boutique
+                // Charger les paramètres (nom de la boutique + image de fond)
                 const configResponse = await fetch(`${API_URL}/api/settings`);
                 if (configResponse.ok) {
                     const data = await configResponse.json();
-                    if (data.success && data.settings && data.settings.shop_name) {
-                        document.getElementById('giantLogo').textContent = data.settings.shop_name;
-                        document.getElementById('logoSubtitle').textContent = '';
-                        document.title = data.settings.shop_name + ' - Accueil';
+                    if (data.success && data.settings) {
+                        // Nom de la boutique
+                        if (data.settings.shop_name) {
+                            document.getElementById('giantLogo').textContent = data.settings.shop_name;
+                            document.getElementById('logoSubtitle').textContent = '';
+                            document.title = data.settings.shop_name + ' - Accueil';
+                        }
+                        
+                        // Image de fond
+                        if (data.settings.background_image_url && data.settings.background_image_url.trim() !== '') {
+                            const cosmicBg = document.querySelector('.cosmic-background');
+                            if (cosmicBg) {
+                                cosmicBg.style.backgroundImage = `url('${data.settings.background_image_url}')`;
+                                cosmicBg.style.backgroundSize = 'cover';
+                                cosmicBg.style.backgroundPosition = 'center';
+                                cosmicBg.style.backgroundAttachment = 'fixed';
+                                cosmicBg.style.backgroundRepeat = 'no-repeat';
+                                cosmicBg.style.opacity = '1';
+                            }
+                        }
                     }
                 }
 
