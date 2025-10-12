@@ -57,6 +57,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .category-card:hover .category-image {
+            transform: scale(1.1);
         }
 
         .category-icon-overlay {
@@ -64,38 +69,39 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 4rem;
+            font-size: 5rem;
             opacity: 0.9;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
         .category-info {
-            padding: 25px;
             text-align: center;
         }
 
         .category-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: white;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .category-description {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
 
         .category-count {
             display: inline-block;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(255, 62, 165, 0.3), rgba(168, 85, 247, 0.3));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            font-size: 1rem;
+            color: white;
             font-weight: 600;
         }
 
