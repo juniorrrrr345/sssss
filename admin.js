@@ -688,10 +688,12 @@ async function loadSocialNetworks() {
         if (data.success) {
             socialNetworks = data.networks || [];
             displaySocialNetworks(socialNetworks);
+        } else {
+            displaySocialNetworks([]);
         }
     } catch (error) {
         console.error('Error loading social networks:', error);
-        showAlert('Erreur lors du chargement des réseaux sociaux', 'error');
+        displaySocialNetworks([]);
     }
 }
 
