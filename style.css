@@ -290,6 +290,13 @@ body {
     line-height: 1.4;
 }
 
+.card-content,
+.card-content span,
+.card-content div,
+.card-content strong {
+    color: #ffffff !important;
+}
+
 .card-arrow {
     font-size: 1.2rem;
     color: var(--text-secondary);

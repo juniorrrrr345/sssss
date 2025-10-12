@@ -1,0 +1,29 @@
+====================================
+🔴 URGENT - VOUS DEVEZ EXÉCUTER CETTE COMMANDE
+====================================
+
+L'ERREUR :
+table farms has no column named slug: SQLITE_ERROR
+
+====================================
+✅ EXÉCUTEZ CETTE COMMANDE MAINTENANT :
+====================================
+
+wrangler d1 execute algran-db --file=add-slug-to-farms.sql --remote
+
+====================================
+ENSUITE :
+====================================
+
+npm run deploy
+
+python -m http.server 8005
+
+====================================
+
+SANS CETTE COMMANDE, LES FARMS NE POURRONT PAS ÊTRE CRÉÉES !
+
+La colonne 'slug' est manquante dans votre table 'farms'.
+Le script SQL 'add-slug-to-farms.sql' va l'ajouter.
+
+====================================
