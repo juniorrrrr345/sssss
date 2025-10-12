@@ -281,11 +281,12 @@ body {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
+    color: #ffffff !important;
 }
 
 .card-content p {
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: #ffffff !important;
     line-height: 1.4;
 }
 
