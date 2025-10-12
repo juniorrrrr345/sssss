@@ -526,7 +526,7 @@
             const options = categories.map(cat => 
                 `<option value="${cat.id}">${cat.icon || '📦'} ${cat.name}</option>`
             ).join('');
-            select.innerHTML = `<option value="all">📦 Toutes les catégories</option>${options}`;
+            select.innerHTML = `<option value="all">Toutes les catégories</option>${options}`;
         }
 
         // Remplir le select des farms
