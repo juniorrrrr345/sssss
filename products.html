@@ -284,8 +284,8 @@
                 if (data.success) {
                     // Filtrer seulement les produits actifs
                     allProducts = data.products.filter(p => p.is_active);
-                    products = [...allProducts];
-                    displayProducts(products);
+                    productsData = [...allProducts];
+                    displayProducts(productsData);
                 }
             } catch (error) {
                 console.error('Erreur lors du chargement des produits:', error);
