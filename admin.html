@@ -661,27 +661,119 @@
 
             <!-- Settings Section -->
             <section class="content-section" id="settings">
-                <div class="card">
+                <!-- Informations Générales -->
+                <div class="card" style="margin-bottom: 25px;">
                     <div class="card-header">
-                        <h2 class="card-title">Paramètres de la Boutique</h2>
+                        <h2 class="card-title"><i class="fas fa-store"></i> Informations Générales</h2>
                     </div>
-                    <form id="settingsForm">
+                    <div class="card-body">
                         <div class="form-group">
                             <label>Nom de la boutique</label>
-                            <input type="text" value="Al Gran" class="form-control">
+                            <input type="text" id="setting_shop_name" class="form-control" placeholder="Al Gran">
                         </div>
                         <div class="form-group">
-                            <label>Email de contact</label>
-                            <input type="email" class="form-control">
+                            <label>Description de la boutique</label>
+                            <textarea id="setting_shop_description" class="form-control" rows="3" placeholder="Découvrez notre univers unique"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label>WhatsApp</label>
-                            <input type="text" class="form-control">
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Email de contact</label>
+                                <input type="email" id="setting_shop_email" class="form-control" placeholder="contact@algran.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Téléphone</label>
+                                <input type="tel" id="setting_shop_phone" class="form-control" placeholder="+33 6 XX XX XX XX">
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-success">
+                        <button type="button" onclick="saveSettings('general')" class="btn btn-success">
                             <i class="fas fa-save"></i> Sauvegarder
                         </button>
-                    </form>
+                    </div>
+                </div>
+
+                <!-- Liens Sociaux et Contact -->
+                <div class="card" style="margin-bottom: 25px;">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-share-alt"></i> Liens Sociaux et Contact</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label><i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp</label>
+                                <input type="text" id="setting_shop_whatsapp" class="form-control" placeholder="+33612345678 ou 33612345678">
+                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Numéro avec indicatif pays (sans espaces)</small>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fab fa-telegram" style="color: #0088cc;"></i> Telegram</label>
+                                <input type="text" id="setting_shop_telegram" class="form-control" placeholder="@votre_canal ou votre_canal">
+                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Nom d'utilisateur ou canal (avec ou sans @)</small>
+                            </div>
+                        </div>
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</label>
+                                <input type="text" id="setting_shop_instagram" class="form-control" placeholder="@votre_compte ou votre_compte">
+                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Nom d'utilisateur (avec ou sans @)</small>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-tree" style="color: #43E55E;"></i> LinkTree</label>
+                                <input type="url" id="setting_shop_linktree" class="form-control" placeholder="https://linktr.ee/votre_profil">
+                                <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">URL complète de votre LinkTree</small>
+                            </div>
+                        </div>
+                        <button type="button" onclick="saveSettings('social')" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Paramètres de la Page d'Accueil -->
+                <div class="card" style="margin-bottom: 25px;">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-home"></i> Contenu de la Page d'Accueil</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Titre principal (ex: "AVEC AMOUR")</label>
+                            <input type="text" id="setting_home_welcome_title" class="form-control" placeholder="AVEC AMOUR">
+                            <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Le premier mot sera en grand, le reste en plus petit</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Texte de présentation des services</label>
+                            <textarea id="setting_home_services_text" class="form-control" rows="3" placeholder="Bienvenue sur AVEC AMOUR ! Nous vous proposons..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Texte sur les livraisons</label>
+                            <textarea id="setting_home_delivery_text" class="form-control" rows="2" placeholder="Livraisons/Meetup dans toute l'ile de France..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Zones de livraison (départements)</label>
+                            <input type="text" id="setting_home_delivery_zones" class="form-control" placeholder="75,77,78,91,92,93,94,95">
+                            <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Numéros de départements séparés par des virgules</small>
+                        </div>
+                        <button type="button" onclick="saveSettings('home')" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Paramètres Avancés -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-cog"></i> Paramètres Avancés</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Mode maintenance</label>
+                            <select id="setting_maintenance_mode" class="form-control">
+                                <option value="0">Désactivé</option>
+                                <option value="1">Activé (site inaccessible)</option>
+                            </select>
+                        </div>
+                        <button type="button" onclick="saveSettings('advanced')" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </div>
                 </div>
             </section>
         </main>

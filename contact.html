@@ -106,6 +106,75 @@
         </a>
     </nav>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Charger les paramètres de contact depuis l'API
+        async function loadContactSettings() {
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                
+                if (data.success) {
+                    const settings = data.settings;
+                    updateContactLinks(settings);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des paramètres:', error);
+            }
+        }
+
+        // Mettre à jour les liens de contact
+        function updateContactLinks(settings) {
+            // WhatsApp
+            const whatsappCard = document.querySelector('a[href*="wa.me"]');
+            if (whatsappCard && settings.shop_whatsapp) {
+                const whatsappNumber = settings.shop_whatsapp.replace(/\D/g, ''); // Nettoyer le numéro
+                whatsappCard.href = `https://wa.me/${whatsappNumber}`;
+                whatsappCard.classList.remove('disabled');
+            } else if (whatsappCard) {
+                whatsappCard.classList.add('disabled');
+                whatsappCard.removeAttribute('href');
+            }
+
+            // Telegram
+            const telegramCard = document.querySelector('a[href*="t.me"]');
+            if (telegramCard && settings.shop_telegram) {
+                const telegramUsername = settings.shop_telegram.replace('@', '');
+                telegramCard.href = `https://t.me/${telegramUsername}`;
+                telegramCard.classList.remove('disabled');
+            } else if (telegramCard) {
+                telegramCard.classList.add('disabled');
+                telegramCard.removeAttribute('href');
+            }
+
+            // Instagram
+            const instagramCard = document.querySelector('a[href*="instagram.com"]');
+            if (instagramCard && settings.shop_instagram) {
+                const instagramUsername = settings.shop_instagram.replace('@', '');
+                instagramCard.href = `https://instagram.com/${instagramUsername}`;
+                instagramCard.classList.remove('disabled');
+            } else if (instagramCard) {
+                instagramCard.classList.add('disabled');
+                instagramCard.removeAttribute('href');
+            }
+
+            // LinkTree
+            const linktreeCard = document.querySelector('.contact-card.disabled');
+            if (linktreeCard && settings.shop_linktree) {
+                linktreeCard.classList.remove('disabled');
+                const newLink = document.createElement('a');
+                newLink.href = settings.shop_linktree;
+                newLink.className = 'contact-card';
+                newLink.target = '_blank';
+                newLink.innerHTML = linktreeCard.innerHTML;
+                linktreeCard.parentNode.replaceChild(newLink, linktreeCard);
+            }
+        }
+
+        // Charger au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContactSettings();
+        });
+    </script>
 </body>
 </html>

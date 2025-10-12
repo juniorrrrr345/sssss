@@ -4,8 +4,8 @@
  */
 
 // Configuration API
-const API_URL = 'http://localhost:8787'; // Pour dev local - Changez pour production: https://algran-api.juniorrrrr345.workers.dev
-const ADMIN_PASSWORD = 'admin123'; // À changer après premier login
+const API_URL = 'http://localhost:8787'; // Pour dev local - Changez pour production: https://algran-api.VOTRE-SUBDOMAIN.workers.dev
+const ADMIN_PASSWORD = 'votre_nouveau_mot_de_passe'; // À changer après premier login
 
 // État global
 let currentSection = 'dashboard';
@@ -404,11 +404,64 @@ async function loadSettings() {
         const data = await response.json();
         
         if (data.success) {
-            // Remplir le formulaire avec les valeurs actuelles
-            console.log('Settings loaded:', data.settings);
+            const settings = data.settings;
+            
+            // Remplir tous les champs avec les valeurs actuelles
+            Object.keys(settings).forEach(key => {
+                const input = document.getElementById(`setting_${key}`);
+                if (input) {
+                    input.value = settings[key] || '';
+                }
+            });
+            
+            console.log('Settings loaded:', settings);
         }
     } catch (error) {
         console.error('Error loading settings:', error);
+    }
+}
+
+// Sauvegarder les paramètres
+async function saveSettings(section) {
+    const settingsData = {};
+    
+    // Déterminer quels champs sauvegarder selon la section
+    let fields = [];
+    if (section === 'general') {
+        fields = ['shop_name', 'shop_description', 'shop_email', 'shop_phone'];
+    } else if (section === 'social') {
+        fields = ['shop_whatsapp', 'shop_telegram', 'shop_instagram', 'shop_linktree'];
+    } else if (section === 'home') {
+        fields = ['home_welcome_title', 'home_services_text', 'home_delivery_text', 'home_delivery_zones'];
+    } else if (section === 'advanced') {
+        fields = ['maintenance_mode'];
+    }
+    
+    // Récupérer les valeurs des champs
+    fields.forEach(field => {
+        const input = document.getElementById(`setting_${field}`);
+        if (input) {
+            settingsData[field] = input.value;
+        }
+    });
+    
+    try {
+        const response = await fetch(`${API_URL}/api/settings`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settingsData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('Paramètres sauvegardés avec succès !', 'success');
+        } else {
+            showAlert('Erreur: ' + (result.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
     }
 }
 
@@ -459,3 +512,4 @@ function showAlert(message, type = 'success') {
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.saveSettings = saveSettings;

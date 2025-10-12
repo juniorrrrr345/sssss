@@ -270,120 +270,62 @@
         </a>
     </nav>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
     <script>
-        // Données des produits - correspondant à l'image
-        const products = [
-            {
-                id: 1,
-                name: "100K ROSIN",
-                farm: "100K",
-                badge: "🔥 LIVE ROSIN",
-                price: 200,
-                unit: "/ 2g",
-                image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
-            },
-            {
-                id: 2,
-                name: "HASH BURGER",
-                farm: "ESTATICO",
-                badge: "❄️ FROZEN USA US",
-                price: 120,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
-            },
-            {
-                id: 3,
-                name: "POTION",
-                farm: "WIZARD TREES",
-                badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
-                price: 110,
-                unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
-            },
-            {
-                id: 4,
-                name: "ZANGBANGER",
-                farm: "WIZARD TREES",
-                badge: "🌿 TOPSHELF CALIFORNIA BRANDED US",
-                price: 110,
-                unit: "/ 3,5g",
-                image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
-            },
-            {
-                id: 5,
-                name: "TOP DRY",
-                farm: "NOFARM",
-                badge: "💨 DRY MA",
-                price: 50,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
-            },
-            {
-                id: 6,
-                name: "DARK MATTER",
-                farm: "COSMIC FARMS",
-                badge: "🌿 TOPSHELF",
-                price: 110,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
-            },
-            {
-                id: 7,
-                name: "CONCRETE JUNGLE",
-                farm: "URBAN GROW",
-                badge: "💎 BRANDED",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
-            },
-            {
-                id: 8,
-                name: "ZKITTLEZ",
-                farm: "RAINBOW FARMS",
-                badge: "🌈 TOPSHELF",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
-            },
-            {
-                id: 9,
-                name: "BIG Z",
-                farm: "PURPLE HAZE",
-                badge: "💜 PREMIUM",
-                price: 100,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
-            },
-            {
-                id: 10,
-                name: "GUSHMINTZ",
-                farm: "MINTY FRESH",
-                badge: "❄️ STATIC",
-                price: 170,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
-            }
-        ];
+        // Charger les produits depuis l'API
+        let products = [];
+        let allProducts = [];
 
-        let filteredProducts = [...products];
+        // Charger les produits depuis l'API
+        async function loadProducts() {
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.PRODUCTS);
+                if (data.success) {
+                    // Filtrer seulement les produits actifs
+                    allProducts = data.products.filter(p => p.is_active);
+                    products = [...allProducts];
+                    displayProducts(products);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des produits:', error);
+                showError('Impossible de charger les produits. Veuillez réessayer plus tard.');
+            }
+        }
+
+        // Afficher un message d'erreur
+        function showError(message) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; display: block; color: #ff6b6b;"></i>
+                    ${message}
+                </div>
+            `;
+        }
+
+        let filteredProducts = [];
 
         // Créer une carte produit
         function createProductCard(product) {
+            const imageUrl = product.image_url || 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop';
+            const badge = product.badge || (product.category_icon ? `${product.category_icon} ${product.category_name}` : '');
+            
             return `
                 <div class="product-card" data-id="${product.id}">
                     <div class="product-image-container">
-                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.background='linear-gradient(135deg, rgba(255, 62, 165, 0.3), rgba(168, 85, 247, 0.3))'">
-                        <div class="product-badge">${product.badge}</div>
+                        <img src="${imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/400x280/1a1a2e/ffffff?text=${encodeURIComponent(product.name)}'">
+                        ${badge ? `<div class="product-badge">${badge}</div>` : ''}
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
+                        ${product.description ? `
                         <div class="product-farm">
                             <span class="farm-icon"></span>
-                            <span>${product.farm}</span>
-                        </div>
+                            <span>${product.description.substring(0, 50)}${product.description.length > 50 ? '...' : ''}</span>
+                        </div>` : ''}
                         <div class="product-price">
-                            ${product.price}€ <span class="unit">${product.unit}</span>
+                            ${product.price}€ <span class="unit">${product.unit || '/ 3.5g'}</span>
                         </div>
                     </div>
                 </div>
@@ -404,12 +346,13 @@
         function handleSearch(term) {
             const searchTerm = term.toLowerCase().trim();
             if (searchTerm === '') {
-                filteredProducts = [...products];
+                filteredProducts = [...allProducts];
             } else {
-                filteredProducts = products.filter(p => 
+                filteredProducts = allProducts.filter(p => 
                     p.name.toLowerCase().includes(searchTerm) ||
-                    p.farm.toLowerCase().includes(searchTerm) ||
-                    p.badge.toLowerCase().includes(searchTerm)
+                    (p.description && p.description.toLowerCase().includes(searchTerm)) ||
+                    (p.category_name && p.category_name.toLowerCase().includes(searchTerm)) ||
+                    (p.badge && p.badge.toLowerCase().includes(searchTerm))
                 );
             }
             displayProducts(filteredProducts);
@@ -437,8 +380,10 @@
             }
         });
 
-        // Affichage initial
-        displayProducts(filteredProducts);
+        // Affichage initial - charger les produits
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+        });
     </script>
 </body>
 </html>

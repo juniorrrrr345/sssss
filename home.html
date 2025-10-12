@@ -20,8 +20,8 @@
     </div>
 
     <!-- Logo géant AVEC en arrière-plan -->
-    <div class="giant-logo">AVEC</div>
-    <div class="logo-subtitle">Amour</div>
+    <div class="giant-logo" id="mainLogo">AVEC</div>
+    <div class="logo-subtitle" id="subLogo">Amour</div>
 
     <!-- Arc-en-ciel décoratif -->
     <div class="rainbow-arc"></div>
@@ -37,9 +37,8 @@
                 <i class="fas fa-heart"></i>
                 Nos Services
             </h2>
-            <div class="section-content">
-                <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
-                <p>Livraisons/Meetup dans toute l'ile de France, le jour même,envois de France à France ou à l'international avec suivis,preuves de dépôts et assurances. 👍 😜 🌍</p>
+            <div class="section-content" id="servicesContent">
+                <p>Chargement...</p>
             </div>
         </section>
 
@@ -50,15 +49,8 @@
                 Zone de Livraison
             </h2>
             <div class="section-content">
-                <div class="department-grid">
-                    <div class="department-badge">75</div>
-                    <div class="department-badge">77</div>
-                    <div class="department-badge">78</div>
-                    <div class="department-badge">91</div>
-                    <div class="department-badge">92</div>
-                    <div class="department-badge">93</div>
-                    <div class="department-badge">94</div>
-                    <div class="department-badge">95</div>
+                <div class="department-grid" id="deliveryZones">
+                    <div class="department-badge">Chargement...</div>
                 </div>
             </div>
         </section>
@@ -92,9 +84,89 @@
         </a>
     </nav>
 
+    <script src="config.js"></script>
     <script>
+        // Charger les paramètres de la page d'accueil
+        async function loadHomeSettings() {
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                
+                if (data.success) {
+                    const settings = data.settings;
+                    updateHomeContent(settings);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des paramètres:', error);
+                // Afficher le contenu par défaut en cas d'erreur
+                showDefaultContent();
+            }
+        }
+
+        // Mettre à jour le contenu de la page
+        function updateHomeContent(settings) {
+            // Titre principal
+            if (settings.home_welcome_title) {
+                const words = settings.home_welcome_title.split(' ');
+                const mainLogo = document.getElementById('mainLogo');
+                const subLogo = document.getElementById('subLogo');
+                
+                if (words.length >= 2) {
+                    mainLogo.textContent = words[0];
+                    subLogo.textContent = words.slice(1).join(' ');
+                } else {
+                    mainLogo.textContent = settings.home_welcome_title;
+                    subLogo.textContent = '';
+                }
+            }
+
+            // Textes de présentation
+            const servicesContent = document.getElementById('servicesContent');
+            if (settings.home_services_text || settings.home_delivery_text) {
+                let html = '';
+                if (settings.home_services_text) {
+                    html += `<p>${settings.home_services_text}</p>`;
+                }
+                if (settings.home_delivery_text) {
+                    html += `<p>${settings.home_delivery_text}</p>`;
+                }
+                servicesContent.innerHTML = html;
+            }
+
+            // Zones de livraison
+            if (settings.home_delivery_zones) {
+                const zones = settings.home_delivery_zones.split(',').map(z => z.trim());
+                const deliveryZones = document.getElementById('deliveryZones');
+                deliveryZones.innerHTML = zones.map(zone => 
+                    `<div class="department-badge">${zone}</div>`
+                ).join('');
+            }
+        }
+
+        // Afficher le contenu par défaut en cas d'erreur
+        function showDefaultContent() {
+            document.getElementById('servicesContent').innerHTML = `
+                <p>Bienvenue sur AVEC AMOUR ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p>
+                <p>Livraisons/Meetup dans toute l'ile de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+            `;
+            
+            document.getElementById('deliveryZones').innerHTML = `
+                <div class="department-badge">75</div>
+                <div class="department-badge">77</div>
+                <div class="department-badge">78</div>
+                <div class="department-badge">91</div>
+                <div class="department-badge">92</div>
+                <div class="department-badge">93</div>
+                <div class="department-badge">94</div>
+                <div class="department-badge">95</div>
+            `;
+        }
+
         // Initialiser l'animation Lottie hero
         document.addEventListener('DOMContentLoaded', () => {
+            // Charger les paramètres
+            loadHomeSettings();
+            
+            // Animation Lottie
             lottie.loadAnimation({
                 container: document.getElementById('heroAnimation'),
                 renderer: 'svg',
