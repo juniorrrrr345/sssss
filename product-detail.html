@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100K ROSIN - Al Gran</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles spécifiques pour la page de détails du produit */
+        .product-detail-container {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 0 100px;
+            min-height: 100vh;
+        }
+
+        /* Carousel d'images */
+        .product-carousel {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-images {
+            display: flex;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-image {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .carousel-button:hover {
+            background: rgba(255, 62, 165, 0.6);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-button.prev {
+            left: 20px;
+        }
+
+        .carousel-button.next {
+            right: 20px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: var(--primary-pink);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Badge LIVE ROSIN */
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-pink), #ff1493);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(255, 62, 165, 0.5);
+            z-index: 10;
+        }
+
+        /* Informations du produit */
+        .product-info {
+            padding: 1.5rem;
+            background: linear-gradient(180deg, transparent, rgba(10, 14, 39, 0.95));
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-farm {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 62, 165, 0.15);
+            border: 1px solid var(--primary-pink);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+        }
+
+        .product-vendor {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .vendor-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .vendor-name {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Sélection de quantité */
+        .quantity-section {
+            margin-bottom: 2rem;
+        }
+
+        .quantity-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quantity-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .quantity-option {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quantity-option:hover {
+            border-color: var(--primary-pink);
+            background: rgba(255, 62, 165, 0.1);
+        }
+
+        .quantity-option.selected {
+            border-color: var(--primary-pink);
+            background: rgba(255, 62, 165, 0.15);
+            box-shadow: 0 5px 20px rgba(255, 62, 165, 0.3);
+        }
+
+        .quantity-weight {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .quantity-price {
+            font-size: 1.1rem;
+            color: var(--primary-pink);
+            font-weight: 700;
+        }
+
+        /* Bouton principal */
+        .order-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-pink), #ff1493);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 62, 165, 0.4);
+            text-transform: capitalize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .order-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 62, 165, 0.6);
+        }
+
+        .order-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .product-carousel {
+                height: 60vh;
+            }
+
+            .product-title {
+                font-size: 1.5rem;
+            }
+
+            .quantity-options {
+                flex-direction: column;
+            }
+
+            .carousel-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-button.prev {
+                left: 10px;
+            }
+
+            .carousel-button.next {
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="product-detail-container">
+        <!-- Carousel d'images du produit -->
+        <div class="product-carousel">
+            <div class="product-badge">
+                <i class="fas fa-star"></i> LIVE ROSIN
+            </div>
+
+            <div class="carousel-images" id="carouselImages">
+                <img src="images/product-placeholder.jpg" alt="100K ROSIN" class="carousel-image">
+                <img src="images/product-placeholder.jpg" alt="100K ROSIN" class="carousel-image">
+                <img src="images/product-placeholder.jpg" alt="100K ROSIN" class="carousel-image">
+            </div>
+
+            <button class="carousel-button prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-button next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="carousel-indicators" id="carouselIndicators">
+                <span class="indicator active" onclick="goToSlide(0)"></span>
+                <span class="indicator" onclick="goToSlide(1)"></span>
+                <span class="indicator" onclick="goToSlide(2)"></span>
+            </div>
+        </div>
+
+        <!-- Informations du produit -->
+        <div class="product-info">
+            <h1 class="product-title">100K ROSIN</h1>
+
+            <div class="product-farm">
+                <i class="fas fa-leaf"></i>
+                Farm: 100K
+            </div>
+
+            <div class="product-vendor">
+                <div class="vendor-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span class="vendor-name">DONNY BURGER</span>
+            </div>
+
+            <!-- Sélection de la quantité -->
+            <div class="quantity-section">
+                <div class="quantity-title">
+                    <i class="fas fa-balance-scale"></i>
+                    Sélectionner la Quantité
+                </div>
+
+                <div class="quantity-options">
+                    <div class="quantity-option" onclick="selectQuantity(this, '2G', '290€')">
+                        <div class="quantity-weight">2G</div>
+                        <div class="quantity-price">290€</div>
+                    </div>
+                    <div class="quantity-option" onclick="selectQuantity(this, '4G', '380€')">
+                        <div class="quantity-weight">4G</div>
+                        <div class="quantity-price">380€</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bouton de commande -->
+            <button class="order-button" onclick="placeOrder()">
+                <i class="fas fa-shopping-cart"></i>
+                Commencer Maintenant
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item active">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <i class="fas fa-th"></i>
+            <span>Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </nav>
+
+    <script src="script.js"></script>
+    <script>
+        // Carousel functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-image');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function showSlide(index) {
+            const carouselImages = document.getElementById('carouselImages');
+            if (index >= slides.length) currentSlide = 0;
+            if (index < 0) currentSlide = slides.length - 1;
+            
+            carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        // Quantity selection
+        let selectedQuantity = null;
+        let selectedPrice = null;
+
+        function selectQuantity(element, quantity, price) {
+            // Remove selected class from all options
+            document.querySelectorAll('.quantity-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            selectedQuantity = quantity;
+            selectedPrice = price;
+        }
+
+        // Place order
+        function placeOrder() {
+            if (!selectedQuantity) {
+                alert('Veuillez sélectionner une quantité avant de continuer.');
+                return;
+            }
+            
+            // Rediriger vers la page de contact ou afficher un message
+            alert(`Commande: 100K ROSIN - ${selectedQuantity} pour ${selectedPrice}\n\nNous allons vous rediriger vers notre service de commande.`);
+            window.location.href = 'contact.html';
+        }
+
+        // Auto-play carousel (optional)
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+    </script>
+</body>
+</html>
