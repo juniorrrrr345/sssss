@@ -239,21 +239,35 @@
         
         // Charger les données depuis l'API
         async function loadProducts() {
+            console.log('🔄 Chargement des produits depuis l\'API...');
             try {
                 const response = await fetch(`${API_URL}/api/products`);
+                console.log('📡 Réponse reçue:', response.status);
+                
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('📦 Données reçues:', data);
+                    
                     const productsArray = data.success ? data.products : data;
+                    console.log('📋 Nombre de produits:', productsArray ? productsArray.length : 0);
+                    
+                    if (!productsArray || productsArray.length === 0) {
+                        console.log('⚠️ Aucun produit disponible');
+                        displayProducts([]);
+                        return;
+                    }
+                    
                     products = productsArray.map(p => {
                         // Parser les prices qui sont en string JSON
                         let pricesArray = [];
                         try {
                             pricesArray = typeof p.prices === 'string' ? JSON.parse(p.prices) : p.prices;
                         } catch (e) {
+                            console.log('⚠️ Erreur parsing prices pour', p.name, e);
                             pricesArray = [];
                         }
                         
-                        return {
+                        const product = {
                             id: p.id,
                             name: p.name,
                             category: p.category_name || 'Sans catégorie',
@@ -262,14 +276,21 @@
                             unit: pricesArray && pricesArray.length > 0 ? `/ ${pricesArray[0].quantity}` : (p.unit ? `/ ${p.unit}` : ''),
                             image: p.image_url || 'images/product-placeholder.jpg'
                         };
+                        console.log('✅ Produit traité:', product);
+                        return product;
                     });
+                    
                     filteredProducts = [...products];
+                    console.log('🎯 Affichage de', filteredProducts.length, 'produits');
                     displayProducts(filteredProducts);
+                } else {
+                    console.error('❌ Erreur HTTP:', response.status);
                 }
             } catch (error) {
-                console.error('Erreur lors du chargement des produits:', error);
+                console.error('❌ Erreur lors du chargement des produits:', error);
                 products = [];
                 filteredProducts = [];
+                displayProducts([]);
             }
         }
         
