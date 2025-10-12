@@ -435,6 +435,44 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Créer une nouvelle catégorie
+function createNewCategory() {
+    const name = prompt('Nom de la catégorie (ex: Extract, Weed):');
+    if (!name) return;
+    
+    const icon = prompt('Icône (emoji, ex: 🔥):', '');
+    const description = prompt('Description:', '');
+    const imageUrl = prompt('URL de l\'image (optionnel):\n\n💡 Utilisez un lien direct (finit par .jpg, .png, .webp)\nExemple: https://i.imgur.com/xxxxx.jpg', '');
+    
+    createCategoryAction({ 
+        name, 
+        icon, 
+        description,
+        image_url: imageUrl 
+    });
+}
+
+// Créer une catégorie
+async function createCategoryAction(data) {
+    try {
+        const response = await fetch(`${API_URL}/api/categories`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            showAlert('Catégorie créée avec succès !', 'success');
+            loadCategories();
+        } else {
+            showAlert('Erreur: ' + (result.message || 'Création impossible'), 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('Erreur lors de la création', 'error');
+    }
+}
+
 // Éditer une catégorie
 function editCategory(id) {
     const category = categories.find(c => c.id === id);
