@@ -61,14 +61,18 @@
 
         // Charger les informations de la boutique
         async function loadShopInfo() {
+            console.log('Loading shop info...');
             try {
                 const [settingsResponse, servicesResponse] = await Promise.all([
                     fetch(`${API_URL}/api/settings`),
                     fetch(`${API_URL}/api/services`)
                 ]);
                 
+                console.log('Responses received');
                 const settingsData = await settingsResponse.json();
                 const servicesData = await servicesResponse.json();
+                console.log('Settings:', settingsData);
+                console.log('Services:', servicesData);
                 
                 // Mettre à jour le nom de la boutique
                 if (settingsData.success && settingsData.settings) {
