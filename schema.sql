@@ -1,6 +1,4 @@
--- Schéma de base de données pour Cloudflare D1
-
--- Table des catégories
+-- Table des categories
 CREATE TABLE IF NOT EXISTS categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL
@@ -26,7 +24,7 @@ CREATE TABLE IF NOT EXISTS products (
   FOREIGN KEY(farm_id) REFERENCES farms(id) ON DELETE SET NULL
 );
 
--- Table des prix (relation 1-N avec products)
+-- Table des prix
 CREATE TABLE IF NOT EXISTS prices (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   product_id INTEGER NOT NULL,
@@ -35,14 +33,14 @@ CREATE TABLE IF NOT EXISTS prices (
   FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- Table des réseaux sociaux
+-- Table des reseaux sociaux
 CREATE TABLE IF NOT EXISTS socials (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   url TEXT NOT NULL
 );
 
--- Table des paramètres du site
+-- Table des parametres
 CREATE TABLE IF NOT EXISTS settings (
   id INTEGER PRIMARY KEY,
   shop_name TEXT DEFAULT 'Avec Amour',
@@ -50,22 +48,22 @@ CREATE TABLE IF NOT EXISTS settings (
   command_url TEXT
 );
 
--- Index pour améliorer les performances
+-- Index pour les performances
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
 CREATE INDEX IF NOT EXISTS idx_products_farm ON products(farm_id);
 CREATE INDEX IF NOT EXISTS idx_prices_product ON prices(product_id);
 
--- Données initiales par défaut
+-- Donnees initiales
 INSERT OR IGNORE INTO settings (id, shop_name) VALUES (1, 'Avec Amour');
 
--- Exemples de catégories
+-- Categories par defaut
 INSERT OR IGNORE INTO categories (name) VALUES 
   ('Fleurs'),
   ('Extraits'),
   ('Huiles'),
   ('Comestibles');
 
--- Exemples de farms
+-- Farms par defaut
 INSERT OR IGNORE INTO farms (name) VALUES 
   ('Farm Californie'),
   ('Farm Amsterdam'),
