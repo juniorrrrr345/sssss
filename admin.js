@@ -1054,11 +1054,16 @@ function displaySocialFields() {
     }
     
     container.innerHTML = currentSocialLinks.map((link, index) => `
-        <tr>
-            <td><i class="fas fa-link" style="font-size: 1.2rem;"></i></td>
-            <td><strong>${link.name}</strong></td>
-            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${link.url}</td>
-            <td>${link.display_order}</td>
+        <div class="social-field-row" style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <div style="display: grid; grid-template-columns: 80px 1fr 2fr auto; gap: 10px; align-items: center;">
+                <input type="text" value="${link.icon || ''}" onchange="updateSocialLink(${index}, 'icon', this.value)" placeholder="📱" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; text-align: center; font-size: 1.5rem;">
+                <input type="text" value="${link.name || ''}" onchange="updateSocialLink(${index}, 'name', this.value)" placeholder="Nom" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                <input type="url" value="${link.url || ''}" onchange="updateSocialLink(${index}, 'url', this.value)" placeholder="https://..." style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                <button type="button" onclick="removeSocialLink(${index})" class="btn btn-danger" style="padding: 8px 12px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
             <td>
                 <span class="badge ${link.is_active ? 'badge-success' : 'badge-warning'}">
                     ${link.is_active ? 'Actif' : 'Inactif'}
