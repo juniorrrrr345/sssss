@@ -6,7 +6,7 @@
 // Configuration API
 // ⚠️ IMPORTANT: Remplacez cette URL par votre URL Cloudflare Workers après déploiement
 // Exemple: https://algran-api-votre-nom.workers.dev
-const API_URL = 'http://localhost:8787'; 
+const API_URL = 'https://algran-api.calitek-junior.workers.dev'; 
 const ADMIN_PASSWORD = 'admin123'; // À changer après premier login
 
 // Vérifier si l'API est accessible
