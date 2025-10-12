@@ -138,14 +138,14 @@ body {
 
 .logo-subtitle {
     position: fixed;
-    top: 30%;
+    top: 20%;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Pacifico', cursive;
-    font-size: 3rem;
-    color: #ffffff !important;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.2) !important;
     z-index: 2;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 /* Rainbow Arc */
@@ -220,6 +220,13 @@ body {
 
 .section-content p {
     margin-bottom: 0.8rem;
+    color: #ffffff !important;
+}
+
+.section-content ul,
+.section-content li,
+.section-content div {
+    color: #ffffff !important;
 }
 
 .section-content p:last-child {
