@@ -5,17 +5,15 @@ CREATE TABLE IF NOT EXISTS social_networks (
     icon TEXT NOT NULL,
     url TEXT NOT NULL,
     display_order INTEGER DEFAULT 0,
-    is_active INTEGER DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Index pour l'ordre d'affichage
-CREATE INDEX IF NOT EXISTS idx_social_networks_order ON social_networks(display_order, is_active);
+-- Supprimer les anciens réseaux
+DELETE FROM social_networks;
 
--- Trigger pour mettre à jour updated_at
-CREATE TRIGGER IF NOT EXISTS update_social_networks_timestamp 
-AFTER UPDATE ON social_networks
-BEGIN
-    UPDATE social_networks SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
-END;
+-- Insérer des exemples de réseaux sociaux
+INSERT INTO social_networks (id, name, icon, url, display_order) VALUES
+(1, 'WhatsApp', '📱', 'https://wa.me/33612345678', 1),
+(2, 'Telegram', '✈️', 'https://t.me/algran', 2),
+(3, 'Instagram', '📸', 'https://instagram.com/algran', 3),
+(4, 'Email', '✉️', 'mailto:contact@algran.com', 4);
