@@ -151,6 +151,25 @@ export default {
         return await deleteService(id, env, corsHeaders);
       }
 
+      // Farms Routes
+      if (path === '/api/farms' && method === 'GET') {
+        return await getFarms(env, corsHeaders);
+      }
+
+      if (path === '/api/farms' && method === 'POST') {
+        return await createFarm(request, env, corsHeaders);
+      }
+
+      if (path.match(/^\/api\/farms\/\d+$/) && method === 'PUT') {
+        const id = path.split('/')[3];
+        return await updateFarm(id, request, env, corsHeaders);
+      }
+
+      if (path.match(/^\/api\/farms\/\d+$/) && method === 'DELETE') {
+        const id = path.split('/')[3];
+        return await deleteFarm(id, env, corsHeaders);
+      }
+
       return jsonResponse({ error: 'Route not found' }, 404, corsHeaders);
       
     } catch (error) {
