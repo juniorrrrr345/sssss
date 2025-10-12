@@ -1,0 +1,40 @@
+====================================
+🔧 RÉSOUDRE LE CONFLIT GIT
+====================================
+
+Exécutez ces commandes dans l'ordre :
+
+# 1. Voir quel fichier est en conflit
+git status
+
+# 2. Annuler le pull en cours
+git merge --abort
+
+# 3. Sauvegarder vos changements locaux
+git stash
+
+# 4. Récupérer la dernière version
+git pull origin cursor/deploy-local-web-store-from-github-901c
+
+# 5. Restaurer vos changements si nécessaire
+git stash pop
+
+# 6. Redéployer l'API
+npm run deploy
+
+# 7. Lancer le serveur
+python -m http.server 8005
+
+====================================
+OU SOLUTION RAPIDE :
+====================================
+
+# Forcer la récupération (ATTENTION: perd vos modifications locales)
+git reset --hard origin/cursor/deploy-local-web-store-from-github-901c
+git pull origin cursor/deploy-local-web-store-from-github-901c
+npm run deploy
+python -m http.server 8005
+
+====================================
+Puis rechargez avec Ctrl + Shift + R !
+====================================
