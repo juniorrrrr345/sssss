@@ -462,8 +462,11 @@ async function loadSettings() {
             }
             
             document.getElementById('shopName').value = settings.shop_name || 'Al Gran';
-            document.getElementById('shopSubtitle').value = settings.shop_subtitle || 'Amour';
             document.getElementById('shopEmail').value = settings.shop_email || '';
+            document.getElementById('shopWhatsapp').value = settings.shop_whatsapp || '';
+            document.getElementById('shopTelegram').value = settings.shop_telegram || '';
+            document.getElementById('shopInstagram').value = settings.shop_instagram || '';
+            document.getElementById('shopDescription').value = settings.shop_description || '';
             
             console.log('Settings loaded:', settings);
         }
@@ -471,11 +474,8 @@ async function loadSettings() {
         console.error('Error loading settings:', error);
         // Ne pas afficher d'alerte d'erreur, juste utiliser les valeurs par défaut
         document.getElementById('shopName').value = 'Al Gran';
+        document.getElementById('shopSubtitle').value = 'Amour';
         document.getElementById('shopEmail').value = '';
-        document.getElementById('shopWhatsapp').value = '';
-        document.getElementById('shopTelegram').value = '';
-        document.getElementById('shopInstagram').value = '';
-        document.getElementById('shopDescription').value = '';
     }
 }
 
