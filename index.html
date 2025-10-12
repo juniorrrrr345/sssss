@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tous les Produits</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
+    <!-- Bulles flottantes en arrière-plan -->
+    <div class="floating-bubble"></div>
+    <div class="floating-bubble"></div>
+    <div class="floating-bubble"></div>
+    
     <div class="container">
         <header>
             <h1 class="main-title">Tous les Produits</h1>
@@ -18,7 +24,7 @@
                     <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom, catégorie ou farm...">
                 </div>
                 <button class="filter-btn" id="filterBtn">
-                    <span>🔻</span> Filtres
+                    <span style="font-size: 0.8rem;">▼</span> Filtres
                 </button>
             </div>
         </header>
