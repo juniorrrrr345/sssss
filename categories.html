@@ -126,19 +126,19 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            background: rgba(255, 255, 255, 0.05);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .category-card:hover {
             transform: translateY(-5px);
-            border-color: var(--primary-pink);
-            box-shadow: 0 15px 40px rgba(255, 62, 165, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
         }
 
         .category-card:hover::before {
-            opacity: 0.1;
+            opacity: 1;
         }
 
         .category-content {
