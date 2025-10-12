@@ -604,9 +604,11 @@ async function loadSettings() {
             
             const shopNameEl = document.getElementById('shopName');
             const bgImageEl = document.getElementById('backgroundImage');
+            const adminTitleEl = document.getElementById('adminTitle');
             
             if (shopNameEl) shopNameEl.value = settings.shop_name || 'Al Gran';
             if (bgImageEl) bgImageEl.value = settings.background_image_url || '';
+            if (adminTitleEl) adminTitleEl.textContent = (settings.shop_name || 'Al Gran') + ' Admin';
             
             console.log('Settings loaded:', settings);
         }
