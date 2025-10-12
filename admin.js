@@ -431,10 +431,18 @@ async function loadSettings() {
         
         if (data.success && data.settings) {
             // Remplir le formulaire avec les valeurs actuelles
-            const settings = {};
-            data.settings.forEach(setting => {
-                settings[setting.key] = setting.value;
-            });
+            let settings = {};
+            
+            // Si data.settings est un tableau
+            if (Array.isArray(data.settings)) {
+                data.settings.forEach(setting => {
+                    settings[setting.key] = setting.value;
+                });
+            } 
+            // Si data.settings est déjà un objet
+            else if (typeof data.settings === 'object') {
+                settings = data.settings;
+            }
             
             document.getElementById('shopName').value = settings.shop_name || 'Al Gran';
             document.getElementById('shopEmail').value = settings.shop_email || '';
@@ -447,7 +455,13 @@ async function loadSettings() {
         }
     } catch (error) {
         console.error('Error loading settings:', error);
-        showAlert('Erreur lors du chargement des paramètres', 'error');
+        // Ne pas afficher d'alerte d'erreur, juste utiliser les valeurs par défaut
+        document.getElementById('shopName').value = 'Al Gran';
+        document.getElementById('shopEmail').value = '';
+        document.getElementById('shopWhatsapp').value = '';
+        document.getElementById('shopTelegram').value = '';
+        document.getElementById('shopInstagram').value = '';
+        document.getElementById('shopDescription').value = '';
     }
 }
 

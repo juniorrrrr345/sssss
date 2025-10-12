@@ -76,10 +76,18 @@
                 const data = await response.json();
                 
                 if (data.success && data.settings) {
-                    const settings = {};
-                    data.settings.forEach(setting => {
-                        settings[setting.key] = setting.value;
-                    });
+                    let settings = {};
+                    
+                    // Si data.settings est un tableau
+                    if (Array.isArray(data.settings)) {
+                        data.settings.forEach(setting => {
+                            settings[setting.key] = setting.value;
+                        });
+                    } 
+                    // Si data.settings est déjà un objet
+                    else if (typeof data.settings === 'object') {
+                        settings = data.settings;
+                    }
                     
                     displayContactCards(settings);
                 } else {
