@@ -1280,10 +1280,10 @@ window.deleteCategoryConfirm = deleteCategoryConfirm;
 window.editFarm = editFarm;
 window.deleteFarmConfirm = deleteFarmConfirm;
 // Exposer les fonctions sociales
-window.addSocialField = addSocialField;
-window.updateSocialLink = updateSocialLink;
-window.removeSocialLink = removeSocialLink;
-window.saveSocialLinks = saveSocialLinks;
+window.addSocialFieldInSettings = addSocialFieldInSettings;
+window.updateSocialInSettings = updateSocialInSettings;
+window.removeSocialInSettings = removeSocialInSettings;
+window.saveSocialLinksInSettings = saveSocialLinksInSettings;
 window.editService = editService;
 window.deleteServiceConfirm = deleteServiceConfirm;
 window.saveSettings = saveSettings;
