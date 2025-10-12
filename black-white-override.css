@@ -1,5 +1,11 @@
 /* FORCER LE DESIGN NOIR ET BLANC PARTOUT */
 
+/* Supprimer bulles cosmiques */
+.bubbles-container,
+.bubble {
+    display: none !important;
+}
+
 /* Titres et logos EN BLANC */
 .logo-text,
 .title,

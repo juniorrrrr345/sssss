@@ -1037,7 +1037,7 @@ function displaySocialLinks(links) {
     
     tbody.innerHTML = links.map(link => `
         <tr>
-            <td style="font-size: 1.5rem;">${link.icon || '🔗'}</td>
+            <td><i class="fas fa-link" style="font-size: 1.2rem;"></i></td>
             <td><strong>${link.name}</strong></td>
             <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${link.url}</td>
             <td>${link.display_order}</td>
@@ -1069,7 +1069,6 @@ function openSocialModal(socialId = null) {
         if (social) {
             document.getElementById('socialName').value = social.name;
             document.getElementById('socialUrl').value = social.url;
-            document.getElementById('socialIcon').value = social.icon || '';
             document.getElementById('socialOrder').value = social.display_order || 0;
             document.getElementById('socialActive').checked = social.is_active === 1;
             document.querySelector('#socialModal .modal-title').innerHTML = '<i class="fas fa-edit"></i> Modifier le Réseau Social';
@@ -1167,7 +1166,6 @@ function openCategoryModal(categoryId = null) {
         if (category) {
             document.getElementById('categoryName').value = category.name;
             document.getElementById('categoryDescription').value = category.description || '';
-            document.getElementById('categoryIcon').value = category.icon || '';
             document.getElementById('categoryImageUrl').value = category.image_url || '';
             document.querySelector('#categoryModal .modal-title').innerHTML = '<i class="fas fa-edit"></i> Modifier la Catégorie';
         }
