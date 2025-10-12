@@ -227,7 +227,6 @@
         </a>
     </nav>
 
-    <script src="script.js"></script>
     <script>
         // Configuration API
         const API_URL = 'https://algran-api.calitek-junior.workers.dev';
@@ -329,146 +328,15 @@
             }
         }
 
-        // Données en dur pour fallback (si l'API ne fonctionne pas)
-        const fallbackProducts = [
-            {
-                id: 1,
-                name: "100K ROSIN",
-                category: "Extract",
-                badge: "🔥 LIVE ROSIN",
-                price: 200,
-                unit: "/ 2g",
-                image: "https://images.unsplash.com/photo-1605792657660-596af9009e82?w=500&h=400&fit=crop"
-            },
-            {
-                id: 2,
-                name: "HASH BURGER",
-                category: "Static-Sift",
-                badge: "💎 FROZEN USA",
-                price: 120,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1536964310528-e47dd655ecf3?w=500&h=400&fit=crop"
-            },
-            {
-                id: 3,
-                name: "POTION MAGIC",
-                category: "Extract",
-                badge: "🌿 TOPSHELF",
-                price: 110,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1603909075879-2c6e224fd5bb?w=500&h=400&fit=crop"
-            },
-            {
-                id: 4,
-                name: "ZANGBANGER",
-                category: "Frozen-Sift",
-                badge: "🔥 PREMIUM",
-                price: 110,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1566054757965-20c27d98b0e2?w=500&h=400&fit=crop"
-            },
-            {
-                id: 5,
-                name: "TOP DRY",
-                category: "Dry-Sift",
-                badge: "💨 DRY",
-                price: 50,
-                unit: "/ 3g",
-                image: "https://images.unsplash.com/photo-1587767766972-fdf899d364e6?w=500&h=400&fit=crop"
-            },
-            {
-                id: 6,
-                name: "DARK MATTER",
-                category: "Weed",
-                badge: "🌿 TOPSHELF",
-                price: 110,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1610896650098-34d3af7d98be?w=500&h=400&fit=crop"
-            },
-            {
-                id: 7,
-                name: "CONCRETE JUNGLE",
-                category: "Extract",
-                badge: "💎 BRANDED",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1563181672-99f84b03c2e5?w=500&h=400&fit=crop"
-            },
-            {
-                id: 8,
-                name: "ZKITTLEZ",
-                category: "Weed",
-                badge: "🌈 TOPSHELF",
-                price: 180,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1587760560986-1c8b85fc89e8?w=500&h=400&fit=crop"
-            },
-            {
-                id: 9,
-                name: "BIG Z",
-                category: "Static-Sift",
-                badge: "💜 PREMIUM",
-                price: 100,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1608571387750-4d14e2a4c179?w=500&h=400&fit=crop"
-            },
-            {
-                id: 10,
-                name: "GUSHMINTZ",
-                category: "Frozen-Sift",
-                badge: "❄️ STATIC",
-                price: 170,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1620912366589-b0c5285c2fc2?w=500&h=400&fit=crop"
-            },
-            {
-                id: 11,
-                name: "WEDDING CAKE",
-                category: "Weed",
-                badge: "💎 PREMIUM",
-                price: 150,
-                unit: "/ 7g",
-                image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&h=400&fit=crop"
-            },
-            {
-                id: 12,
-                name: "GELATO 41",
-                category: "Extract",
-                badge: "🔥 TOPSHELF",
-                price: 130,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1609770215665-9a5360f41b4e?w=500&h=400&fit=crop"
-            },
-            {
-                id: 13,
-                name: "PURPLE PUNCH",
-                category: "Dry-Sift",
-                badge: "💜 CALIFORNIA",
-                price: 120,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1617661394886-5919e6aa1a5a?w=500&h=400&fit=crop"
-            },
-            {
-                id: 14,
-                name: "BLUE DREAM",
-                category: "Weed",
-                badge: "💙 CLASSIC",
-                price: 95,
-                unit: "/ 3.5g",
-                image: "https://images.unsplash.com/photo-1628582420968-c0ed80e35b0d?w=500&h=400&fit=crop"
-            },
-            {
-                id: 15,
-                name: "OG KUSH",
-                category: "Extract",
-                badge: "👑 LEGEND",
-                price: 140,
-                unit: "/ 5g",
-                image: "https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=500&h=400&fit=crop"
+        // Afficher les produits
+        function displayProducts(productsToDisplay) {
+            const grid = document.getElementById('productsGrid');
+            if (productsToDisplay.length === 0) {
+                grid.innerHTML = '<div class="no-results"><i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>Aucun produit trouvé</div>';
+                return;
             }
-        ];
-
-        let filteredProducts = [];
+            grid.innerHTML = productsToDisplay.map(createProductCard).join('');
+        }
 
         // Créer une carte produit
         function createProductCard(product) {
@@ -490,16 +358,6 @@
                     </div>
                 </div>
             `;
-        }
-
-        // Afficher les produits
-        function displayProducts(productsToDisplay) {
-            const grid = document.getElementById('productsGrid');
-            if (productsToDisplay.length === 0) {
-                grid.innerHTML = '<div class="no-results"><i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>Aucun produit trouvé</div>';
-                return;
-            }
-            grid.innerHTML = productsToDisplay.map(createProductCard).join('');
         }
 
         // Recherche
