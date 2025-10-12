@@ -234,13 +234,9 @@ function displayProducts(productsToDisplay) {
 async function openProductModal(productId = null) {
     editingProductId = productId;
     
-    // Charger les catégories et farms si pas déjà fait
-    if (categories.length === 0) {
-        await loadCategoriesForForm();
-    }
-    if (farms.length === 0) {
-        await loadFarmsForForm();
-    }
+    // Charger les catégories et farms
+    await loadCategoriesForForm();
+    await loadFarmsForForm();
     
     // Réinitialiser le formulaire
     document.getElementById('productForm').reset();
@@ -314,15 +310,15 @@ async function loadFarmsForForm() {
         const response = await fetch(`${API_URL}/api/farms`);
         const data = await response.json();
         
-        if (data.success && data.farms) {
-            const select = document.getElementById('productFarm');
-            select.innerHTML = '<option value="">Aucune</option>' + 
-                data.farms.map(farm => 
-                    `<option value="${farm.id}">${farm.name}</option>`
-                ).join('');
-        }
+        farms = data.farms || [];
+        const select = document.getElementById('productFarm');
+        select.innerHTML = '<option value="">Aucune</option>' + 
+            farms.map(farm => 
+                `<option value="${farm.id}">${farm.name}</option>`
+            ).join('');
     } catch (error) {
         console.error('Error loading farms for form:', error);
+        document.getElementById('productFarm').innerHTML = '<option value="">Aucune</option>';
     }
 }
 
