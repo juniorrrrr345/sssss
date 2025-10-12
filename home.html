@@ -166,14 +166,18 @@
             // Charger les paramètres
             loadHomeSettings();
             
-            // Animation Lottie
-            lottie.loadAnimation({
-                container: document.getElementById('heroAnimation'),
-                renderer: 'svg',
-                loop: true,
-                autoplay: true,
-                path: 'https://lottie.host/b7f9d8e8-0a0c-4d52-a5e0-3a4d9c8f7b6a/VZ3gIHxd2M.json' // Animation cosmique/shopping
-            });
+            // Animation Lottie (optionnel - peut causer des erreurs 403)
+            try {
+                lottie.loadAnimation({
+                    container: document.getElementById('heroAnimation'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: 'https://lottie.host/b7f9d8e8-0a0c-4d52-a5e0-3a4d9c8f7b6a/VZ3gIHxd2M.json'
+                });
+            } catch (error) {
+                console.log('Animation Lottie non disponible');
+            }
         });
     </script>
 </body>

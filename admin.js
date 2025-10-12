@@ -487,20 +487,18 @@ function showAlert(message, type = 'success') {
     alert.appendChild(messageSpan);
     container.appendChild(alert);
     
-    // Charger l'animation Lottie appropriée
-    const lottieUrls = {
-        success: 'https://lottie.host/e9729a7c-8c92-4ab1-9ba8-093b6732e203/iOLLrbWYAc.json',
-        error: 'https://lottie.host/c1c7f68b-fa9e-4e3c-85e5-2bb7d23b6b1c/P0Bz7iQzGY.json',
-        warning: 'https://lottie.host/f9bc6d36-8a2f-4b8a-8e42-c45e7eb4ce31/sLRfjVZkN1.json'
+    // Icône simple au lieu de Lottie (problème de 403)
+    const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️'
     };
     
-    lottie.loadAnimation({
-        container: lottieContainer,
-        renderer: 'svg',
-        loop: type !== 'success', // Success joue une seule fois
-        autoplay: true,
-        path: lottieUrls[type] || lottieUrls.success
-    });
+    lottieContainer.style.fontSize = '32px';
+    lottieContainer.style.display = 'flex';
+    lottieContainer.style.alignItems = 'center';
+    lottieContainer.style.justifyContent = 'center';
+    lottieContainer.textContent = icons[type] || icons.success;
     
     setTimeout(() => {
         alert.style.opacity = '0';
