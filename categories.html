@@ -28,80 +28,80 @@
         <!-- Grille des catégories -->
         <div class="categories-grid" id="categoriesGrid">
             <!-- Les catégories seront chargées ici -->
-            <div class="category-card" data-category="extract">
+            <a href="products.html?category=extract" class="category-card">
                 <div class="category-icon-large">🔥</div>
                 <div class="category-content">
                     <h2 class="category-title">Extract</h2>
                     <p class="category-description">Extraits premium de haute qualité</p>
                     <div class="category-count">
                         <i class="fas fa-box"></i>
-                        <span id="count-extract">0</span> produits
+                        <span id="count-extract">...</span> produits
                     </div>
                 </div>
                 <div class="category-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
-            </div>
+            </a>
 
-            <div class="category-card" data-category="static-sift">
+            <a href="products.html?category=static-sift" class="category-card">
                 <div class="category-icon-large">💎</div>
                 <div class="category-content">
                     <h2 class="category-title">Static-Sift</h2>
                     <p class="category-description">Produits Static-Sift premium</p>
                     <div class="category-count">
                         <i class="fas fa-box"></i>
-                        <span id="count-static-sift">0</span> produits
+                        <span id="count-static-sift">...</span> produits
                     </div>
                 </div>
                 <div class="category-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
-            </div>
+            </a>
 
-            <div class="category-card" data-category="frozen-sift">
+            <a href="products.html?category=frozen-sift" class="category-card">
                 <div class="category-icon-large">❄️</div>
                 <div class="category-content">
                     <h2 class="category-title">Frozen-Sift</h2>
                     <p class="category-description">Frozen-Sift de qualité supérieure</p>
                     <div class="category-count">
                         <i class="fas fa-box"></i>
-                        <span id="count-frozen-sift">0</span> produits
+                        <span id="count-frozen-sift">...</span> produits
                     </div>
                 </div>
                 <div class="category-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
-            </div>
+            </a>
 
-            <div class="category-card" data-category="dry-sift">
+            <a href="products.html?category=dry-sift" class="category-card">
                 <div class="category-icon-large">🌿</div>
                 <div class="category-content">
                     <h2 class="category-title">Dry-Sift</h2>
                     <p class="category-description">Dry-Sift artisanal</p>
                     <div class="category-count">
                         <i class="fas fa-box"></i>
-                        <span id="count-dry-sift">0</span> produits
+                        <span id="count-dry-sift">...</span> produits
                     </div>
                 </div>
                 <div class="category-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
-            </div>
+            </a>
 
-            <div class="category-card" data-category="weed">
+            <a href="products.html?category=weed" class="category-card">
                 <div class="category-icon-large">🍃</div>
                 <div class="category-content">
                     <h2 class="category-title">Weed</h2>
                     <p class="category-description">Fleurs premium sélectionnées</p>
                     <div class="category-count">
                         <i class="fas fa-box"></i>
-                        <span id="count-weed">0</span> produits
+                        <span id="count-weed">...</span> produits
                     </div>
                 </div>
                 <div class="category-arrow">
                     <i class="fas fa-arrow-right"></i>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -113,7 +113,7 @@
             </div>
             <span class="nav-label">Accueil</span>
         </a>
-        <a href="products-complete.html" class="nav-item">
+        <a href="products.html" class="nav-item">
             <div class="nav-icon-circle">
                 <i class="fas fa-shopping-bag"></i>
             </div>
@@ -164,6 +164,8 @@
             gap: 20px;
             position: relative;
             overflow: hidden;
+            text-decoration: none;
+            color: white;
         }
 
         .category-card::before {
@@ -255,6 +257,7 @@
         }
     </style>
 
+    <script src="script.js"></script>
     <script>
         // Configuration API - Changez cette URL après déploiement
         const API_URL = 'http://localhost:8787';
@@ -283,19 +286,15 @@
                 }
             } catch (error) {
                 console.error('Erreur lors du chargement des catégories:', error);
+                // Mettre des valeurs par défaut
+                document.querySelectorAll('[id^="count-"]').forEach(el => {
+                    el.textContent = '0';
+                });
             }
         }
 
         // Charger les catégories au chargement de la page
         document.addEventListener('DOMContentLoaded', loadCategories);
-
-        // Gérer les clics sur les catégories
-        document.querySelectorAll('.category-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const category = this.getAttribute('data-category');
-                window.location.href = `products-complete.html?category=${category}`;
-            });
-        });
     </script>
 </body>
 </html>
