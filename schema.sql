@@ -229,13 +229,6 @@ INSERT OR IGNORE INTO services (id, title, content, icon, display_order, is_acti
 (2, 'Livraison', 'Livraisons/Meetup dans toute l''ile de France, le jour même, envois de France à France ou à l''international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍', '🚚', 2, 1),
 (3, 'Zone de Livraison', '75,77,78,91,92,93,94,95', '📍', 3, 1);
 
--- Insérer les réseaux sociaux par défaut
-INSERT OR IGNORE INTO social_links (id, name, url, icon, display_order, is_active) VALUES
-(1, 'WhatsApp', '', '📱', 1, 0),
-(2, 'Telegram', '', '✈️', 2, 0),
-(3, 'Instagram', '', '📷', 3, 0),
-(4, 'LinkTree', '', '🌳', 4, 0);
-
 -- Insérer les paramètres par défaut
 INSERT OR IGNORE INTO settings (key, value, description) VALUES
 ('shop_name', 'Al Gran', 'Nom de la boutique'),
