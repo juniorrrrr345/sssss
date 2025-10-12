@@ -1049,11 +1049,11 @@ function displaySocialFields() {
     if (!container) return;
     
     if (currentSocialLinks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Aucun réseau social</td></tr>';
+        container.innerHTML = '<p style="color: rgba(255,255,255,0.6); padding: 1rem;">Aucun réseau social. Cliquez sur "Ajouter un Réseau"</p>';
         return;
     }
     
-    tbody.innerHTML = links.map(link => `
+    container.innerHTML = currentSocialLinks.map((link, index) => `
         <tr>
             <td><i class="fas fa-link" style="font-size: 1.2rem;"></i></td>
             <td><strong>${link.name}</strong></td>
