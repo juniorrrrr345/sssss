@@ -62,7 +62,7 @@ body {
 .bubble {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(0, 0, 0, 0.4), rgba(168, 85, 247, 0.2));
+    background: radial-gradient(circle at 30% 30%, rgba(0, 0, 0, 0.4), rgba(50, 50, 50, 0.2));
     backdrop-filter: blur(10px);
     animation: float 15s ease-in-out infinite;
 }
@@ -224,7 +224,7 @@ body {
     border-color: rgba(0, 0, 0, 0.3);
     box-shadow: 
         0 10px 40px rgba(0, 0, 0, 0.3),
-        0 0 60px rgba(168, 85, 247, 0.2);
+        0 0 60px rgba(50, 50, 50, 0.2);
 }
 
 .contact-card:not(.disabled):hover::before {
@@ -310,7 +310,7 @@ body {
     transform: translateY(-2px) scale(0.98);
     box-shadow: 
         0 5px 20px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(168, 85, 247, 0.3);
+        0 0 40px rgba(50, 50, 50, 0.3);
     transition: all 0.1s ease;
 }
 
