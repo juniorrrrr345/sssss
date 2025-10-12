@@ -247,21 +247,34 @@ function closeProductModal() {
     editingProductId = null;
 }
 
-// Charger les catégories pour le formulaire
+// Charger les catégories et farms pour le formulaire
 async function loadCategoriesForForm() {
     try {
-        const response = await fetch(`${API_URL}/api/categories`);
-        const data = await response.json();
+        // Charger les catégories
+        const catResponse = await fetch(`${API_URL}/api/categories`);
+        const catData = await catResponse.json();
         
-        if (data.success) {
-            categories = data.categories;
-            const select = document.getElementById('productCategory');
-            select.innerHTML = categories.map(cat => 
+        if (catData.success) {
+            categories = catData.categories;
+            const catSelect = document.getElementById('productCategory');
+            catSelect.innerHTML = categories.map(cat => 
                 `<option value="${cat.id}">${cat.icon || ''} ${cat.name}</option>`
             ).join('');
         }
+        
+        // Charger les farms
+        const farmResponse = await fetch(`${API_URL}/api/farms`);
+        const farmData = await farmResponse.json();
+        
+        if (farmData.success) {
+            const farmSelect = document.getElementById('productFarm');
+            farmSelect.innerHTML = '<option value="">-- Aucune farm --</option>' + 
+                farmData.farms.map(farm => 
+                    `<option value="${farm.id}">${farm.name}</option>`
+                ).join('');
+        }
     } catch (error) {
-        console.error('Error loading categories:', error);
+        console.error('Error loading form data:', error);
     }
 }
 
@@ -272,10 +285,15 @@ async function handleProductSubmit(e) {
     const productData = {
         name: document.getElementById('productName').value,
         category_id: parseInt(document.getElementById('productCategory').value),
+        farm_id: document.getElementById('productFarm') ? parseInt(document.getElementById('productFarm').value) || null : null,
         price: parseFloat(document.getElementById('productPrice').value),
         unit: document.getElementById('productUnit').value,
         badge: document.getElementById('productBadge').value,
+        description: document.getElementById('productDescription') ? document.getElementById('productDescription').value : '',
+        long_description: document.getElementById('productLongDescription') ? document.getElementById('productLongDescription').value : '',
         image_url: document.getElementById('productImage').value,
+        video_url: document.getElementById('productVideo') ? document.getElementById('productVideo').value : '',
+        stock_quantity: document.getElementById('productStock') ? parseInt(document.getElementById('productStock').value) || 0 : 0,
         is_active: 1
     };
     

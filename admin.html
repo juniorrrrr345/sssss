@@ -792,37 +792,68 @@
             </div>
             <form id="productForm">
                 <div class="form-group">
-                    <label>Nom du produit</label>
-                    <input type="text" id="productName" required>
+                    <label>Nom du produit *</label>
+                    <input type="text" id="productName" required placeholder="ex: 100K ROSIN">
                 </div>
-                <div class="form-row">
+                
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
-                        <label>Catégorie</label>
+                        <label>Catégorie *</label>
                         <select id="productCategory" required>
-                            <option value="Extract">Extract</option>
-                            <option value="Static-Sift">Static-Sift</option>
-                            <option value="Frozen-Sift">Frozen-Sift</option>
-                            <option value="Dry-Sift">Dry-Sift</option>
-                            <option value="Weed">Weed</option>
+                            <!-- Chargé dynamiquement -->
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Prix (€)</label>
-                        <input type="number" id="productPrice" required>
+                        <label>Farm</label>
+                        <select id="productFarm">
+                            <option value="">-- Aucune farm --</option>
+                            <!-- Chargé dynamiquement -->
+                        </select>
                     </div>
                 </div>
+                
                 <div class="form-group">
-                    <label>Unité</label>
-                    <input type="text" id="productUnit" placeholder="ex: / 3.5g" required>
+                    <label>Description courte</label>
+                    <input type="text" id="productDescription" placeholder="Description en une ligne">
                 </div>
+                
+                <div class="form-group">
+                    <label>Description détaillée</label>
+                    <textarea id="productLongDescription" rows="3" placeholder="Description complète du produit..."></textarea>
+                </div>
+                
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Prix (€) *</label>
+                        <input type="number" step="0.01" id="productPrice" required placeholder="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Unité *</label>
+                        <input type="text" id="productUnit" placeholder="/ 3.5g" required value="/ 3.5g">
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="number" id="productStock" placeholder="0" value="0">
+                    </div>
+                </div>
+                
                 <div class="form-group">
                     <label>Badge</label>
                     <input type="text" id="productBadge" placeholder="ex: 🔥 TOPSHELF">
                 </div>
+                
                 <div class="form-group">
-                    <label>Image URL (ou uploader vers R2)</label>
-                    <input type="text" id="productImage">
+                    <label>Image URL</label>
+                    <input type="url" id="productImage" placeholder="https://imgur.com/...">
+                    <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">Imgur, Cloudinary, ou autre lien direct</small>
                 </div>
+                
+                <div class="form-group">
+                    <label>Vidéo URL (optionnel)</label>
+                    <input type="url" id="productVideo" placeholder="https://youtube.com/... ou lien direct">
+                    <small style="color: rgba(255, 255, 255, 0.6); font-size: 0.85rem;">YouTube, Vimeo, ou vidéo directe</small>
+                </div>
+                
                 <button type="submit" class="btn btn-success">
                     <i class="fas fa-save"></i> Enregistrer
                 </button>
@@ -869,6 +900,6 @@
         </div>
     </div>
 
-    <script src="admin.js?v=20251012-3"></script>
+    <script src="admin.js?v=20251012-4"></script>
 </body>
 </html>
