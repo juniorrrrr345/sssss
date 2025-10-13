@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BipCosa06 - Boutique</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-header {
+            background: #111;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #333;
+        }
+
+        .nav-header h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #333;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grille de produits */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            border-color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #222;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        /* Formulaires */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #fff;
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Boutons */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: #fff;
+        }
+
+        /* Contact cards */
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #fff;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: #fff;
+            transform: translateX(10px);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        /* Admin section */
+        .admin-login {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            border-radius: 15px;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.logged-in {
+            display: block;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: rgba(255,255,255,0.1);
+            font-weight: 700;
+        }
+
+        /* Alertes */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            background: #51cf66;
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="nav-header">
+        <h1 id="shopName">BipCosa06</h1>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-tabs">
+        <div class="nav-tab active" data-section="home">
+            <i class="fas fa-home"></i> Accueil
+        </div>
+        <div class="nav-tab" data-section="products">
+            <i class="fas fa-shopping-bag"></i> Produits
+        </div>
+        <div class="nav-tab" data-section="contact">
+            <i class="fas fa-envelope"></i> Contact
+        </div>
+        <div class="nav-tab" data-section="admin">
+            <i class="fas fa-cog"></i> Admin
+        </div>
+    </div>
+
+    <!-- Section Accueil -->
+    <div class="section active" id="home">
+        <h2>Bienvenue chez BipCosa06</h2>
+        <p style="font-size: 1.2rem; margin: 2rem 0; line-height: 1.8;">
+            Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. 
+            Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀
+        </p>
+        
+        <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 15px; margin-top: 2rem;">
+            <h3><i class="fas fa-truck"></i> Zone de Livraison</h3>
+            <p>Livraisons/Meetup dans toute l'île de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances.</p>
+            <div style="margin-top: 1rem; font-weight: 700; font-size: 1.2rem;">
+                75, 77, 78, 91, 92, 93, 94, 95
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Produits -->
+    <div class="section" id="products">
+        <h2>Nos Produits</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- Les produits seront ajoutés ici -->
+        </div>
+    </div>
+
+    <!-- Section Contact -->
+    <div class="section" id="contact">
+        <h2>Nous Contacter</h2>
+        <div id="contactLinks">
+            <a href="https://wa.me/33612345678" class="contact-card" target="_blank">
+                <div class="contact-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div>
+                    <h3>WhatsApp</h3>
+                    <p>Contactez-nous directement</p>
+                </div>
+            </a>
+            <a href="https://t.me/bipcosa06" class="contact-card" target="_blank">
+                <div class="contact-icon">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                <div>
+                    <h3>Telegram</h3>
+                    <p>Rejoignez notre canal</p>
+                </div>
+            </a>
+            <a href="https://instagram.com/bipcosa06" class="contact-card" target="_blank">
+                <div class="contact-icon">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div>
+                    <h3>Instagram</h3>
+                    <p>Suivez-nous sur Instagram</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Section Admin -->
+    <div class="section" id="admin">
+        <h2>Administration</h2>
+        
+        <div class="admin-login" id="adminLogin">
+            <h3>Connexion Admin</h3>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="adminPassword" placeholder="Entrez le mot de passe">
+            </div>
+            <button class="btn" onclick="login()">Se connecter</button>
+            <p style="margin-top: 1rem; color: #888;">Mot de passe par défaut : admin123</p>
+        </div>
+
+        <div class="admin-panel" id="adminPanel">
+            <h3>Gestion des Produits</h3>
+            <button class="btn" onclick="showAddProduct()" style="margin-bottom: 1rem;">
+                <i class="fas fa-plus"></i> Ajouter un produit
+            </button>
+            
+            <div id="productForm" style="display: none; margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                <h4>Nouveau Produit</h4>
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" id="newProductName" required>
+                </div>
+                <div class="form-group">
+                    <label>Prix (€)</label>
+                    <input type="number" id="newProductPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <input type="text" id="newProductCategory" placeholder="ex: Fleurs Premium">
+                </div>
+                <div class="form-group">
+                    <label>URL Image</label>
+                    <input type="url" id="newProductImage" placeholder="https://...">
+                </div>
+                <button class="btn" onclick="addProduct()">Ajouter</button>
+                <button class="btn" onclick="hideAddProduct()" style="margin-left: 1rem;">Annuler</button>
+            </div>
+
+            <table id="adminProductsTable">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prix</th>
+                        <th>Catégorie</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProductsList">
+                    <!-- Produits admin -->
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 3rem;">Paramètres</h3>
+            <div class="form-group">
+                <label>Nom de la boutique</label>
+                <input type="text" id="settingsShopName" value="BipCosa06">
+            </div>
+            <button class="btn" onclick="saveSettings()">Enregistrer</button>
+            <button class="btn btn-danger" onclick="logout()" style="margin-left: 1rem;">Déconnexion</button>
+        </div>
+    </div>
+
+    <script>
+        // État de l'application
+        let products = [];
+        let isAdminLoggedIn = false;
+
+        // Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const sectionId = tab.dataset.section;
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Charger les données depuis localStorage
+        function loadData() {
+            const savedProducts = localStorage.getItem('bipcosa_products');
+            if (savedProducts) {
+                products = JSON.parse(savedProducts);
+            } else {
+                // Produits par défaut
+                products = [
+                    { id: 1, name: 'Purple Haze', price: 35, category: 'Fleurs Premium', image: 'https://via.placeholder.com/300x200' },
+                    { id: 2, name: 'OG Kush', price: 40, category: 'Fleurs Premium', image: 'https://via.placeholder.com/300x200' },
+                    { id: 3, name: 'Super Skunk', price: 30, category: 'Fleurs', image: 'https://via.placeholder.com/300x200' },
+                ];
+                saveData();
+            }
+            
+            const savedSettings = localStorage.getItem('bipcosa_settings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                document.getElementById('shopName').textContent = settings.shopName || 'BipCosa06';
+            }
+            
+            displayProducts();
+            displayAdminProducts();
+        }
+
+        // Sauvegarder les données
+        function saveData() {
+            localStorage.setItem('bipcosa_products', JSON.stringify(products));
+        }
+
+        // Afficher les produits
+        function displayProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.image}" alt="${p.name}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name">${p.name}</h3>
+                        <p style="color: #888; margin-bottom: 0.5rem;">${p.category}</p>
+                        <div class="product-price">${p.price}€</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Admin - Login
+        function login() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'admin123') {
+                isAdminLoggedIn = true;
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminPanel').classList.add('logged-in');
+                showAlert('Connexion réussie !');
+                loadSettings();
+            } else {
+                showAlert('Mot de passe incorrect !', 'error');
+            }
+        }
+
+        // Admin - Logout
+        function logout() {
+            isAdminLoggedIn = false;
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminPanel').classList.remove('logged-in');
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // Admin - Afficher formulaire produit
+        function showAddProduct() {
+            document.getElementById('productForm').style.display = 'block';
+        }
+
+        function hideAddProduct() {
+            document.getElementById('productForm').style.display = 'none';
+            document.getElementById('newProductName').value = '';
+            document.getElementById('newProductPrice').value = '';
+            document.getElementById('newProductCategory').value = '';
+            document.getElementById('newProductImage').value = '';
+        }
+
+        // Admin - Ajouter produit
+        function addProduct() {
+            const name = document.getElementById('newProductName').value;
+            const price = parseFloat(document.getElementById('newProductPrice').value);
+            const category = document.getElementById('newProductCategory').value || 'Non catégorisé';
+            const image = document.getElementById('newProductImage').value || 'https://via.placeholder.com/300x200';
+            
+            if (name && price) {
+                const newProduct = {
+                    id: Date.now(),
+                    name,
+                    price,
+                    category,
+                    image
+                };
+                
+                products.push(newProduct);
+                saveData();
+                displayProducts();
+                displayAdminProducts();
+                hideAddProduct();
+                showAlert('Produit ajouté avec succès !');
+            }
+        }
+
+        // Admin - Afficher produits dans l'admin
+        function displayAdminProducts() {
+            const tbody = document.getElementById('adminProductsList');
+            tbody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.name}</td>
+                    <td>${p.price}€</td>
+                    <td>${p.category}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteProduct(${p.id})">Supprimer</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Admin - Supprimer produit
+        function deleteProduct(id) {
+            if (confirm('Supprimer ce produit ?')) {
+                products = products.filter(p => p.id !== id);
+                saveData();
+                displayProducts();
+                displayAdminProducts();
+                showAlert('Produit supprimé !');
+            }
+        }
+
+        // Admin - Charger paramètres
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('bipcosa_settings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                document.getElementById('settingsShopName').value = settings.shopName || 'BipCosa06';
+            }
+        }
+
+        // Admin - Sauvegarder paramètres
+        function saveSettings() {
+            const settings = {
+                shopName: document.getElementById('settingsShopName').value
+            };
+            localStorage.setItem('bipcosa_settings', JSON.stringify(settings));
+            document.getElementById('shopName').textContent = settings.shopName;
+            showAlert('Paramètres enregistrés !');
+        }
+
+        // Afficher une alerte
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.textContent = message;
+            if (type === 'error') {
+                alert.style.background = '#ff4757';
+            }
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialiser l'application
+        loadData();
+    </script>
+</body>
+</html>
