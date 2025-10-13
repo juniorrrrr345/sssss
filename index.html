@@ -3,97 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tous les Produits</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <title>Render N - Visualisateur de Données</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 class="main-title">Tous les Produits</h1>
-            
-            <div class="search-filter-bar">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom, catégorie ou farm...">
-                </div>
-                <button class="filter-btn" id="filterBtn">
-                    <span>🔻</span> Filtres
-                </button>
-            </div>
-        </header>
-
-        <!-- Loader Lottie -->
-        <div id="loadingAnimation" style="display: none; text-align: center; padding: 60px 0;">
-            <div id="lottieLoader" style="width: 200px; height: 200px; margin: 0 auto;"></div>
-            <p style="color: rgba(255, 255, 255, 0.7); margin-top: 20px; font-size: 1.1rem;">Chargement des produits...</p>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">Render N</h1>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Accueil</a></li>
+                <li><a href="#features" class="nav-link">Fonctionnalités</a></li>
+                <li><a href="#demo" class="nav-link">Démo</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
         </div>
-
-        <div class="products-grid" id="productsGrid">
-            <!-- Les produits seront générés dynamiquement -->
-        </div>
-
-        <!-- Animation État Vide -->
-        <div id="emptyStateAnimation" style="display: none; text-align: center; padding: 60px 20px;">
-            <div id="lottieEmpty" style="width: 300px; height: 300px; margin: 0 auto;"></div>
-            <h3 style="color: rgba(255, 255, 255, 0.9); margin-top: 20px; font-size: 1.5rem;">Aucun produit trouvé</h3>
-            <p style="color: rgba(255, 255, 255, 0.6); margin-top: 10px;">Essayez une autre recherche</p>
-        </div>
-    </div>
-
-    <!-- Modal des filtres -->
-    <div class="filter-modal" id="filterModal">
-        <div class="filter-modal-content">
-            <div class="filter-modal-header">
-                <h2>Filtres</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <div class="filter-modal-body">
-                <div class="filter-intro">
-                    <p>Les filtres avancés seront bientôt disponibles ! 🎯</p>
-                </div>
-                <div class="filter-options">
-                    <h3>Vous pourrez filtrer par :</h3>
-                    <ul class="filter-list">
-                        <li>📂 Catégorie</li>
-                        <li>💰 Prix</li>
-                        <li>📦 Type de produit</li>
-                        <li>🌍 Origine</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="filter-modal-footer">
-                <button class="btn-ok" id="btnOk">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <a href="home.html" class="nav-item active">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">🏠</span>
-            </div>
-            <span class="nav-label">Accueil</span>
-        </a>
-        <a href="products.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">📦</span>
-            </div>
-            <span class="nav-label">Produits</span>
-        </a>
-        <a href="categories.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">🛒</span>
-            </div>
-            <span class="nav-label">Catégories</span>
-        </a>
-        <a href="contact.html" class="nav-item">
-            <div class="nav-icon-circle">
-                <span class="nav-icon">✉️</span>
-            </div>
-            <span class="nav-label">Contact</span>
-        </a>
     </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2 class="hero-title">Bienvenue sur Render N</h2>
+            <p class="hero-subtitle">Visualisez et explorez vos données avec élégance</p>
+            <button class="cta-button" onclick="scrollToDemo()">Voir la Démo</button>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Fonctionnalités</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Visualisation Interactive</h3>
+                    <p>Créez des graphiques et des visualisations interactives de vos données</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Performance Optimisée</h3>
+                    <p>Rendu rapide même avec de grandes quantités de données</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Personnalisable</h3>
+                    <p>Adaptez les visualisations à vos besoins spécifiques</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Responsive Design</h3>
+                    <p>Fonctionne parfaitement sur tous les appareils</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <h2 class="section-title">Démo Interactive</h2>
+            <div class="demo-container">
+                <div class="controls">
+                    <h3>Paramètres</h3>
+                    <label for="n-value">Valeur de N:</label>
+                    <input type="number" id="n-value" min="1" max="100" value="10">
+                    
+                    <label for="render-type">Type de Rendu:</label>
+                    <select id="render-type">
+                        <option value="bars">Barres</option>
+                        <option value="circles">Cercles</option>
+                        <option value="spiral">Spirale</option>
+                        <option value="matrix">Matrice</option>
+                    </select>
+                    
+                    <button class="render-button" onclick="renderVisualization()">Générer</button>
+                </div>
+                <div class="visualization-area">
+                    <canvas id="render-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <p class="contact-text">Des questions? Contactez-nous à contact@render-n.com</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Render N. Tous droits réservés.</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
