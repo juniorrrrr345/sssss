@@ -70,7 +70,7 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .form-group input {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px 15px;
             border-radius: 10px;
@@ -78,6 +78,11 @@
             background: rgba(255, 255, 255, 0.05);
             color: white;
             font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
         }
 
         .form-group input:focus {
@@ -636,6 +641,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">Gestion des Catégories</h2>
+                        <button class="btn btn-primary" id="addCategoryBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Ajouter une catégorie
+                        </button>
                     </div>
                     <div class="table-container">
                         <table>
@@ -648,11 +656,11 @@
                                 </tr>
                             </thead>
                             <tbody id="categoriesTableBody">
-                                <tr><td>Extract</td><td>Extraits premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Static-Sift</td><td>Static-Sift premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Frozen-Sift</td><td>Frozen-Sift qualité</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Dry-Sift</td><td>Dry-Sift artisanal</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
-                                <tr><td>Weed</td><td>Fleurs premium</td><td>0</td><td><button class="btn btn-primary">Modifier</button></td></tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 2rem;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em" class="fa-spin" style="display: inline-block; vertical-align: middle;"><path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM304 464a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"/></svg> Chargement...
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -667,16 +675,48 @@
                     </div>
                     <form id="settingsForm">
                         <div class="form-group">
-                            <label>Nom de la boutique</label>
-                            <input type="text" value="Al Gran" class="form-control">
+                            <label for="settingsShopName">Nom de la boutique</label>
+                            <input type="text" id="settingsShopName" placeholder="Ex: Al Gran">
                         </div>
                         <div class="form-group">
-                            <label>Email de contact</label>
-                            <input type="email" class="form-control">
+                            <label for="settingsShopDescription">Description</label>
+                            <textarea id="settingsShopDescription" placeholder="Texte d'accueil, slogan..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="settingsShopEmail">Email</label>
+                                <input type="email" id="settingsShopEmail" placeholder="contact@exemple.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="settingsShopPhone">Téléphone</label>
+                                <input type="text" id="settingsShopPhone" placeholder="+33...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="settingsShopWhatsapp">WhatsApp</label>
+                                <input type="text" id="settingsShopWhatsapp" placeholder="Numéro international">
+                            </div>
+                            <div class="form-group">
+                                <label for="settingsShopTelegram">Telegram (@username)</label>
+                                <input type="text" id="settingsShopTelegram" placeholder="@votrecompte">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="settingsShopInstagram">Instagram (@username)</label>
+                                <input type="text" id="settingsShopInstagram" placeholder="@votrecompte">
+                            </div>
+                            <div class="form-group">
+                                <label for="settingsShopLinktree">Linktree</label>
+                                <input type="text" id="settingsShopLinktree" placeholder="https://linktr.ee/...">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label>WhatsApp</label>
-                            <input type="text" class="form-control">
+                            <label for="settingsSocialLinksJson">Réseaux sociaux (JSON)</label>
+                            <textarea id="settingsSocialLinksJson" placeholder='[
+  {"name":"WhatsApp","icon":"💬","url":"https://wa.me/...")}
+]'></textarea>
                         </div>
                         <button type="submit" class="btn btn-success">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Sauvegarder
@@ -698,6 +738,10 @@
                 <div class="form-group">
                     <label>Nom du produit</label>
                     <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" placeholder="Description du produit"></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -724,8 +768,65 @@
                     <input type="text" id="productBadge" placeholder="ex: 🔥 TOPSHELF">
                 </div>
                 <div class="form-group">
-                    <label>Image URL (ou uploader vers R2)</label>
-                    <input type="text" id="productImage">
+                    <label>Image</label>
+                    <input type="text" id="productImage" placeholder="https://...">
+                    <div class="form-row" style="margin-top: .5rem;">
+                        <div class="form-group">
+                            <input type="file" id="productImageFile" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="uploadProductImageBtn">Uploader vers R2</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap:.5rem;">
+                    <input type="checkbox" id="productIsActive" checked>
+                    <label for="productIsActive" style="margin:0;">Produit actif</label>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Enregistrer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Ajouter une Catégorie</h2>
+                <button class="btn-close" id="closeCategoryModalBtn">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="categoryDescription" placeholder="Description de la catégorie"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Icône (emoji)</label>
+                        <input type="text" id="categoryIcon" placeholder="📦">
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <input type="text" id="categoryImage" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: .5rem;">
+                    <div class="form-group">
+                        <input type="file" id="categoryImageFile" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" id="uploadCategoryImageBtn">Uploader vers R2</button>
+                    </div>
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap:.5rem;">
+                    <input type="checkbox" id="categoryIsActive" checked>
+                    <label for="categoryIsActive" style="margin:0;">Catégorie active</label>
                 </div>
                 <button type="submit" class="btn btn-success">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Enregistrer
