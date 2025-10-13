@@ -12,6 +12,12 @@ let currentSection = 'dashboard';
 let products = [];
 let categories = [];
 let editingProductId = null;
+// UI state (produits)
+let productsFiltered = [];
+let currentPage = 1;
+let pageSize = 10;
+let sortValue = 'created_desc';
+let searchValue = '';
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,7 +65,57 @@ function initEventListeners() {
     document.getElementById('addProductBtn').addEventListener('click', () => openProductModal());
     document.getElementById('closeModalBtn').addEventListener('click', closeProductModal);
     document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
+    const uploadBtn = document.getElementById('uploadProductImageBtn');
+    if (uploadBtn) uploadBtn.addEventListener('click', uploadProductImageToR2);
+    // Catégories
+    const addCategoryBtn = document.getElementById('addCategoryBtn');
+    if (addCategoryBtn) addCategoryBtn.addEventListener('click', () => openCategoryModal());
+    const closeCategoryModalBtn = document.getElementById('closeCategoryModalBtn');
+    if (closeCategoryModalBtn) closeCategoryModalBtn.addEventListener('click', closeCategoryModal);
+    const categoryForm = document.getElementById('categoryForm');
+    if (categoryForm) categoryForm.addEventListener('submit', handleCategorySubmit);
+    const uploadCategoryBtn = document.getElementById('uploadCategoryImageBtn');
+    if (uploadCategoryBtn) uploadCategoryBtn.addEventListener('click', uploadCategoryImageToR2);
     
+    // Login - toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    if (togglePassword) {
+        togglePassword.addEventListener('click', () => {
+            const input = document.getElementById('passwordInput');
+            if (input) input.type = input.type === 'password' ? 'text' : 'password';
+        });
+    }
+    
+    // Toolbar produits
+    const search = document.getElementById('productsSearch');
+    if (search) {
+        search.addEventListener('input', (e) => {
+            searchValue = e.target.value.trim().toLowerCase();
+            currentPage = 1;
+            applyProductsFilters();
+        });
+    }
+    const sort = document.getElementById('productsSort');
+    if (sort) {
+        sort.addEventListener('change', (e) => {
+            sortValue = e.target.value;
+            currentPage = 1;
+            applyProductsFilters();
+        });
+    }
+    const size = document.getElementById('productsPageSize');
+    if (size) {
+        size.addEventListener('change', (e) => {
+            pageSize = parseInt(e.target.value) || 10;
+            currentPage = 1;
+            applyProductsFilters();
+        });
+    }
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    if (prevBtn) prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderProductsTable(); } });
+    if (nextBtn) nextBtn.addEventListener('click', () => { const max = Math.ceil(productsFiltered.length / pageSize); if (currentPage < max) { currentPage++; renderProductsTable(); } });
+
     // Fermer modal en cliquant à l'extérieur
     document.getElementById('productModal').addEventListener('click', (e) => {
         if (e.target.id === 'productModal') {
@@ -146,7 +202,7 @@ async function loadProducts() {
         
         if (data.success) {
             products = data.products;
-            displayProducts(products);
+            applyProductsFilters();
         }
     } catch (error) {
         console.error('Error loading products:', error);
@@ -175,11 +231,12 @@ function displayProducts(productsToDisplay) {
             <td>
                 ${product.category_icon || ''} ${product.category_name || 'N/A'}
             </td>
-            <td>${product.price}€ ${product.unit}</td>
+            <td>${product.price}€ ${product.unit || ''}</td>
             <td>
-                <span class="badge ${product.is_active ? 'badge-success' : 'badge-warning'}">
-                    ${product.is_active ? 'Actif' : 'Inactif'}
-                </span>
+                <label class="switch">
+                    <input type="checkbox" ${product.is_active ? 'checked' : ''} onchange="toggleProductActive(${product.id}, this.checked)">
+                    <span class="slider"></span>
+                </label>
             </td>
             <td>
                 <button class="btn btn-primary" onclick="editProduct(${product.id})" style="margin-right: 0.5rem;">
@@ -191,6 +248,62 @@ function displayProducts(productsToDisplay) {
             </td>
         </tr>
     `).join('');
+}
+
+// Filtrage/tri/pagination
+function applyProductsFilters() {
+    // search
+    productsFiltered = products.filter(p => {
+        if (!searchValue) return true;
+        const hay = `${p.name || ''} ${p.category_name || ''}`.toLowerCase();
+        return hay.includes(searchValue);
+    });
+    // sort
+    productsFiltered.sort((a,b) => {
+        switch (sortValue) {
+            case 'price_asc': return (a.price||0) - (b.price||0);
+            case 'price_desc': return (b.price||0) - (a.price||0);
+            case 'name_asc': return (a.name||'').localeCompare(b.name||'');
+            case 'name_desc': return (b.name||'').localeCompare(a.name||'');
+            default: // created_desc (fallback by id desc)
+                return (b.id||0) - (a.id||0);
+        }
+    });
+    currentPage = 1;
+    renderProductsTable();
+}
+
+function renderProductsTable() {
+    const start = (currentPage - 1) * pageSize;
+    const pageItems = productsFiltered.slice(start, start + pageSize);
+    displayProducts(pageItems);
+    const pageInfo = document.getElementById('pageInfo');
+    if (pageInfo) {
+        const totalPages = Math.max(1, Math.ceil(productsFiltered.length / pageSize));
+        pageInfo.textContent = `Page ${currentPage} / ${totalPages}`;
+    }
+}
+
+// Toggle actif inline
+async function toggleProductActive(id, isChecked) {
+    try {
+        const response = await fetch(`${API_URL}/api/products/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ is_active: isChecked ? 1 : 0 })
+        });
+        const data = await response.json();
+        if (!data.success) throw new Error('Update failed');
+        const item = products.find(p => p.id === id);
+        if (item) item.is_active = isChecked ? 1 : 0;
+        applyProductsFilters();
+        loadDashboard();
+    } catch (e) {
+        console.error(e);
+        showAlert('Impossible de modifier le statut', 'error');
+        // revert UI state by reloading list
+        loadProducts();
+    }
 }
 
 // Ouvrir le modal produit
@@ -210,11 +323,13 @@ async function openProductModal(productId = null) {
         const product = products.find(p => p.id === productId);
         if (product) {
             document.getElementById('productName').value = product.name;
+            document.getElementById('productDescription').value = product.description || '';
             document.getElementById('productCategory').value = product.category_id;
             document.getElementById('productPrice').value = product.price;
             document.getElementById('productUnit').value = product.unit;
             document.getElementById('productBadge').value = product.badge || '';
             document.getElementById('productImage').value = product.image_url || '';
+            document.getElementById('productIsActive').checked = !!product.is_active;
             document.querySelector('.modal-title').textContent = 'Modifier le Produit';
         }
     } else {
@@ -255,12 +370,13 @@ async function handleProductSubmit(e) {
     
     const productData = {
         name: document.getElementById('productName').value,
+        description: document.getElementById('productDescription').value,
         category_id: parseInt(document.getElementById('productCategory').value),
         price: parseFloat(document.getElementById('productPrice').value),
         unit: document.getElementById('productUnit').value,
         badge: document.getElementById('productBadge').value,
         image_url: document.getElementById('productImage').value,
-        is_active: 1
+        is_active: document.getElementById('productIsActive').checked ? 1 : 0
     };
     
     try {
@@ -357,9 +473,7 @@ function displayCategories(categoriesToDisplay) {
             <td>${cat.description || ''}</td>
             <td>${cat.product_count || 0}</td>
             <td>
-                <button class="btn btn-primary" onclick="editCategory(${cat.id})">
-                    <i class="fas fa-edit"></i> Modifier
-                </button>
+                <button class="btn btn-primary" onclick="editCategory(${cat.id})"><i class="fas fa-edit"></i> Modifier</button>
             </td>
         </tr>
     `).join('');
@@ -369,10 +483,7 @@ function displayCategories(categoriesToDisplay) {
 function editCategory(id) {
     const category = categories.find(c => c.id === id);
     if (category) {
-        const newName = prompt('Nouveau nom:', category.name);
-        if (newName && newName !== category.name) {
-            updateCategoryAction(id, { name: newName });
-        }
+        openCategoryModal(id);
     }
 }
 
@@ -404,12 +515,159 @@ async function loadSettings() {
         const data = await response.json();
         
         if (data.success) {
-            // Remplir le formulaire avec les valeurs actuelles
-            console.log('Settings loaded:', data.settings);
+            const s = data.settings;
+            document.getElementById('settingsShopName').value = s.shop_name || '';
+            document.getElementById('settingsShopDescription').value = s.shop_description || '';
+            document.getElementById('settingsShopEmail').value = s.shop_email || '';
+            document.getElementById('settingsShopPhone').value = s.shop_phone || '';
+            document.getElementById('settingsShopWhatsapp').value = s.shop_whatsapp || '';
+            document.getElementById('settingsShopTelegram').value = s.shop_telegram || '';
+            document.getElementById('settingsShopInstagram').value = s.shop_instagram || '';
+            document.getElementById('settingsShopLinktree').value = s.shop_linktree || '';
+            document.getElementById('settingsSocialLinksJson').value = s.social_links_json || '';
         }
     } catch (error) {
         console.error('Error loading settings:', error);
     }
+}
+
+// Sauvegarder les paramètres
+document.addEventListener('DOMContentLoaded', () => {
+    const settingsForm = document.getElementById('settingsForm');
+    if (settingsForm) {
+        settingsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                shop_name: document.getElementById('settingsShopName').value,
+                shop_description: document.getElementById('settingsShopDescription').value,
+                shop_email: document.getElementById('settingsShopEmail').value,
+                shop_phone: document.getElementById('settingsShopPhone').value,
+                shop_whatsapp: document.getElementById('settingsShopWhatsapp').value,
+                shop_telegram: document.getElementById('settingsShopTelegram').value,
+                shop_instagram: document.getElementById('settingsShopInstagram').value,
+                shop_linktree: document.getElementById('settingsShopLinktree').value,
+                social_links_json: document.getElementById('settingsSocialLinksJson').value
+            };
+            try {
+                const response = await fetch(`${API_URL}/api/settings`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showAlert('Paramètres sauvegardés', 'success');
+                } else {
+                    showAlert('Erreur lors de la sauvegarde', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('Erreur réseau', 'error');
+            }
+        });
+    }
+});
+
+// Modal Catégorie
+let editingCategoryId = null;
+function openCategoryModal(categoryId = null) {
+    editingCategoryId = categoryId;
+    document.getElementById('categoryForm').reset();
+    document.querySelector('#categoryModal .modal-title').textContent = categoryId ? 'Modifier une Catégorie' : 'Ajouter une Catégorie';
+    if (categoryId) {
+        const cat = categories.find(c => c.id === categoryId);
+        if (cat) {
+            document.getElementById('categoryName').value = cat.name || '';
+            document.getElementById('categoryDescription').value = cat.description || '';
+            document.getElementById('categoryIcon').value = cat.icon || '';
+            document.getElementById('categoryImage').value = cat.image_url || '';
+            document.getElementById('categoryIsActive').checked = !!cat.is_active;
+        }
+    }
+    document.getElementById('categoryModal').classList.add('active');
+}
+
+function closeCategoryModal() {
+    document.getElementById('categoryModal').classList.remove('active');
+    editingCategoryId = null;
+}
+
+async function handleCategorySubmit(e) {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('categoryName').value,
+        description: document.getElementById('categoryDescription').value,
+        icon: document.getElementById('categoryIcon').value,
+        image_url: document.getElementById('categoryImage').value,
+        is_active: document.getElementById('categoryIsActive').checked ? 1 : 0
+    };
+    try {
+        let response;
+        if (editingCategoryId) {
+            response = await fetch(`${API_URL}/api/categories/${editingCategoryId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        } else {
+            response = await fetch(`${API_URL}/api/categories`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        }
+        const result = await response.json();
+        if (result.success) {
+            showAlert(editingCategoryId ? 'Catégorie modifiée' : 'Catégorie créée', 'success');
+            closeCategoryModal();
+            loadCategories();
+            loadDashboard();
+        } else {
+            showAlert('Erreur: ' + (result.error || 'Inconnue'), 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        showAlert('Erreur réseau', 'error');
+    }
+}
+
+// Upload image R2 helpers
+async function uploadFileToR2(fileInputId) {
+    const input = document.getElementById(fileInputId);
+    const file = input && input.files && input.files[0];
+    if (!file) {
+        showAlert('Sélectionnez un fichier d\'abord', 'warning');
+        return null;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+        const res = await fetch(`${API_URL}/api/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+            showAlert('Image uploadée', 'success');
+            return data.url;
+        }
+        showAlert('Upload échoué', 'error');
+        return null;
+    } catch (e) {
+        console.error(e);
+        showAlert('Erreur réseau upload', 'error');
+        return null;
+    }
+}
+
+async function uploadProductImageToR2() {
+    const url = await uploadFileToR2('productImageFile');
+    if (url) document.getElementById('productImage').value = url;
+}
+
+async function uploadCategoryImageToR2() {
+    const url = await uploadFileToR2('categoryImageFile');
+    if (url) document.getElementById('categoryImage').value = url;
 }
 
 // Afficher une alerte avec animation Lottie
@@ -459,3 +717,4 @@ function showAlert(message, type = 'success') {
 window.editProduct = editProduct;
 window.deleteProductConfirm = deleteProductConfirm;
 window.editCategory = editCategory;
+window.openCategoryModal = openCategoryModal;
