@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin - BipCosa06</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  body { margin:0; font-family:'Segoe UI', sans-serif; background:#111; color:#fff; }
+  header { padding:20px; background:#000; text-align:center; font-size:1.6rem; font-weight:bold; letter-spacing:1px; border-bottom:2px solid #444; }
+  nav { display:flex; justify-content:center; gap:10px; background:#111; border-bottom:1px solid #333; flex-wrap:wrap; }
+  .nav-item { padding:15px 25px; cursor:pointer; transition:0.3s; border-bottom:3px solid transparent; }
+  .nav-item.active { border-bottom:3px solid #fff; font-weight:bold; }
+  .nav-item:hover { background:rgba(255,255,255,0.1); }
+  .content-section { display:none; padding:20px; max-width:1200px; margin:0 auto; }
+  .content-section.active { display:block; }
+
+  table { width:100%; border-collapse:collapse; margin-top:20px; }
+  th, td { padding:12px 10px; border-bottom:1px solid #333; text-align:left; }
+  th { font-weight:bold; background:#1a1a1a; }
+  button { padding:6px 12px; border:none; border-radius:6px; cursor:pointer; transition:0.2s; }
+  .btn-primary { background:#1e90ff; color:#fff; }
+  .btn-edit { background:#ffb400; color:#111; margin-right:5px; }
+  .btn-delete { background:#ff4d4f; color:#fff; }
+  .btn-view { background:#4caf50; color:#fff; margin-right:5px; }
+  .btn-seo { background:#9c27b0; color:#fff; }
+  .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:0.3s; z-index:1000; }
+  .modal.active { opacity:1; pointer-events:auto; }
+  .modal-content { background:#111; padding:20px; border-radius:12px; max-width:500px; width:90%; position:relative; border:2px solid #fff; max-height:90vh; overflow-y:auto; }
+  .close-modal { position:absolute; top:10px; right:15px; cursor:pointer; font-size:1.3rem; }
+  input, select, textarea { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #333; background:#222; color:#fff; }
+  textarea { min-height:100px; resize:vertical; }
+  #alertContainer { position:fixed; top:20px; right:20px; z-index:999; }
+  .alert { padding:12px 20px; margin-bottom:10px; border-radius:8px; opacity:1; transition:0.3s; }
+  .alert-success { background:#1e90ff; color:#fff; }
+  .alert-error { background:#ff4d4f; color:#fff; }
+  .alert-warning { background:#ffb400; color:#111; }
+
+  /* Pages section styles */
+  .pages-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px; margin-top:20px; }
+  .page-card { background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; transition:0.3s; }
+  .page-card:hover { border-color:#1e90ff; transform:translateY(-2px); }
+  .page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+  .page-title { font-size:1.2rem; font-weight:bold; }
+  .page-status { padding:4px 12px; border-radius:20px; font-size:0.85rem; }
+  .status-active { background:#4caf50; color:#fff; }
+  .status-template { background:#ffb400; color:#111; }
+  .status-demo { background:#03a9f4; color:#fff; }
+  .status-inactive { background:#666; color:#fff; }
+  .page-info { margin-bottom:15px; }
+  .page-filename { color:#999; font-size:0.9rem; margin:5px 0; }
+  .page-description { margin:10px 0; line-height:1.5; }
+  .page-components { margin:15px 0; }
+  .components-list { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
+  .component-tag { background:#333; padding:3px 8px; border-radius:12px; font-size:0.85rem; }
+  .page-actions { display:flex; gap:5px; flex-wrap:wrap; }
+  .page-actions button { font-size:0.9rem; }
+
+  /* SEO Analysis styles */
+  .seo-analysis { margin-top:20px; }
+  .seo-section { background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; }
+  .seo-section h3 { margin:0 0 10px 0; color:#1e90ff; }
+  .seo-item { padding:8px 0; border-bottom:1px solid #333; }
+  .seo-item:last-child { border-bottom:none; }
+  .seo-item.good { color:#4caf50; }
+  .seo-item.warning { color:#ffb400; }
+  .seo-item.error { color:#ff4d4f; }
+  .seo-badge { background:#333; padding:2px 8px; border-radius:12px; font-size:0.85rem; margin-left:10px; }
+  .seo-tip { margin-left:10px; font-size:0.9rem; }
+
+  /* Stats cards */
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin-bottom:30px; }
+  .stat-card { background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; text-align:center; }
+  .stat-value { font-size:2rem; font-weight:bold; color:#1e90ff; }
+  .stat-label { color:#999; margin-top:5px; }
+</style>
+</head>
+<body>
+
+<header>Panel Admin - BipCosa06</header>
+<nav>
+  <div class="nav-item active" data-section="dashboard">Dashboard</div>
+  <div class="nav-item" data-section="pages">Pages</div>
+  <div class="nav-item" data-section="products">Produits</div>
+  <div class="nav-item" data-section="categories">Catégories</div>
+  <div class="nav-item" data-section="farms">Farms</div>
+  <div class="nav-item" data-section="services">Services</div>
+  <div class="nav-item" data-section="social">Réseaux</div>
+  <div class="nav-item" id="logoutBtn">Déconnexion</div>
+</nav>
+
+<div id="alertContainer"></div>
+
+<!-- Dashboard Section -->
+<div id="dashboard" class="content-section active">
+  <h2>Statistiques</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value" id="statPages">0</div>
+      <div class="stat-label">Pages HTML</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statProducts">0</div>
+      <div class="stat-label">Produits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statCategories">0</div>
+      <div class="stat-label">Catégories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statFarms">0</div>
+      <div class="stat-label">Farms</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statServices">0</div>
+      <div class="stat-label">Services</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statSocial">0</div>
+      <div class="stat-label">Réseaux</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pages Section -->
+<div id="pages" class="content-section">
+  <h2>Gestion des Pages HTML</h2>
+  <div class="pages-grid" id="pagesContainer">
+    <!-- Pages will be dynamically loaded here -->
+  </div>
+</div>
+
+<!-- Products Section -->
+<div id="products" class="content-section">
+  <button class="btn-primary" id="addProductBtn">Ajouter Produit</button>
+  <table>
+    <thead><tr><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Image</th><th>Actions</th></tr></thead>
+    <tbody id="productsTableBody"></tbody>
+  </table>
+</div>
+
+<!-- Categories Section -->
+<div id="categories" class="content-section">
+  <button class="btn-primary" id="addCategoryBtn">Ajouter Catégorie</button>
+  <table>
+    <thead><tr><th>Nom</th><th>Actions</th></tr></thead>
+    <tbody id="categoriesTableBody"></tbody>
+  </table>
+</div>
+
+<!-- Farms Section -->
+<div id="farms" class="content-section">
+  <button class="btn-primary" id="addFarmBtn">Ajouter Farm</button>
+  <table>
+    <thead><tr><th>Nom</th><th>Actions</th></tr></thead>
+    <tbody id="farmsTableBody"></tbody>
+  </table>
+</div>
+
+<!-- Services Section -->
+<div id="services" class="content-section">
+  <button class="btn-primary" id="addServiceBtn">Ajouter Service</button>
+  <table>
+    <thead><tr><th>Nom</th><th>Actions</th></tr></thead>
+    <tbody id="servicesTableBody"></tbody>
+  </table>
+</div>
+
+<!-- Social Section -->
+<div id="social" class="content-section">
+  <button class="btn-primary" id="addSocialBtn">Ajouter Réseau</button>
+  <table>
+    <thead><tr><th>Nom</th><th>Lien</th><th>Actions</th></tr></thead>
+    <tbody id="socialTableBody"></tbody>
+  </table>
+</div>
+
+<!-- Product Modal -->
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeProductModal">&times;</span>
+    <h2>Produit</h2>
+    <form id="productForm">
+      <input type="text" id="productName" placeholder="Nom produit" required>
+      <input type="text" id="productCategory" placeholder="Catégorie">
+      <input type="number" id="productPrice" placeholder="Prix" required>
+      <input type="text" id="productUnit" placeholder="Unité (ex: /3.5g)">
+      <input type="text" id="productImage" placeholder="URL image">
+      <textarea id="productDescription" placeholder="Description"></textarea>
+      <button type="submit" class="btn-primary">Enregistrer</button>
+    </form>
+  </div>
+</div>
+
+<!-- Page Edit Modal -->
+<div id="pageEditModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closePageEditModal">&times;</span>
+    <h2>Modifier les informations de la page</h2>
+    <form id="pageEditForm">
+      <input type="hidden" id="pageId">
+      <input type="text" id="pageTitle" placeholder="Titre de la page" required>
+      <textarea id="pageDescription" placeholder="Description" required></textarea>
+      <select id="pageStatus">
+        <option value="active">Actif</option>
+        <option value="template">Template</option>
+        <option value="demo">Démo</option>
+        <option value="inactive">Inactif</option>
+      </select>
+      <button type="submit" class="btn-primary">Sauvegarder</button>
+    </form>
+  </div>
+</div>
+
+<!-- SEO Modal -->
+<div id="seoModal" class="modal">
+  <div class="modal-content" style="max-width:700px;">
+    <span class="close-modal" id="closeSeoModal">&times;</span>
+    <h2>Analyse SEO - <span id="seoPageName"></span></h2>
+    <div id="seoContent" class="seo-analysis">
+      <!-- SEO analysis will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<script src="admin-bipcosa.js"></script>
+</body>
+</html>
