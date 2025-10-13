@@ -1,0 +1,15 @@
+<!-- Ajoute ces lignes juste avant </body> dans products.html -->
+
+<!-- Remplace cette ligne -->
+<!-- <script src="config.js"></script> -->
+
+<!-- Par ces lignes -->
+<script>
+// Configuration API
+const API_CONFIG = {
+    BASE_URL: 'https://algran-api.calitek-junior.workers.dev'
+};
+window.API_URL = API_CONFIG.BASE_URL;
+</script>
+<script src="config.js"></script>
+<script src="shop-name-updater.js"></script>

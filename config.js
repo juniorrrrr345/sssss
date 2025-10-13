@@ -64,7 +64,7 @@ async function autoLoadSettings() {
         if (settings && settings.settings) {
             // Appliquer le nom de la boutique
             if (settings.settings.shop_name) {
-                document.querySelectorAll('.shop-name, .site-title, .hero-title, h1').forEach(el => {
+                document.querySelectorAll('.shop-name, .site-title, .hero-title, h1, #shopName, .logo-text').forEach(el => {
                     if (el.textContent.includes('Al Gran') || 
                         el.textContent.includes('COFFEELA55') || 
                         el.textContent.includes('Avec Amour')) {
