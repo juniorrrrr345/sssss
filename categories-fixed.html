@@ -3,86 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catégories - Al Gran</title>
+    <title>Catégories - Boutique</title>
     <link rel="stylesheet" href="style.css">
-    <script src="icons.js"></script>
+    <link rel="stylesheet" href="black-white-override.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 40px auto;
+            padding: 0 1.5rem;
+            max-width: 1400px;
+        }
+
+        @media (max-width: 1024px) {
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .category-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--card-border);
+            background: transparent;
             border-radius: 20px;
             overflow: hidden;
+            border: 3px solid #fff;
+            backdrop-filter: blur(5px);
             transition: all 0.3s ease;
             cursor: pointer;
             text-decoration: none;
-            color: var(--text-primary);
+            color: white;
             display: block;
         }
 
         .category-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 
-                0 10px 40px rgba(255, 62, 165, 0.3),
-                0 0 60px rgba(168, 85, 247, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .category-image-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .category-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, rgba(255, 62, 165, 0.2), rgba(168, 85, 247, 0.2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .category-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .category-image::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 62, 165, 0.1), rgba(168, 85, 247, 0.1));
+        .no-image {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 4rem;
+            opacity: 0.3;
         }
 
         .category-info {
-            padding: 1.5rem;
+            padding: 25px;
         }
 
-        .category-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .category-name {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);
         }
 
         .category-description {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
         }
 
         .category-count {
-            display: inline-block;
-            margin-top: 0.5rem;
-            padding: 0.3rem 0.8rem;
-            background: rgba(255, 62, 165, 0.2);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--primary-pink);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        }
+
+        .container {
+            padding-top: 2rem;
+            padding-bottom: 100px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 2rem;
         }
     </style>
 </head>
@@ -97,109 +125,108 @@
     </div>
 
     <div class="container">
-        <div class="logo-text">Al Gran</div>
-        
-        <h1 class="title">Catégories</h1>
+        <h1 class="title" style="color: #fff; font-weight: 900; text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1); font-size: 2.5rem;">Nos Catégories</h1>
 
-        <div class="categories-content">
-            <p style="text-align: center; color: var(--text-secondary); font-size: 1rem; margin-bottom: 2rem;">
-                Explorez nos différentes catégories de produits pour trouver ce qui vous convient.
-            </p>
-            
-            <div class="categories-grid" id="categoriesGrid">
-                <!-- Les catégories seront chargées ici -->
-            </div>
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront générées ici par JavaScript -->
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor" width="1em" height="1em"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
-            <span>Accueil</span>
+        <a href="home.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
         </a>
         <a href="products.html" class="nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em"><path d="M160 112c0-35.3 28.7-64 64-64s64 28.7 64 64v48H160V112zm-48 48H48c-26.5 0-48 21.5-48 48V416c0 53 43 96 96 96H352c53 0 96-43 96-96V208c0-26.5-21.5-48-48-48H336V112C336 50.1 285.9 0 224 0S112 50.1 112 112v48zm24 48a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm152 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/></svg>
-            <span>Produits</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
         </a>
         <a href="categories.html" class="nav-item active">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em"><path d="M448 96V224H288V96H448zm0 192V416H288V288H448zM224 224H64V96H224V224zM64 288H224V416H64V288zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg>
-            <span>Catégories</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
         </a>
         <a href="contact.html" class="nav-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="1em" height="1em"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
-            <span>Contact</span>
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
         </a>
     </nav>
 
-    <script src="script.js"></script>
+    <script src="config.js"></script>
+    <script src="theme-loader.js"></script>
     <script>
-        // Catégories disponibles
-        const categories = [
-            {
-                id: 1,
-                name: "Extract",
-                description: "Extraits premium de haute qualité",
-                icon: "🔥",
-                count: 0,
-                image: "images/extract.jpg"
-            },
-            {
-                id: 2,
-                name: "Static-Sift",
-                description: "Produits Static-Sift premium",
-                icon: "💎",
-                count: 0,
-                image: "images/static-sift.jpg"
-            },
-            {
-                id: 3,
-                name: "Frozen-Sift",
-                description: "Frozen-Sift de qualité supérieure",
-                icon: "❄️",
-                count: 0,
-                image: "images/frozen-sift.jpg"
-            },
-            {
-                id: 4,
-                name: "Dry-Sift",
-                description: "Dry-Sift artisanal",
-                icon: "🌿",
-                count: 0,
-                image: "images/dry-sift.jpg"
-            },
-            {
-                id: 5,
-                name: "Weed",
-                description: "Fleurs premium sélectionnées",
-                icon: "🍃",
-                count: 0,
-                image: "images/weed.jpg"
+        console.log('🚀 Categories.html chargé');
+        
+        // Charger les catégories depuis l'API
+        async function loadCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: white;">⏳ Chargement...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/categories`);
+                const data = await response.json();
+                
+                if (data.success && data.categories) {
+                    displayCategories(data.categories);
+                } else {
+                    showError('Aucune catégorie disponible');
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des catégories:', error);
+                showError('Impossible de charger les catégories');
             }
-        ];
+        }
 
-        function createCategoryCard(category) {
-            return `
-                <a href="products.html?category=${encodeURIComponent(category.name)}" class="category-card">
-                    <div class="category-image">
-                        <span style="font-size: 4rem; z-index: 1;">${category.icon}</span>
+        // Afficher les catégories
+        function displayCategories(categories) {
+            const grid = document.getElementById('categoriesGrid');
+            
+            if (categories.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: white;">Aucune catégorie disponible</div>';
+                return;
+            }
+            
+            grid.innerHTML = categories.map(category => `
+                <a href="products.html?category=${category.id}" class="category-card">
+                    <div class="category-image-container">
+                        ${category.image_url 
+                            ? `<img src="${category.image_url}" alt="${category.name}" class="category-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                               <div class="no-image" style="display: none;"><i class="fas fa-image"></i></div>`
+                            : `<div class="no-image"><i class="fas fa-image"></i></div>`
+                        }
                     </div>
                     <div class="category-info">
-                        <h2 class="category-title">${category.name}</h2>
-                        <p class="category-description">${category.description}</p>
-                        <span class="category-count">${category.count} produits</span>
+                        <h3 class="category-name">${category.name}</h3>
+                        ${category.description ? `<p class="category-description">${category.description}</p>` : ''}
+                        <p class="category-count">${category.product_count || 0} produit${(category.product_count || 0) > 1 ? 's' : ''}</p>
                     </div>
                 </a>
+            `).join('');
+        }
+
+        // Afficher une erreur
+        function showError(message) {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #ff6b6b;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                    ${message}
+                </div>
             `;
         }
 
-        function displayCategories() {
-            const grid = document.getElementById('categoriesGrid');
-            grid.innerHTML = categories.map(createCategoryCard).join('');
-        }
-
-        // Affichage initial
-        displayCategories();
+        // Charger les catégories au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+        });
     </script>
 </body>
 </html>
