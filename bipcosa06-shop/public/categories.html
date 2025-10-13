@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catégories - BipCosa06</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/black-white-override.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 100px;
+            background: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1, h2, h3, p, span {
+            color: #fff;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .category-card {
+            background: transparent;
+            border: 3px solid #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.3);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-info {
+            padding: 1.5rem;
+        }
+
+        .category-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-description {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .category-count {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #fff;
+        }
+
+        .bottom-nav {
+            background: #000;
+            border-top: 2px solid #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            z-index: 2;
+        }
+
+        .nav-item {
+            color: #fff;
+            text-align: center;
+            font-size: 0.8rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .nav-item.active {
+            color: #fff;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+        }
+
+        .nav-icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-item.active .nav-icon-circle {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+        }
+
+        /* Overlay pour assombrir le fond si nécessaire */
+        .theme-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo-text">BipCosa06</div>
+        <h1 class="title">Catégories</h1>
+        <p style="text-align:center; color: rgba(255,255,255,0.7); margin-bottom:2rem;">
+            Explorez nos différentes catégories de produits pour trouver ce qui vous convient.
+        </p>
+
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Les catégories seront chargées ici -->
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script src="js/config.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script>
+        // Ajouter overlay pour lisibilité
+        const overlay = document.createElement('div');
+        overlay.className = 'theme-overlay';
+        document.body.insertBefore(overlay, document.body.firstChild);
+
+        // Charger les catégories depuis l'API
+        async function loadCategories() {
+            try {
+                const url = `${window.API_CONFIG.BASE_URL}/api/categories`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if(data.success && data.categories){
+                    const grid = document.getElementById('categoriesGrid');
+                    grid.innerHTML = data.categories.map(cat => `
+                        <a href="products.html?category=${cat.id}" class="category-card">
+                            <div class="category-image">
+                                ${cat.image_url ? `<img src="${cat.image_url}" alt="${cat.name}">` : `<span style="font-size:4rem;">${cat.icon || '📦'}</span>`}
+                            </div>
+                            <div class="category-info">
+                                <h3 class="category-name">${cat.name}</h3>
+                                <p class="category-description">${cat.description || ''}</p>
+                                <p class="category-count">${cat.product_count || 0} produits</p>
+                            </div>
+                        </a>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                // Afficher des catégories par défaut
+                showDefaultCategories();
+            }
+        }
+
+        // Afficher des catégories par défaut en cas d'erreur
+        function showDefaultCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            const defaultCategories = [
+                { id: 1, name: 'Fleurs Premium', icon: '🌺', description: 'Nos meilleures sélections', product_count: 12 },
+                { id: 2, name: 'Résines', icon: '💎', description: 'Résines de haute qualité', product_count: 8 },
+                { id: 3, name: 'Huiles', icon: '🧪', description: 'Extraits concentrés', product_count: 6 },
+                { id: 4, name: 'Accessoires', icon: '🔧', description: 'Tout le nécessaire', product_count: 15 }
+            ];
+            
+            grid.innerHTML = defaultCategories.map(cat => `
+                <a href="products.html?category=${cat.id}" class="category-card">
+                    <div class="category-image">
+                        <span style="font-size:4rem;">${cat.icon}</span>
+                    </div>
+                    <div class="category-info">
+                        <h3 class="category-name">${cat.name}</h3>
+                        <p class="category-description">${cat.description}</p>
+                        <p class="category-count">${cat.product_count} produits</p>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+            // Charger le fond dynamique
+            if(typeof loadThemeBackground === 'function'){
+                loadThemeBackground();
+            }
+        });
+    </script>
+</body>
+</html>

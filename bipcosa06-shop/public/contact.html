@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nous Contacter - BipCosa06</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/black-white-override.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo-text" id="shopName" style="font-weight: 900; color: #fff; text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);">BipCosa06</div>
+        
+        <h1 class="title" style="color: #fff; font-weight: 900; text-shadow: 3px 3px 6px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);">Nous Contacter</h1>
+
+        <div class="contact-cards" id="contactCards">
+            <!-- Les cartes seront générées dynamiquement -->
+            <p style="text-align: center; padding: 2rem; color: #fff;">Chargement...</p>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script src="js/config.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script>
+        // Charger les paramètres de contact depuis l'API
+        async function loadContactSettings() {
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                
+                if (data.success) {
+                    const settings = data.settings;
+                    updateContactLinks(settings);
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des paramètres:', error);
+                // Afficher des données par défaut
+                showDefaultContacts();
+            }
+        }
+
+        // Afficher des contacts par défaut
+        function showDefaultContacts() {
+            const container = document.getElementById('contactCards');
+            container.innerHTML = `
+                <a href="https://wa.me/33612345678" class="contact-card" target="_blank">
+                    <div class="card-icon whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>WhatsApp</h3>
+                        <p>Contactez-nous directement sur WhatsApp</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a href="https://t.me/bipcosa06" class="contact-card" target="_blank">
+                    <div class="card-icon telegram">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Canal Telegram</h3>
+                        <p>Rejoignez notre canal Telegram</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            `;
+        }
+
+        // Générer les cartes de contact dynamiquement
+        function updateContactLinks(settings) {
+            const container = document.getElementById('contactCards');
+            let html = '';
+            
+            // Charger depuis social_links_json
+            let socialLinks = [];
+            if (settings.social_links_json) {
+                try {
+                    socialLinks = JSON.parse(settings.social_links_json);
+                } catch (e) {
+                    console.error('Erreur parsing social_links_json');
+                }
+            }
+            
+            // Générer les cards depuis socialLinks
+            socialLinks.forEach(link => {
+                if (link.url && link.url.trim() !== '') {
+                    html += `
+                        <a href="${link.url}" class="contact-card" target="_blank">
+                            <div class="card-icon">
+                                <span style="font-size: 2rem;">${link.icon || '🔗'}</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>${link.name || 'Réseau Social'}</h3>
+                                <p>Cliquez pour visiter</p>
+                            </div>
+                            <div class="card-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+                    `;
+                }
+            });
+            
+            // ANCIENS CHAMPS (compatibilité) - LinkTree
+            if (settings.shop_linktree && settings.shop_linktree.trim() !== '') {
+                html += `
+                    <a href="${settings.shop_linktree}" class="contact-card" target="_blank">
+                        <div class="card-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>LinkTree</h3>
+                            <p>Tous nos liens en un seul endroit</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // WhatsApp
+            if (settings.shop_whatsapp && settings.shop_whatsapp.trim() !== '') {
+                const whatsappNumber = settings.shop_whatsapp.replace(/\D/g, '');
+                html += `
+                    <a href="https://wa.me/${whatsappNumber}" class="contact-card" target="_blank">
+                        <div class="card-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>WhatsApp</h3>
+                            <p>Contactez-nous directement sur WhatsApp</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // Telegram
+            if (settings.shop_telegram && settings.shop_telegram.trim() !== '') {
+                const telegramUsername = settings.shop_telegram.replace('@', '');
+                html += `
+                    <a href="https://t.me/${telegramUsername}" class="contact-card" target="_blank">
+                        <div class="card-icon telegram">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Canal Telegram</h3>
+                            <p>Rejoignez notre canal Telegram</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // Instagram
+            if (settings.shop_instagram && settings.shop_instagram.trim() !== '') {
+                const instagramUsername = settings.shop_instagram.replace('@', '');
+                html += `
+                    <a href="https://instagram.com/${instagramUsername}" class="contact-card" target="_blank">
+                        <div class="card-icon instagram">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Instagram</h3>
+                            <p>Suivez-nous sur Instagram</p>
+                        </div>
+                        <div class="card-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                `;
+            }
+            
+            // Si aucun réseau configuré
+            if (html === '') {
+                html = '<p style="text-align: center; padding: 3rem; color: #fff; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,1);">Aucun réseau social configuré.<br>Allez dans Admin → Paramètres → Réseaux Sociaux</p>';
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // Charger au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContactSettings();
+        });
+    </script>
+</body>
+</html>

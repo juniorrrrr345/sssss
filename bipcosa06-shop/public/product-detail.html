@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Produit - BipCosa06</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/black-white-override.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 100px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .product-image-section {
+            position: relative;
+        }
+
+        .product-main-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 3px solid #fff;
+        }
+
+        .product-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-category-badge {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #fff;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-price-display {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+        }
+
+        .product-unit {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+        }
+
+        .product-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .order-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .order-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .order-button:hover {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-main-image {
+                height: 300px;
+            }
+
+            .product-title {
+                font-size: 2rem;
+            }
+
+            .product-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.2rem;
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+    <div class="bubbles-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="product-detail-container">
+        <a href="products.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Retour aux produits
+        </a>
+
+        <div id="productContent">
+            <div class="loading">Chargement du produit...</div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script src="js/config.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script>
+        // Récupérer l'ID du produit depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        async function loadProductDetail() {
+            const contentDiv = document.getElementById('productContent');
+            
+            if (!productId) {
+                contentDiv.innerHTML = '<div class="error-message">Produit non trouvé</div>';
+                return;
+            }
+
+            try {
+                const response = await fetchApi(`/api/products/${productId}`);
+                
+                if (response.success && response.product) {
+                    displayProduct(response.product);
+                } else {
+                    throw new Error('Produit non trouvé');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                // Afficher un produit de démonstration
+                displayDemoProduct();
+            }
+        }
+
+        function displayProduct(product) {
+            const contentDiv = document.getElementById('productContent');
+            
+            contentDiv.innerHTML = `
+                <div class="product-detail-grid">
+                    <div class="product-image-section">
+                        <img src="${product.image_url || 'https://via.placeholder.com/600x500'}" 
+                             alt="${product.name}" 
+                             class="product-main-image">
+                    </div>
+                    
+                    <div class="product-info-section">
+                        <div>
+                            <h1 class="product-title">${product.name}</h1>
+                            ${product.category_name ? `<span class="product-category-badge">${product.category_name}</span>` : ''}
+                        </div>
+                        
+                        <div>
+                            <div class="product-price-display">
+                                ${product.price}€ 
+                                <span class="product-unit">${product.unit || '/ 3.5g'}</span>
+                            </div>
+                        </div>
+                        
+                        ${product.description ? `
+                            <div class="product-description">
+                                <p>${product.description}</p>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="product-features">
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle feature-icon"></i>
+                                <span>Qualité Premium</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-truck feature-icon"></i>
+                                <span>Livraison Rapide</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt feature-icon"></i>
+                                <span>Produit Authentique</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-leaf feature-icon"></i>
+                                <span>100% Naturel</span>
+                            </div>
+                        </div>
+                        
+                        ${product.farm_name ? `
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                <strong>Farm:</strong> ${product.farm_name}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="order-section">
+                            <h3 style="margin-bottom: 1rem;">Commander ce produit</h3>
+                            <p style="margin-bottom: 1.5rem; color: rgba(255,255,255,0.7);">
+                                Pour commander, contactez-nous via WhatsApp ou Telegram
+                            </p>
+                            <button class="order-button" onclick="orderProduct('${product.name}')">
+                                <i class="fas fa-shopping-cart"></i> Commander Maintenant
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayDemoProduct() {
+            // Produit de démonstration
+            const demoProduct = {
+                id: productId,
+                name: 'Purple Haze Premium',
+                category_name: 'Fleurs Premium',
+                price: 35,
+                unit: '/ 3.5g',
+                description: 'Une variété exceptionnelle avec des arômes fruités et des notes terreuses. Cultivée avec soin pour garantir une qualité optimale.',
+                farm_name: 'Green Valley Farm',
+                image_url: 'https://images.unsplash.com/photo-1596658251774-5b7d3d8c1c9f?w=600&h=500&fit=crop'
+            };
+            
+            displayProduct(demoProduct);
+        }
+
+        function orderProduct(productName) {
+            // Rediriger vers la page de contact avec le produit pré-rempli
+            const message = `Bonjour, je souhaite commander: ${productName}`;
+            window.location.href = `contact.html?message=${encodeURIComponent(message)}`;
+        }
+
+        // Charger le produit au démarrage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProductDetail();
+            loadThemeBackground();
+        });
+    </script>
+</body>
+</html>

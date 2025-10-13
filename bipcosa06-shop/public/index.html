@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BipCosa06 - Accueil</title>
+    <link rel="stylesheet" href="css/home-style.css">
+    <link rel="stylesheet" href="css/black-white-override.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .container-title {
+            text-align: center;
+            margin: 2rem 0 1rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            display: block;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-top: 0.5rem;
+        }
+
+        #servicesContainer {
+            margin-top: 1.5rem;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Supprimer animations et bulles si nécessaire */
+        .bubbles-container, #heroAnimation {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+
+    <!-- Titre principal -->
+    <div class="container-title">
+        <span class="logo-text" id="shopName">BipCosa06</span>
+        <h1 class="title">Bienvenue</h1>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="container" id="servicesContainer">
+        <p style="text-align:center; color:rgba(255,255,255,0.7); padding:2rem;">Chargement...</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <div class="nav-icon-circle">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="products.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="nav-label">Produits</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <span class="nav-label">Catégories</span>
+        </a>
+        <a href="contact.html" class="nav-item">
+            <div class="nav-icon-circle">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <span class="nav-label">Contact</span>
+        </a>
+    </nav>
+
+    <script src="js/config.js"></script>
+    <script src="js/theme-loader.js"></script>
+    <script>
+        // Script fond dynamique
+        async function loadThemeBackground() {
+            try {
+                const url = getApiUrl(API_CONFIG.ENDPOINTS.SETTINGS);
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+
+                if (data.success && data.settings && data.settings.theme_background_url) {
+                    const bgUrl = data.settings.theme_background_url.trim();
+                    if (bgUrl !== '') {
+                        document.body.style.backgroundImage = `url('${bgUrl}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                        document.body.style.backgroundAttachment = 'fixed';
+                        document.body.style.backgroundRepeat = 'no-repeat';
+                        document.body.style.setProperty('background-color', '#000', 'important');
+
+                        const cosmicBg = document.querySelector('.cosmic-background');
+                        if (cosmicBg) cosmicBg.style.opacity = '0.3';
+
+                        const overlay = document.createElement('div');
+                        overlay.style.cssText = `
+                            position: fixed;
+                            top:0;
+                            left:0;
+                            width:100%;
+                            height:100%;
+                            background: rgba(0,0,0,0.3);
+                            z-index:0;
+                            pointer-events:none;
+                        `;
+                        document.body.insertBefore(overlay, document.body.firstChild);
+
+                        console.log('🎨 Fond de thème chargé:', bgUrl);
+                    }
+                }
+            } catch (error) {
+                console.log('⚠️ Pas de fond de thème personnalisé', error);
+            }
+        }
+
+        // Script services synchronisés
+        async function loadServicesFromAPI() {
+            const container = document.getElementById('servicesContainer');
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SERVICES);
+                if (data.success && data.services && data.services.length > 0) {
+                    let html = '';
+                    data.services
+                        .filter(s => s.is_active)
+                        .sort((a,b) => a.display_order - b.display_order)
+                        .forEach(service => {
+                            if ((service.title.toLowerCase().includes('zone') || service.title.toLowerCase().includes('livraison')) && service.content.match(/^[\d,\s]+$/)) {
+                                const zones = service.content.split(',').map(z=>z.trim());
+                                html += `<section class="delivery-section">
+                                            <h2 class="section-title"><i class="fas fa-map-marker-alt"></i> ${service.title}</h2>
+                                            <div class="section-content">
+                                                <div class="department-grid">${zones.join(', ')}</div>
+                                            </div>
+                                        </section>`;
+                            } else {
+                                html += `<section class="service-section">
+                                            <h2 class="section-title"><i class="fas fa-heart"></i> ${service.title}</h2>
+                                            <div class="section-content"><p>${service.content}</p></div>
+                                        </section>`;
+                            }
+                        });
+                    container.innerHTML = html;
+                } else showFallbackContent();
+            } catch (err) {
+                console.error('Erreur API Services:', err);
+                showFallbackContent();
+            }
+        }
+
+        async function loadSettingsFromAPI() {
+            try {
+                const data = await fetchApi(API_CONFIG.ENDPOINTS.SETTINGS);
+                if (data.success && data.settings) {
+                    const shopNameEl = document.getElementById('shopName');
+                    shopNameEl.textContent = data.settings.shop_name || 'BipCosa06';
+                }
+            } catch (err) {
+                console.error('Erreur API Settings:', err);
+            }
+        }
+
+        function showFallbackContent() {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = `
+                <section class="service-section">
+                    <h2 class="section-title"><i class="fas fa-heart"></i> Nos Services</h2>
+                    <div class="section-content"><p>Bienvenue sur BipCosa06 ! Nous vous proposons une très large sélection de produits sélectionnés par nos soins parmi ce qui se fait de mieux dans le monde. Les meilleurs prix du marché, du réassort fréquent et un service imbattable. 🚀</p></div>
+                </section>
+                <section class="delivery-section">
+                    <h2 class="section-title"><i class="fas fa-map-marker-alt"></i> Zone de Livraison</h2>
+                    <div class="section-content">
+                        <p>Livraisons/Meetup dans toute l'île de France, le jour même, envois de France à France ou à l'international avec suivis, preuves de dépôts et assurances. 👍 😜 🌍</p>
+                        <div class="department-grid">75, 77, 78, 91, 92, 93, 94, 95</div>
+                    </div>
+                </section>
+                <section class="service-section">
+                    <h2 class="section-title"><i class="fas fa-handshake"></i> Meetup Paris</h2>
+                    <div class="section-content"><p>Possibilité de meetup dans Paris et environs. Contactez-nous pour organiser une rencontre !</p></div>
+                </section>`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadThemeBackground();
+            loadSettingsFromAPI();
+            loadServicesFromAPI();
+        });
+    </script>
+</body>
+</html>

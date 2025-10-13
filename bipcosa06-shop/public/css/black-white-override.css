@@ -1,0 +1,105 @@
+/* Override pour le thème noir et blanc strict */
+
+/* Force toutes les couleurs en noir et blanc */
+* {
+    filter: grayscale(0%) !important;
+}
+
+/* Assure que les textes restent blancs sur fond noir */
+body {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+/* Navigation bottom */
+.bottom-nav {
+    background: #000 !important;
+    border-top-color: #fff !important;
+}
+
+.nav-item {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.nav-item.active {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Cartes et éléments */
+.contact-card,
+.product-card,
+.category-card,
+.service-section,
+.delivery-section {
+    border-color: #fff !important;
+    background: transparent !important;
+}
+
+.contact-card:hover,
+.product-card:hover,
+.category-card:hover,
+.service-section:hover,
+.delivery-section:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #fff !important;
+}
+
+/* Icônes spéciales - garder un peu de couleur si nécessaire */
+.card-icon.whatsapp,
+.card-icon.telegram,
+.card-icon.instagram {
+    /* Optionnel: décommenter pour garder les couleurs */
+    /* filter: grayscale(0%) !important; */
+}
+
+/* Boutons */
+button,
+.btn-primary,
+.cta-button {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #fff !important;
+}
+
+button:hover,
+.btn-primary:hover,
+.cta-button:hover {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Overlay thème */
+.theme-overlay {
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Force les ombres en noir */
+* {
+    text-shadow: 2px 2px 4px #000 !important;
+}
+
+.title,
+.logo-text,
+.product-name {
+    text-shadow: 3px 3px 6px #000, 0 0 10px #000 !important;
+}
