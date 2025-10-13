@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BipCosa06 - Administration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS pour le thème moderne */
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #252525;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-hover: rgba(255, 255, 255, 0.08);
+            
+            --accent-primary: #7c3aed;
+            --accent-secondary: #a78bfa;
+            --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animations globales */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Login Screen avec gradient animé */
+        #loginScreen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #loginScreen::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 90%;
+            padding: 3rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-container h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Header moderne */
+        .header {
+            background: var(--bg-secondary);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 26, 0.9);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header h1::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation moderne */
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--bg-secondary);
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 3px;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-tab.active::before {
+            width: 100%;
+        }
+
+        .nav-tab i {
+            font-size: 1.1rem;
+        }
+
+        /* Sections avec animation */
+        .section {
+            display: none;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Dashboard moderne */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tables modernes */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:hover {
+            background: var(--bg-hover);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Formulaires modernes */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        /* Checkbox moderne */
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        /* Boutons modernes */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Modals modernes */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .close-btn:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        /* Alerts modernes */
+        .alert {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .alert-error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .alert-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .alert::before {
+            content: '';
+            width: 4px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 12px 0 0 12px;
+        }
+
+        /* Badges modernes */
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .badge-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge-inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Section header moderne */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-header h2::before {
+            content: '';
+            width: 5px;
+            height: 30px;
+            background: var(--accent-gradient);
+            border-radius: 3px;
+        }
+
+        /* Images produits */
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+
+        /* Actions buttons */
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .actions .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                padding: 1rem;
+                gap: 0.3rem;
+            }
+
+            .nav-tab {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Settings section spéciale */
+        .settings-form {
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .settings-form .form-group {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <h2>🚀 Administration BipCosa06</h2>
+            <div class="form-group">
+                <label>Mot de passe administrateur</label>
+                <input type="password" id="loginPassword" placeholder="Entrez le mot de passe">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+                <i class="fas fa-lock-open"></i> Se connecter
+            </button>
+            <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                Mot de passe par défaut : <code style="background: var(--bg-tertiary); padding: 0.2rem 0.5rem; border-radius: 4px;">admin123</code>
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <h1>Panel Admin</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="color: var(--text-secondary);">
+                    <i class="fas fa-user-shield"></i> Administrateur
+                </span>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showSection('dashboard')">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </div>
+            <div class="nav-tab" onclick="showSection('products')">
+                <i class="fas fa-box"></i> Produits
+            </div>
+            <div class="nav-tab" onclick="showSection('categories')">
+                <i class="fas fa-tags"></i> Catégories
+            </div>
+            <div class="nav-tab" onclick="showSection('farms')">
+                <i class="fas fa-leaf"></i> Farms
+            </div>
+            <div class="nav-tab" onclick="showSection('services')">
+                <i class="fas fa-concierge-bell"></i> Services
+            </div>
+            <div class="nav-tab" onclick="showSection('socials')">
+                <i class="fas fa-share-alt"></i> Réseaux
+            </div>
+            <div class="nav-tab" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Paramètres
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <div class="section-header">
+                <h2>Tableau de bord</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-number" id="statProducts">0</div>
+                    <div class="stat-label">Produits actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-number" id="statCategories">0</div>
+                    <div class="stat-label">Catégories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-number" id="statFarms">0</div>
+                    <div class="stat-label">Farms</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <div class="stat-number" id="statServices">0</div>
+                    <div class="stat-label">Services actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <div class="stat-number" id="statSocials">0</div>
+                    <div class="stat-label">Réseaux sociaux</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div id="products" class="section">
+            <div class="section-header">
+                <h2>Gestion des Produits</h2>
+                <button class="btn btn-primary" onclick="openProductModal()">
+                    <i class="fas fa-plus"></i> Nouveau produit
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Nom</th>
+                            <th>Catégorie</th>
+                            <th>Farm</th>
+                            <th>Prix</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Produits dynamiques -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div id="categories" class="section">
+            <div class="section-header">
+                <h2>Gestion des Catégories</h2>
+                <button class="btn btn-primary" onclick="openCategoryModal()">
+                    <i class="fas fa-plus"></i> Nouvelle catégorie
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Icône</th>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Produits</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <!-- Catégories dynamiques -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Farms Section -->
+        <div id="farms" class="section">
+            <div class="section-header">
+                <h2>Gestion des Farms</h2>
+                <button class="btn btn-primary" onclick="openFarmModal()">
+                    <i class="fas fa-plus"></i> Nouvelle farm
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Logo</th>
+                            <th>Nom</th>
+                            <th>Région</th>
+                            <th>Produits</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="farmsTableBody">
+                        <!-- Farms dynamiques -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div id="services" class="section">
+            <div class="section-header">
+                <h2>Gestion des Services</h2>
+                <button class="btn btn-primary" onclick="openServiceModal()">
+                    <i class="fas fa-plus"></i> Nouveau service
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Contenu</th>
+                            <th>Ordre</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="servicesTableBody">
+                        <!-- Services dynamiques -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Socials Section -->
+        <div id="socials" class="section">
+            <div class="section-header">
+                <h2>Gestion des Réseaux Sociaux</h2>
+                <button class="btn btn-primary" onclick="openSocialModal()">
+                    <i class="fas fa-plus"></i> Nouveau réseau
+                </button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Icône</th>
+                            <th>Nom</th>
+                            <th>Lien</th>
+                            <th>Ordre</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="socialsTableBody">
+                        <!-- Réseaux sociaux dynamiques -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings" class="section">
+            <div class="section-header">
+                <h2>Paramètres de la boutique</h2>
+            </div>
+            <div class="settings-form">
+                <div class="form-group">
+                    <label><i class="fas fa-store"></i> Nom de la boutique</label>
+                    <input type="text" id="shopName" value="BipCosa06">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-info-circle"></i> Description</label>
+                    <textarea id="shopDescription" rows="3">Votre boutique de confiance</textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-image"></i> URL du fond d'écran</label>
+                    <input type="url" id="themeBackgroundUrl" placeholder="https://exemple.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-whatsapp"></i> WhatsApp</label>
+                    <input type="text" id="shopWhatsapp" placeholder="+33612345678">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-telegram"></i> Telegram</label>
+                    <input type="text" id="shopTelegram" placeholder="@username">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-instagram"></i> Instagram</label>
+                    <input type="text" id="shopInstagram" placeholder="@username">
+                </div>
+            </div>
+            <div style="margin-top: 2rem; text-align: center;">
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Enregistrer les paramètres
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="productModalTitle">Nouveau produit</h2>
+                <span class="close-btn" onclick="closeModal('productModal')">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+            <form onsubmit="saveProduct(event)">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>Nom du produit *</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Catégorie *</label>
+                    <select id="productCategory" required>
+                        <option value="">Sélectionner une catégorie</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Farm</label>
+                    <select id="productFarm">
+                        <option value="">Sélectionner une farm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prix (€) *</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Unité</label>
+                    <input type="text" id="productUnit" placeholder="ex: / 3.5g">
+                </div>
+                <div class="form-group">
+                    <label>URL de l'image</label>
+                    <input type="url" id="productImage" placeholder="https://exemple.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productActive" checked>
+                        Produit actif
+                    </label>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle">Nouvelle catégorie</h2>
+                <span class="close-btn" onclick="closeModal('categoryModal')">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+            <form onsubmit="saveCategory(event)">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label>Nom de la catégorie *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label>Icône (emoji)</label>
+                    <input type="text" id="categoryIcon" placeholder="📦" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="categoryDescription" rows="3"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('categoryModal')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Farm Modal -->
+    <div id="farmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="farmModalTitle">Nouvelle farm</h2>
+                <span class="close-btn" onclick="closeModal('farmModal')">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+            <form onsubmit="saveFarm(event)">
+                <input type="hidden" id="farmId">
+                <div class="form-group">
+                    <label>Nom de la farm *</label>
+                    <input type="text" id="farmName" required>
+                </div>
+                <div class="form-group">
+                    <label>Région</label>
+                    <input type="text" id="farmRegion" placeholder="ex: Californie">
+                </div>
+                <div class="form-group">
+                    <label>Logo URL</label>
+                    <input type="url" id="farmLogo" placeholder="https://exemple.com/logo.jpg">
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('farmModal')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="serviceModalTitle">Nouveau service</h2>
+                <span class="close-btn" onclick="closeModal('serviceModal')">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+            <form onsubmit="saveService(event)">
+                <input type="hidden" id="serviceId">
+                <div class="form-group">
+                    <label>Titre *</label>
+                    <input type="text" id="serviceTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Contenu *</label>
+                    <textarea id="serviceContent" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ordre d'affichage</label>
+                    <input type="number" id="serviceOrder" value="0">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="serviceActive" checked>
+                        Service actif
+                    </label>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('serviceModal')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Social Modal -->
+    <div id="socialModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="socialModalTitle">Nouveau réseau social</h2>
+                <span class="close-btn" onclick="closeModal('socialModal')">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+            <form onsubmit="saveSocial(event)">
+                <input type="hidden" id="socialId">
+                <div class="form-group">
+                    <label>Nom du réseau *</label>
+                    <input type="text" id="socialName" required>
+                </div>
+                <div class="form-group">
+                    <label>Icône (emoji)</label>
+                    <input type="text" id="socialIcon" placeholder="🔗" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label>URL *</label>
+                    <input type="url" id="socialUrl" required>
+                </div>
+                <div class="form-group">
+                    <label>Ordre d'affichage</label>
+                    <input type="number" id="socialOrder" value="0">
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('socialModal')">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // État de l'application
+        let state = {
+            products: [],
+            categories: [],
+            farms: [],
+            services: [],
+            socials: [],
+            settings: {},
+            currentEditId: null,
+            currentEditType: null
+        };
+
+        // Authentification
+        function login() {
+            const password = document.getElementById('loginPassword').value;
+            if (password === 'admin123') {
+                sessionStorage.setItem('admin_authenticated', 'true');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAllData();
+                showAlert('Connexion réussie ! Bienvenue dans votre espace admin.', 'success');
+            } else {
+                showAlert('Mot de passe incorrect !', 'error');
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginPassword').focus();
+            }
+        }
+
+        function logout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                sessionStorage.removeItem('admin_authenticated');
+                window.location.reload();
+            }
+        }
+
+        // Vérifier l'authentification au chargement
+        window.onload = function() {
+            if (sessionStorage.getItem('admin_authenticated') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAllData();
+            }
+            
+            // Permettre de se connecter avec Enter
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+        };
+
+        // Navigation
+        function showSection(sectionId) {
+            // Mettre à jour les tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.nav-tab').classList.add('active');
+
+            // Afficher la section
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            // Mettre à jour les données si nécessaire
+            updateSection(sectionId);
+        }
+
+        function updateSection(sectionId) {
+            switch(sectionId) {
+                case 'dashboard':
+                    updateDashboard();
+                    break;
+                case 'products':
+                    renderProducts();
+                    break;
+                case 'categories':
+                    renderCategories();
+                    break;
+                case 'farms':
+                    renderFarms();
+                    break;
+                case 'services':
+                    renderServices();
+                    break;
+                case 'socials':
+                    renderSocials();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        // Chargement des données
+        function loadAllData() {
+            // Charger depuis localStorage
+            state.products = JSON.parse(localStorage.getItem('admin_products') || '[]');
+            state.categories = JSON.parse(localStorage.getItem('admin_categories') || '[]');
+            state.farms = JSON.parse(localStorage.getItem('admin_farms') || '[]');
+            state.services = JSON.parse(localStorage.getItem('admin_services') || '[]');
+            state.socials = JSON.parse(localStorage.getItem('admin_socials') || '[]');
+            state.settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
+
+            // Si aucune donnée, initialiser avec des données par défaut
+            if (state.categories.length === 0) {
+                state.categories = [
+                    { id: 1, name: 'Fleurs Premium', icon: '🌺', description: 'Nos meilleures sélections' },
+                    { id: 2, name: 'Résines', icon: '💎', description: 'Résines de haute qualité' },
+                    { id: 3, name: 'Huiles', icon: '🧪', description: 'Extraits concentrés' },
+                    { id: 4, name: 'Accessoires', icon: '🔧', description: 'Tout le nécessaire' }
+                ];
+                localStorage.setItem('admin_categories', JSON.stringify(state.categories));
+            }
+
+            if (state.farms.length === 0) {
+                state.farms = [
+                    { id: 1, name: 'Green Valley', region: 'Californie', logo: '' },
+                    { id: 2, name: 'Mountain Farm', region: 'Colorado', logo: '' },
+                    { id: 3, name: 'Valley Gardens', region: 'Oregon', logo: '' }
+                ];
+                localStorage.setItem('admin_farms', JSON.stringify(state.farms));
+            }
+
+            updateDashboard();
+        }
+
+        // Dashboard
+        function updateDashboard() {
+            document.getElementById('statProducts').textContent = state.products.filter(p => p.is_active !== false).length;
+            document.getElementById('statCategories').textContent = state.categories.length;
+            document.getElementById('statFarms').textContent = state.farms.length;
+            document.getElementById('statServices').textContent = state.services.filter(s => s.is_active !== false).length;
+            document.getElementById('statSocials').textContent = state.socials.length;
+        }
+
+        // Alerts modernes avec icônes
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+            }
+            
+            alert.innerHTML = `${icon} ${message}`;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateX(100%)';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        // Modals
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            state.currentEditId = null;
+            state.currentEditType = null;
+        }
+
+        // PRODUITS
+        function renderProducts() {
+            const tbody = document.getElementById('productsTableBody');
+            
+            if (state.products.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-box-open"></i>
+                            <p>Aucun produit pour le moment</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = state.products.map(product => `
+                <tr>
+                    <td>
+                        <img src="${product.image_url || 'https://via.placeholder.com/60x60/2a2a2a/666?text=No+Image'}" 
+                             alt="${product.name}" 
+                             class="product-image">
+                    </td>
+                    <td style="font-weight: 600;">${product.name}</td>
+                    <td>${getCategoryName(product.category_id)}</td>
+                    <td>${getFarmName(product.farm_id) || '-'}</td>
+                    <td style="font-weight: 600;">${product.price}€ ${product.unit || ''}</td>
+                    <td>
+                        <span class="badge ${product.is_active !== false ? 'badge-active' : 'badge-inactive'}">
+                            ${product.is_active !== false ? '<i class="fas fa-check"></i> Actif' : '<i class="fas fa-times"></i> Inactif'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-warning" onclick="editProduct(${product.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteItem('products', ${product.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openProductModal(product = null) {
+            state.currentEditType = 'product';
+            state.currentEditId = product ? product.id : null;
+            
+            // Remplir les selects
+            const categorySelect = document.getElementById('productCategory');
+            categorySelect.innerHTML = '<option value="">Sélectionner une catégorie</option>' +
+                state.categories.map(cat => `<option value="${cat.id}">${cat.icon} ${cat.name}</option>`).join('');
+            
+            const farmSelect = document.getElementById('productFarm');
+            farmSelect.innerHTML = '<option value="">Sélectionner une farm</option>' +
+                state.farms.map(farm => `<option value="${farm.id}">${farm.name}</option>`).join('');
+            
+            if (product) {
+                document.getElementById('productModalTitle').textContent = 'Modifier le produit';
+                document.getElementById('productId').value = product.id;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category_id;
+                document.getElementById('productFarm').value = product.farm_id || '';
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productUnit').value = product.unit || '';
+                document.getElementById('productImage').value = product.image_url || '';
+                document.getElementById('productDescription').value = product.description || '';
+                document.getElementById('productActive').checked = product.is_active !== false;
+            } else {
+                document.getElementById('productModalTitle').textContent = 'Nouveau produit';
+                document.getElementById('productId').value = '';
+                document.getElementById('productName').value = '';
+                document.getElementById('productCategory').value = '';
+                document.getElementById('productFarm').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productUnit').value = '';
+                document.getElementById('productImage').value = '';
+                document.getElementById('productDescription').value = '';
+                document.getElementById('productActive').checked = true;
+            }
+            
+            openModal('productModal');
+        }
+
+        function saveProduct(event) {
+            event.preventDefault();
+            
+            const product = {
+                id: state.currentEditId || Date.now(),
+                name: document.getElementById('productName').value,
+                category_id: parseInt(document.getElementById('productCategory').value),
+                farm_id: document.getElementById('productFarm').value ? parseInt(document.getElementById('productFarm').value) : null,
+                price: parseFloat(document.getElementById('productPrice').value),
+                unit: document.getElementById('productUnit').value,
+                image_url: document.getElementById('productImage').value,
+                description: document.getElementById('productDescription').value,
+                is_active: document.getElementById('productActive').checked
+            };
+            
+            if (state.currentEditId) {
+                state.products = state.products.map(p => p.id === state.currentEditId ? product : p);
+                showAlert('Produit modifié avec succès !', 'success');
+            } else {
+                state.products.push(product);
+                showAlert('Produit ajouté avec succès !', 'success');
+            }
+            
+            localStorage.setItem('admin_products', JSON.stringify(state.products));
+            closeModal('productModal');
+            renderProducts();
+            updateDashboard();
+        }
+
+        function editProduct(id) {
+            const product = state.products.find(p => p.id === id);
+            if (product) {
+                openProductModal(product);
+            }
+        }
+
+        // CATÉGORIES
+        function renderCategories() {
+            const tbody = document.getElementById('categoriesTableBody');
+            
+            if (state.categories.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-tags"></i>
+                            <p>Aucune catégorie pour le moment</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = state.categories.map(category => {
+                const productCount = state.products.filter(p => p.category_id === category.id).length;
+                return `
+                    <tr>
+                        <td style="font-size: 2.5rem; text-align: center;">${category.icon || '📦'}</td>
+                        <td style="font-weight: 600;">${category.name}</td>
+                        <td style="color: var(--text-secondary);">${category.description || '-'}</td>
+                        <td>
+                            <span class="badge" style="background: var(--bg-tertiary); color: var(--text-primary);">
+                                ${productCount} produit${productCount > 1 ? 's' : ''}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-warning" onclick="editCategory(${category.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteItem('categories', ${category.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openCategoryModal(category = null) {
+            state.currentEditType = 'category';
+            state.currentEditId = category ? category.id : null;
+            
+            if (category) {
+                document.getElementById('categoryModalTitle').textContent = 'Modifier la catégorie';
+                document.getElementById('categoryId').value = category.id;
+                document.getElementById('categoryName').value = category.name;
+                document.getElementById('categoryIcon').value = category.icon || '';
+                document.getElementById('categoryDescription').value = category.description || '';
+            } else {
+                document.getElementById('categoryModalTitle').textContent = 'Nouvelle catégorie';
+                document.getElementById('categoryId').value = '';
+                document.getElementById('categoryName').value = '';
+                document.getElementById('categoryIcon').value = '';
+                document.getElementById('categoryDescription').value = '';
+            }
+            
+            openModal('categoryModal');
+        }
+
+        function saveCategory(event) {
+            event.preventDefault();
+            
+            const category = {
+                id: state.currentEditId || Date.now(),
+                name: document.getElementById('categoryName').value,
+                icon: document.getElementById('categoryIcon').value || '📦',
+                description: document.getElementById('categoryDescription').value
+            };
+            
+            if (state.currentEditId) {
+                state.categories = state.categories.map(c => c.id === state.currentEditId ? category : c);
+                showAlert('Catégorie modifiée avec succès !', 'success');
+            } else {
+                state.categories.push(category);
+                showAlert('Catégorie ajoutée avec succès !', 'success');
+            }
+            
+            localStorage.setItem('admin_categories', JSON.stringify(state.categories));
+            closeModal('categoryModal');
+            renderCategories();
+            updateDashboard();
+        }
+
+        function editCategory(id) {
+            const category = state.categories.find(c => c.id === id);
+            if (category) {
+                openCategoryModal(category);
+            }
+        }
+
+        // FARMS
+        function renderFarms() {
+            const tbody = document.getElementById('farmsTableBody');
+            
+            if (state.farms.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-leaf"></i>
+                            <p>Aucune farm pour le moment</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = state.farms.map(farm => {
+                const productCount = state.products.filter(p => p.farm_id === farm.id).length;
+                return `
+                    <tr>
+                        <td>
+                            ${farm.logo ? `<img src="${farm.logo}" alt="${farm.name}" class="product-image">` : 
+                              '<div class="product-image" style="background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;"><i class="fas fa-leaf" style="color: var(--text-muted);"></i></div>'}
+                        </td>
+                        <td style="font-weight: 600;">${farm.name}</td>
+                        <td>${farm.region || '-'}</td>
+                        <td>
+                            <span class="badge" style="background: var(--bg-tertiary); color: var(--text-primary);">
+                                ${productCount} produit${productCount > 1 ? 's' : ''}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-warning" onclick="editFarm(${farm.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteItem('farms', ${farm.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openFarmModal(farm = null) {
+            state.currentEditType = 'farm';
+            state.currentEditId = farm ? farm.id : null;
+            
+            if (farm) {
+                document.getElementById('farmModalTitle').textContent = 'Modifier la farm';
+                document.getElementById('farmId').value = farm.id;
+                document.getElementById('farmName').value = farm.name;
+                document.getElementById('farmRegion').value = farm.region || '';
+                document.getElementById('farmLogo').value = farm.logo || '';
+            } else {
+                document.getElementById('farmModalTitle').textContent = 'Nouvelle farm';
+                document.getElementById('farmId').value = '';
+                document.getElementById('farmName').value = '';
+                document.getElementById('farmRegion').value = '';
+                document.getElementById('farmLogo').value = '';
+            }
+            
+            openModal('farmModal');
+        }
+
+        function saveFarm(event) {
+            event.preventDefault();
+            
+            const farm = {
+                id: state.currentEditId || Date.now(),
+                name: document.getElementById('farmName').value,
+                region: document.getElementById('farmRegion').value,
+                logo: document.getElementById('farmLogo').value
+            };
+            
+            if (state.currentEditId) {
+                state.farms = state.farms.map(f => f.id === state.currentEditId ? farm : f);
+                showAlert('Farm modifiée avec succès !', 'success');
+            } else {
+                state.farms.push(farm);
+                showAlert('Farm ajoutée avec succès !', 'success');
+            }
+            
+            localStorage.setItem('admin_farms', JSON.stringify(state.farms));
+            closeModal('farmModal');
+            renderFarms();
+            updateDashboard();
+        }
+
+        function editFarm(id) {
+            const farm = state.farms.find(f => f.id === id);
+            if (farm) {
+                openFarmModal(farm);
+            }
+        }
+
+        // SERVICES
+        function renderServices() {
+            const tbody = document.getElementById('servicesTableBody');
+            
+            if (state.services.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-concierge-bell"></i>
+                            <p>Aucun service pour le moment</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = state.services.map(service => `
+                <tr>
+                    <td style="font-weight: 600;">${service.title}</td>
+                    <td style="color: var(--text-secondary);">${service.content.substring(0, 60)}${service.content.length > 60 ? '...' : ''}</td>
+                    <td>${service.display_order || 0}</td>
+                    <td>
+                        <span class="badge ${service.is_active !== false ? 'badge-active' : 'badge-inactive'}">
+                            ${service.is_active !== false ? '<i class="fas fa-check"></i> Actif' : '<i class="fas fa-times"></i> Inactif'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-warning" onclick="editService(${service.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteItem('services', ${service.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openServiceModal(service = null) {
+            state.currentEditType = 'service';
+            state.currentEditId = service ? service.id : null;
+            
+            if (service) {
+                document.getElementById('serviceModalTitle').textContent = 'Modifier le service';
+                document.getElementById('serviceId').value = service.id;
+                document.getElementById('serviceTitle').value = service.title;
+                document.getElementById('serviceContent').value = service.content;
+                document.getElementById('serviceOrder').value = service.display_order || 0;
+                document.getElementById('serviceActive').checked = service.is_active !== false;
+            } else {
+                document.getElementById('serviceModalTitle').textContent = 'Nouveau service';
+                document.getElementById('serviceId').value = '';
+                document.getElementById('serviceTitle').value = '';
+                document.getElementById('serviceContent').value = '';
+                document.getElementById('serviceOrder').value = '0';
+                document.getElementById('serviceActive').checked = true;
+            }
+            
+            openModal('serviceModal');
+        }
+
+        function saveService(event) {
+            event.preventDefault();
+            
+            const service = {
+                id: state.currentEditId || Date.now(),
+                title: document.getElementById('serviceTitle').value,
+                content: document.getElementById('serviceContent').value,
+                display_order: parseInt(document.getElementById('serviceOrder').value) || 0,
+                is_active: document.getElementById('serviceActive').checked
+            };
+            
+            if (state.currentEditId) {
+                state.services = state.services.map(s => s.id === state.currentEditId ? service : s);
+                showAlert('Service modifié avec succès !', 'success');
+            } else {
+                state.services.push(service);
+                showAlert('Service ajouté avec succès !', 'success');
+            }
+            
+            localStorage.setItem('admin_services', JSON.stringify(state.services));
+            closeModal('serviceModal');
+            renderServices();
+            updateDashboard();
+        }
+
+        function editService(id) {
+            const service = state.services.find(s => s.id === id);
+            if (service) {
+                openServiceModal(service);
+            }
+        }
+
+        // RÉSEAUX SOCIAUX
+        function renderSocials() {
+            const tbody = document.getElementById('socialsTableBody');
+            
+            if (state.socials.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-share-alt"></i>
+                            <p>Aucun réseau social pour le moment</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = state.socials.map(social => `
+                <tr>
+                    <td style="font-size: 2.5rem; text-align: center;">${social.icon || '🔗'}</td>
+                    <td style="font-weight: 600;">${social.name}</td>
+                    <td><a href="${social.url}" target="_blank" style="color: var(--accent-secondary);">${social.url}</a></td>
+                    <td>${social.order || 0}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-warning" onclick="editSocial(${social.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteItem('socials', ${social.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openSocialModal(social = null) {
+            state.currentEditType = 'social';
+            state.currentEditId = social ? social.id : null;
+            
+            if (social) {
+                document.getElementById('socialModalTitle').textContent = 'Modifier le réseau social';
+                document.getElementById('socialId').value = social.id;
+                document.getElementById('socialName').value = social.name;
+                document.getElementById('socialIcon').value = social.icon || '';
+                document.getElementById('socialUrl').value = social.url;
+                document.getElementById('socialOrder').value = social.order || 0;
+            } else {
+                document.getElementById('socialModalTitle').textContent = 'Nouveau réseau social';
+                document.getElementById('socialId').value = '';
+                document.getElementById('socialName').value = '';
+                document.getElementById('socialIcon').value = '';
+                document.getElementById('socialUrl').value = '';
+                document.getElementById('socialOrder').value = '0';
+            }
+            
+            openModal('socialModal');
+        }
+
+        function saveSocial(event) {
+            event.preventDefault();
+            
+            const social = {
+                id: state.currentEditId || Date.now(),
+                name: document.getElementById('socialName').value,
+                icon: document.getElementById('socialIcon').value || '🔗',
+                url: document.getElementById('socialUrl').value,
+                order: parseInt(document.getElementById('socialOrder').value) || 0
+            };
+            
+            if (state.currentEditId) {
+                state.socials = state.socials.map(s => s.id === state.currentEditId ? social : s);
+                showAlert('Réseau social modifié avec succès !', 'success');
+            } else {
+                state.socials.push(social);
+                showAlert('Réseau social ajouté avec succès !', 'success');
+            }
+            
+            localStorage.setItem('admin_socials', JSON.stringify(state.socials));
+            closeModal('socialModal');
+            renderSocials();
+            updateDashboard();
+        }
+
+        function editSocial(id) {
+            const social = state.socials.find(s => s.id === id);
+            if (social) {
+                openSocialModal(social);
+            }
+        }
+
+        // PARAMÈTRES
+        function loadSettings() {
+            const settings = state.settings;
+            document.getElementById('shopName').value = settings.shop_name || 'BipCosa06';
+            document.getElementById('shopDescription').value = settings.shop_description || 'Votre boutique de confiance';
+            document.getElementById('themeBackgroundUrl').value = settings.theme_background_url || '';
+            document.getElementById('shopWhatsapp').value = settings.shop_whatsapp || '';
+            document.getElementById('shopTelegram').value = settings.shop_telegram || '';
+            document.getElementById('shopInstagram').value = settings.shop_instagram || '';
+        }
+
+        function saveSettings() {
+            state.settings = {
+                shop_name: document.getElementById('shopName').value,
+                shop_description: document.getElementById('shopDescription').value,
+                theme_background_url: document.getElementById('themeBackgroundUrl').value,
+                shop_whatsapp: document.getElementById('shopWhatsapp').value,
+                shop_telegram: document.getElementById('shopTelegram').value,
+                shop_instagram: document.getElementById('shopInstagram').value
+            };
+            
+            localStorage.setItem('admin_settings', JSON.stringify(state.settings));
+            localStorage.setItem('shop_settings', JSON.stringify(state.settings)); // Pour le frontend
+            showAlert('Paramètres enregistrés avec succès !', 'success');
+        }
+
+        // SUPPRESSION
+        function deleteItem(type, id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) return;
+            
+            switch(type) {
+                case 'products':
+                    state.products = state.products.filter(p => p.id !== id);
+                    localStorage.setItem('admin_products', JSON.stringify(state.products));
+                    renderProducts();
+                    break;
+                case 'categories':
+                    // Vérifier si des produits utilisent cette catégorie
+                    const productsWithCategory = state.products.filter(p => p.category_id === id);
+                    if (productsWithCategory.length > 0) {
+                        showAlert(`Impossible de supprimer : ${productsWithCategory.length} produit(s) utilisent cette catégorie`, 'error');
+                        return;
+                    }
+                    state.categories = state.categories.filter(c => c.id !== id);
+                    localStorage.setItem('admin_categories', JSON.stringify(state.categories));
+                    renderCategories();
+                    break;
+                case 'farms':
+                    // Vérifier si des produits utilisent cette farm
+                    const productsWithFarm = state.products.filter(p => p.farm_id === id);
+                    if (productsWithFarm.length > 0) {
+                        showAlert(`Impossible de supprimer : ${productsWithFarm.length} produit(s) utilisent cette farm`, 'error');
+                        return;
+                    }
+                    state.farms = state.farms.filter(f => f.id !== id);
+                    localStorage.setItem('admin_farms', JSON.stringify(state.farms));
+                    renderFarms();
+                    break;
+                case 'services':
+                    state.services = state.services.filter(s => s.id !== id);
+                    localStorage.setItem('admin_services', JSON.stringify(state.services));
+                    renderServices();
+                    break;
+                case 'socials':
+                    state.socials = state.socials.filter(s => s.id !== id);
+                    localStorage.setItem('admin_socials', JSON.stringify(state.socials));
+                    renderSocials();
+                    break;
+            }
+            
+            showAlert('Élément supprimé avec succès !', 'success');
+            updateDashboard();
+        }
+
+        // Helpers
+        function getCategoryName(categoryId) {
+            const category = state.categories.find(c => c.id === categoryId);
+            return category ? `${category.icon} ${category.name}` : '-';
+        }
+
+        function getFarmName(farmId) {
+            const farm = state.farms.find(f => f.id === farmId);
+            return farm ? farm.name : null;
+        }
+    </script>
+</body>
+</html>
