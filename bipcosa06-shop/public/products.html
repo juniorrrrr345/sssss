@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - BipCosa06</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/black-white-override.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { margin:0; font-family:sans-serif; background:#111; color:#fff; }
+        .container { max-width:1400px; padding:2rem 1.5rem 100px; margin:0 auto; }
+        .logo-text { font-size: 3rem; font-weight: 900; text-align: center; margin-bottom: 1rem; color: #fff; text-shadow: 3px 3px 6px rgba(0,0,0,0.8); }
+        .title { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
+        .search-filter-bar { display:flex; gap:15px; margin:30px auto; max-width:800px; flex-wrap:wrap; align-items:center; }
+        .search-container { flex:1; min-width:250px; position:relative; }
+        .search-icon { position:absolute; left:15px; top:50%; transform:translateY(-50%); color:rgba(255,255,255,0.7); font-size:1.1rem; }
+        .search-input { width:100%; padding:15px 15px 15px 45px; border-radius:25px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); backdrop-filter:blur(10px); color:white; font-size:1rem; transition:all 0.3s ease; }
+        .search-input:focus { outline:none; border-color:rgba(255,255,255,0.4); box-shadow:0 0 20px rgba(255,255,255,0.2); }
+        .search-input::placeholder { color: rgba(255,255,255,0.5); }
+        .filter-btn { padding:15px 35px; border-radius:25px; border:2px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.1); color:white; font-weight:bold; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; gap:10px; font-size:1rem; box-shadow:0 4px 15px rgba(0,0,0,0.3); }
+        .filter-btn:hover { transform:translateY(-2px); box-shadow:0 6px 25px rgba(255,255,255,0.3); background:rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
+        .products-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:25px; margin:20px auto; }
+        .product-card { background:transparent; border-radius:20px; overflow:hidden; border:3px solid #fff; backdrop-filter:blur(5px); transition:all 0.3s ease; cursor:pointer; position:relative; }
+        .product-card:hover { transform:translateY(-8px); box-shadow:0 15px 40px rgba(255,255,255,0.3); border-color:#fff; background: rgba(255,255,255,0.08); }
+        .product-image-container { position:relative; width:100%; height:280px; overflow:hidden; }
+        .product-image { width:100%; height:100%; object-fit:cover; }
+        .product-badge { position:absolute; top:15px; left:15px; padding:8px 16px; border-radius:20px; background:#000; backdrop-filter:blur(10px); font-size:0.75rem; font-weight:700; display:flex; align-items:center; gap:5px; text-transform:uppercase; letter-spacing:0.5px; border:2px solid #fff; color:#fff; }
+        .product-info { padding:20px; }
+        .product-name { font-size:1.4rem; font-weight:900; margin-bottom:12px; color:#fff; text-transform:uppercase; letter-spacing:0.5px; text-shadow:3px 3px 6px rgba(0,0,0,1),0 0 10px rgba(0,0,0,1); }
+        .product-farm { display:flex; align-items:center; gap:8px; margin-bottom:15px; font-size:0.95rem; color:#fff; font-weight:700; text-shadow:2px 2px 4px rgba(0,0,0,1),0 0 8px rgba(0,0,0,1); }
+        .farm-icon { width:6px; height:6px; border-radius:50%; background: rgba(255,255,255,0.7); }
+        .product-price { font-size:2.2rem; font-weight:900; color:#fff; text-shadow:3px 3px 6px rgba(0,0,0,1),0 0 10px rgba(0,0,0,1); }
+        .product-price .unit { font-size:1rem; color:#fff; font-weight:700; text-shadow:2px 2px 4px rgba(0,0,0,1); }
+        .no-results { text-align:center; padding:60px 20px; color: rgba(255,255,255,0.6); font-size:1.2rem; }
+
+        /* Drawer filtres */
+        .filter-drawer { position:fixed; top:0; right:-320px; width:320px; height:100%; background:rgba(20,20,20,0.95); backdrop-filter:blur(5px); box-shadow:-5px 0 20px rgba(0,0,0,0.7); padding:2rem 1rem; transition:right 0.3s ease; z-index:100; display:flex; flex-direction:column; gap:1.5rem; overflow-y: auto; }
+        .filter-drawer.open { right:0; }
+        .filter-drawer .drawer-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+        .filter-drawer h3 { font-size:1.2rem; margin:0; }
+        .filter-option { cursor:pointer; padding:8px 12px; border-radius:8px; background:rgba(255,255,255,0.05); transition:all 0.2s; margin-bottom: 0.5rem; }
+        .filter-option:hover { background:rgba(255,255,255,0.15); }
+        .filter-option.active { background:rgba(255,255,255,0.25); }
+        .close-drawer { cursor:pointer; font-size:1.2rem; color:#fff; padding:4px 8px; border-radius:50%; background:rgba(255,255,255,0.1); }
+        .theme-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:0; pointer-events:none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-text">BipCosa06</div>
+    <h1 class="title">Nos Produits</h1>
+    <div class="search-filter-bar">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom...">
+        </div>
+        <button class="filter-btn" id="filterBtn"><i class="fas fa-filter"></i> Filtres</button>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- Drawer filtres -->
+<div class="filter-drawer" id="filterDrawer">
+    <div class="drawer-header">
+        <h3>Filtres</h3>
+        <span class="close-drawer" id="closeDrawer"><i class="fas fa-times"></i></span>
+    </div>
+    <h3>Catégories</h3>
+    <div id="categoryOptions"></div>
+    <h3>Farms</h3>
+    <div id="farmOptions"></div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <div class="nav-icon-circle">
+            <i class="fas fa-home"></i>
+        </div>
+        <span class="nav-label">Accueil</span>
+    </a>
+    <a href="products.html" class="nav-item active">
+        <div class="nav-icon-circle">
+            <i class="fas fa-shopping-bag"></i>
+        </div>
+        <span class="nav-label">Produits</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+        <div class="nav-icon-circle">
+            <i class="fas fa-th"></i>
+        </div>
+        <span class="nav-label">Catégories</span>
+    </a>
+    <a href="contact.html" class="nav-item">
+        <div class="nav-icon-circle">
+            <i class="fas fa-envelope"></i>
+        </div>
+        <span class="nav-label">Contact</span>
+    </a>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/theme-loader.js"></script>
+<script>
+let allProducts = [];
+let selectedCategory = null;
+let selectedFarm = null;
+const productsGrid = document.getElementById('productsGrid');
+const filterDrawer = document.getElementById('filterDrawer');
+const categoryOptions = document.getElementById('categoryOptions');
+const farmOptions = document.getElementById('farmOptions');
+
+// Récupérer la catégorie depuis l'URL
+const urlParams = new URLSearchParams(window.location.search);
+const categoryFromUrl = urlParams.get('category');
+
+// Chargement produits + catégories/farms depuis API
+async function loadProductsAndFilters(){
+    try{
+        const [productsData, categoriesData] = await Promise.all([
+            fetchApi('/api/products'),
+            fetchApi('/api/categories')
+        ]);
+        
+        if(productsData.success && productsData.products){
+            allProducts = productsData.products.filter(p => p.is_active);
+            
+            // Si catégorie dans URL, filtrer
+            if(categoryFromUrl) {
+                selectedCategory = parseInt(categoryFromUrl);
+                filterProducts();
+            } else {
+                displayProducts(allProducts);
+            }
+        }
+        
+        if(categoriesData.success && categoriesData.categories){
+            categoryOptions.innerHTML = categoriesData.categories.map(c=>`
+                <div class="filter-option ${selectedCategory === c.id ? 'active' : ''}" data-category-id="${c.id}">${c.name}</div>
+            `).join('');
+            
+            // Ajouter listeners aux catégories
+            document.querySelectorAll('[data-category-id]').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    const catId = parseInt(e.target.dataset.categoryId);
+                    if(selectedCategory === catId) {
+                        selectedCategory = null;
+                        e.target.classList.remove('active');
+                    } else {
+                        document.querySelectorAll('[data-category-id]').forEach(o => o.classList.remove('active'));
+                        selectedCategory = catId;
+                        e.target.classList.add('active');
+                    }
+                    filterProducts();
+                });
+            });
+        }
+        
+        // Charger les farms depuis les produits
+        const farms = [...new Set(allProducts.map(p => p.farm_name).filter(f => f))];
+        if(farms.length > 0) {
+            farmOptions.innerHTML = farms.map(f=>`
+                <div class="filter-option" data-farm="${f}">${f}</div>
+            `).join('');
+            
+            // Ajouter listeners aux farms
+            document.querySelectorAll('[data-farm]').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    const farmName = e.target.dataset.farm;
+                    if(selectedFarm === farmName) {
+                        selectedFarm = null;
+                        e.target.classList.remove('active');
+                    } else {
+                        document.querySelectorAll('[data-farm]').forEach(o => o.classList.remove('active'));
+                        selectedFarm = farmName;
+                        e.target.classList.add('active');
+                    }
+                    filterProducts();
+                });
+            });
+        }
+    }catch(e){
+        console.error(e); 
+        showDefaultProducts();
+    }
+}
+
+// Afficher des produits par défaut
+function showDefaultProducts() {
+    const defaultProducts = [
+        { id: 1, name: 'Purple Haze', category_name: 'Fleurs Premium', price: 35, unit: '/ 3.5g', farm_name: 'Green Valley', image_url: 'https://images.unsplash.com/photo-1596658251774-5b7d3d8c1c9f?w=400' },
+        { id: 2, name: 'OG Kush', category_name: 'Fleurs Premium', price: 40, unit: '/ 3.5g', farm_name: 'Mountain Farm', image_url: 'https://images.unsplash.com/photo-1616859670867-e0b7f7f0c9f0?w=400' },
+        { id: 3, name: 'Super Skunk', category_name: 'Fleurs', price: 30, unit: '/ 3.5g', farm_name: 'Valley Gardens', image_url: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=400' }
+    ];
+    allProducts = defaultProducts;
+    displayProducts(defaultProducts);
+}
+
+// Filtrer les produits
+function filterProducts() {
+    let filtered = allProducts;
+    
+    if(selectedCategory) {
+        filtered = filtered.filter(p => p.category_id === selectedCategory);
+    }
+    
+    if(selectedFarm) {
+        filtered = filtered.filter(p => p.farm_name === selectedFarm);
+    }
+    
+    // Appliquer aussi la recherche
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    if(searchTerm) {
+        filtered = filtered.filter(p =>
+            p.name.toLowerCase().includes(searchTerm) ||
+            (p.category_name && p.category_name.toLowerCase().includes(searchTerm)) ||
+            (p.farm_name && p.farm_name.toLowerCase().includes(searchTerm))
+        );
+    }
+    
+    displayProducts(filtered);
+}
+
+// Affichage produits
+function displayProducts(products){
+    if(products.length===0){
+        productsGrid.innerHTML='<div class="no-results">Aucun produit trouvé</div>';
+        return;
+    }
+    productsGrid.innerHTML = products.map(p=>`
+        <div class="product-card" data-id="${p.id}">
+            <div class="product-image-container">
+                <img src="${p.image_url||'https://via.placeholder.com/400x280'}" class="product-image" alt="${p.name}">
+                ${p.category_name?`<div class="product-badge">${p.category_name}</div>`:''}
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${p.name}</h3>
+                ${p.farm_name?`<div class="product-farm"><span class="farm-icon"></span>${p.farm_name}</div>`:''}
+                <div class="product-price">${p.price}€ <span class="unit">${p.unit||'/ 3.5g'}</span></div>
+            </div>
+        </div>`).join('');
+}
+
+// Search
+document.getElementById('searchInput').addEventListener('input', filterProducts);
+
+// Drawer ouverture/fermeture
+document.getElementById('filterBtn').addEventListener('click',()=>filterDrawer.classList.add('open'));
+document.getElementById('closeDrawer').addEventListener('click',()=>filterDrawer.classList.remove('open'));
+
+// Click sur produit
+productsGrid.addEventListener('click', e=>{
+    const card = e.target.closest('.product-card');
+    if(card) window.location.href=`product-detail.html?id=${card.dataset.id}`;
+});
+
+// Charger tout au démarrage
+document.addEventListener('DOMContentLoaded', ()=>{
+    loadProductsAndFilters();
+    if(typeof loadThemeBackground === 'function'){
+        loadThemeBackground();
+    }
+});
+</script>
+</body>
+</html>

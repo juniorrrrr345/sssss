@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - BipCosa06</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <header>
+        <h1>Panel Admin - BipCosa06</h1>
+        <span id="adminUser">Admin</span>
+    </header>
+    
+    <nav class="admin-nav">
+        <div class="nav-item active" data-section="dashboard">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </div>
+        <div class="nav-item" data-section="products">
+            <i class="fas fa-box"></i> Produits
+        </div>
+        <div class="nav-item" data-section="categories">
+            <i class="fas fa-tags"></i> Catégories
+        </div>
+        <div class="nav-item" data-section="farms">
+            <i class="fas fa-leaf"></i> Farms
+        </div>
+        <div class="nav-item" data-section="services">
+            <i class="fas fa-concierge-bell"></i> Services
+        </div>
+        <div class="nav-item" data-section="social">
+            <i class="fas fa-share-alt"></i> Réseaux
+        </div>
+        <div class="nav-item" data-section="settings">
+            <i class="fas fa-cog"></i> Paramètres
+        </div>
+        <div class="nav-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Déconnexion
+        </div>
+    </nav>
+
+    <div id="alertContainer"></div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section active">
+        <h2>Tableau de bord</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-box"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statProducts">0</div>
+                    <div class="stat-label">Produits</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-tags"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statCategories">0</div>
+                    <div class="stat-label">Catégories</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statFarms">0</div>
+                    <div class="stat-label">Farms</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-concierge-bell"></i></div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statServices">0</div>
+                    <div class="stat-label">Services</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products" class="content-section">
+        <div class="section-header">
+            <h2>Gestion des Produits</h2>
+            <button class="btn-primary" id="addProductBtn">
+                <i class="fas fa-plus"></i> Ajouter un produit
+            </button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Farm</th>
+                        <th>Prix</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <!-- Produits dynamiques -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div id="categories" class="content-section">
+        <div class="section-header">
+            <h2>Gestion des Catégories</h2>
+            <button class="btn-primary" id="addCategoryBtn">
+                <i class="fas fa-plus"></i> Ajouter une catégorie
+            </button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Icône</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Nb Produits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="categoriesTableBody">
+                    <!-- Catégories dynamiques -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Farms Section -->
+    <div id="farms" class="content-section">
+        <div class="section-header">
+            <h2>Gestion des Farms</h2>
+            <button class="btn-primary" id="addFarmBtn">
+                <i class="fas fa-plus"></i> Ajouter une farm
+            </button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Logo</th>
+                        <th>Nom</th>
+                        <th>Région</th>
+                        <th>Nb Produits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="farmsTableBody">
+                    <!-- Farms dynamiques -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div id="services" class="content-section">
+        <div class="section-header">
+            <h2>Gestion des Services</h2>
+            <button class="btn-primary" id="addServiceBtn">
+                <i class="fas fa-plus"></i> Ajouter un service
+            </button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Contenu</th>
+                        <th>Ordre</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="servicesTableBody">
+                    <!-- Services dynamiques -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Social Section -->
+    <div id="social" class="content-section">
+        <div class="section-header">
+            <h2>Gestion des Réseaux Sociaux</h2>
+            <button class="btn-primary" id="addSocialBtn">
+                <i class="fas fa-plus"></i> Ajouter un réseau
+            </button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Icône</th>
+                        <th>Nom</th>
+                        <th>Lien</th>
+                        <th>Ordre</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="socialTableBody">
+                    <!-- Réseaux sociaux dynamiques -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="content-section">
+        <h2>Paramètres de la boutique</h2>
+        <form id="settingsForm" class="settings-form">
+            <div class="form-group">
+                <label>Nom de la boutique</label>
+                <input type="text" id="shopName" placeholder="BipCosa06" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="shopDescription" rows="3" placeholder="Description de votre boutique..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>URL du fond d'écran</label>
+                <input type="url" id="themeBackgroundUrl" placeholder="https://exemple.com/image.jpg">
+            </div>
+            <div class="form-group">
+                <label>WhatsApp</label>
+                <input type="text" id="shopWhatsapp" placeholder="+33612345678">
+            </div>
+            <div class="form-group">
+                <label>Telegram</label>
+                <input type="text" id="shopTelegram" placeholder="@username">
+            </div>
+            <div class="form-group">
+                <label>Instagram</label>
+                <input type="text" id="shopInstagram" placeholder="@username">
+            </div>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Enregistrer les paramètres
+            </button>
+        </form>
+    </div>
+
+    <!-- Modals -->
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="productModal">&times;</span>
+            <h2 id="productModalTitle">Ajouter un produit</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>Nom du produit</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select id="productCategory" required>
+                        <option value="">Sélectionner une catégorie</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Farm</label>
+                    <select id="productFarm">
+                        <option value="">Sélectionner une farm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prix (€)</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Unité</label>
+                    <input type="text" id="productUnit" placeholder="ex: / 3.5g">
+                </div>
+                <div class="form-group">
+                    <label>URL de l'image</label>
+                    <input type="url" id="productImage" placeholder="https://exemple.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productActive" checked>
+                        Produit actif
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                    <button type="button" class="btn-secondary" data-modal="productModal">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="categoryModal">&times;</span>
+            <h2 id="categoryModalTitle">Ajouter une catégorie</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label>Nom de la catégorie</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label>Icône (emoji)</label>
+                    <input type="text" id="categoryIcon" placeholder="📦">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="categoryDescription" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                    <button type="button" class="btn-secondary" data-modal="categoryModal">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Farm Modal -->
+    <div id="farmModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="farmModal">&times;</span>
+            <h2 id="farmModalTitle">Ajouter une farm</h2>
+            <form id="farmForm">
+                <input type="hidden" id="farmId">
+                <div class="form-group">
+                    <label>Nom de la farm</label>
+                    <input type="text" id="farmName" required>
+                </div>
+                <div class="form-group">
+                    <label>Région</label>
+                    <input type="text" id="farmRegion" placeholder="ex: Californie">
+                </div>
+                <div class="form-group">
+                    <label>Logo URL</label>
+                    <input type="url" id="farmLogo" placeholder="https://exemple.com/logo.jpg">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                    <button type="button" class="btn-secondary" data-modal="farmModal">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../public/js/config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
