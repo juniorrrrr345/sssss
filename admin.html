@@ -70,20 +70,33 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group select,
+        .form-control {
             width: 100%;
             padding: 12px 15px;
             border-radius: 10px;
             border: 1px solid var(--card-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000000;
             font-size: 1rem;
         }
+        
+        .form-group select option {
+            background: white;
+            color: #000000;
+        }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-control:focus {
             outline: none;
             border-color: var(--primary-pink);
-            box-shadow: 0 0 0 3px rgba(255, 62, 165, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 62, 165, 0.3);
+        }
+        
+        .form-group input::placeholder {
+            color: #666666;
         }
 
         .btn-login {
@@ -668,15 +681,15 @@
                     <form id="settingsForm">
                         <div class="form-group">
                             <label>Nom de la boutique</label>
-                            <input type="text" value="Al Gran" class="form-control">
+                            <input type="text" id="shopName" name="shop_name" value="Al Gran" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Email de contact</label>
-                            <input type="email" class="form-control">
+                            <input type="email" id="shopEmail" name="shop_email" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>WhatsApp</label>
-                            <input type="text" class="form-control">
+                            <input type="text" id="shopWhatsapp" name="shop_whatsapp" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-success">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Sauvegarder
@@ -697,35 +710,31 @@
             <form id="productForm">
                 <div class="form-group">
                     <label>Nom du produit</label>
-                    <input type="text" id="productName" required>
+                    <input type="text" id="productName" class="form-control" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Catégorie</label>
-                        <select id="productCategory" required>
-                            <option value="Extract">Extract</option>
-                            <option value="Static-Sift">Static-Sift</option>
-                            <option value="Frozen-Sift">Frozen-Sift</option>
-                            <option value="Dry-Sift">Dry-Sift</option>
-                            <option value="Weed">Weed</option>
+                        <select id="productCategory" class="form-control" required>
+                            <option value="">Sélectionnez une catégorie...</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Prix (€)</label>
-                        <input type="number" id="productPrice" required>
+                        <input type="number" id="productPrice" class="form-control" step="0.01" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Unité</label>
-                    <input type="text" id="productUnit" placeholder="ex: / 3.5g" required>
+                    <input type="text" id="productUnit" class="form-control" placeholder="ex: / 3.5g" required>
                 </div>
                 <div class="form-group">
                     <label>Badge</label>
-                    <input type="text" id="productBadge" placeholder="ex: 🔥 TOPSHELF">
+                    <input type="text" id="productBadge" class="form-control" placeholder="ex: 🔥 TOPSHELF">
                 </div>
                 <div class="form-group">
                     <label>Image URL (ou uploader vers R2)</label>
-                    <input type="text" id="productImage">
+                    <input type="text" id="productImage" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-success">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="1em" height="1em" style="display: inline-block; vertical-align: middle;"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg> Enregistrer

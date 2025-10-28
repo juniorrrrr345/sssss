@@ -60,6 +60,9 @@ function initEventListeners() {
     document.getElementById('closeModalBtn').addEventListener('click', closeProductModal);
     document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
     
+    // Formulaire paramètres
+    document.getElementById('settingsForm').addEventListener('submit', saveSettings);
+    
     // Fermer modal en cliquant à l'extérieur
     document.getElementById('productModal').addEventListener('click', (e) => {
         if (e.target.id === 'productModal') {
@@ -253,13 +256,24 @@ async function loadCategoriesForForm() {
 async function handleProductSubmit(e) {
     e.preventDefault();
     
+    const name = document.getElementById('productName').value;
+    const categoryId = parseInt(document.getElementById('productCategory').value);
+    const price = parseFloat(document.getElementById('productPrice').value);
+    const unit = document.getElementById('productUnit').value;
+    
+    // Validation
+    if (!name || !categoryId || isNaN(categoryId) || !price || isNaN(price)) {
+        showAlert('Erreur: Veuillez remplir tous les champs obligatoires (nom, catégorie, prix)', 'error');
+        return;
+    }
+    
     const productData = {
-        name: document.getElementById('productName').value,
-        category_id: parseInt(document.getElementById('productCategory').value),
-        price: parseFloat(document.getElementById('productPrice').value),
-        unit: document.getElementById('productUnit').value,
-        badge: document.getElementById('productBadge').value,
-        image_url: document.getElementById('productImage').value,
+        name: name,
+        category_id: categoryId,
+        price: price,
+        unit: unit || '/ 3.5g',
+        badge: document.getElementById('productBadge').value || '',
+        image_url: document.getElementById('productImage').value || '',
         is_active: 1
     };
     
@@ -403,12 +417,57 @@ async function loadSettings() {
         const response = await fetch(`${API_URL}/api/settings`);
         const data = await response.json();
         
-        if (data.success) {
+        if (data.success && data.settings) {
             // Remplir le formulaire avec les valeurs actuelles
+            const shopNameInput = document.getElementById('shopName');
+            const shopEmailInput = document.getElementById('shopEmail');
+            const shopWhatsappInput = document.getElementById('shopWhatsapp');
+            
+            if (shopNameInput && data.settings.shop_name) {
+                shopNameInput.value = data.settings.shop_name;
+            }
+            if (shopEmailInput && data.settings.shop_email) {
+                shopEmailInput.value = data.settings.shop_email;
+            }
+            if (shopWhatsappInput && data.settings.shop_whatsapp) {
+                shopWhatsappInput.value = data.settings.shop_whatsapp;
+            }
+            
             console.log('Settings loaded:', data.settings);
         }
     } catch (error) {
         console.error('Error loading settings:', error);
+        showAlert('Erreur lors du chargement des paramètres', 'error');
+    }
+}
+
+// Sauvegarder les paramètres
+async function saveSettings(e) {
+    e.preventDefault();
+    
+    const settingsData = {
+        shop_name: document.getElementById('shopName').value,
+        shop_email: document.getElementById('shopEmail').value,
+        shop_whatsapp: document.getElementById('shopWhatsapp').value
+    };
+    
+    try {
+        const response = await fetch(`${API_URL}/api/settings`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settingsData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Paramètres sauvegardés avec succès !', 'success');
+        } else {
+            showAlert('Erreur lors de la sauvegarde', 'error');
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showAlert('Erreur lors de la sauvegarde', 'error');
     }
 }
 
